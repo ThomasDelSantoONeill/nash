@@ -3,12 +3,13 @@ Type: Package
 Title: Computation of Nash Equilibrium Harvesting Rates for
        Interdependent Natural Resources
 Version: 0.1.0
-Authors@R: person("Thomas Julian", "Del Santo O'Neill", 
-                  email = "t.j.delsantooneill@qmul.ac.uk", 
-                  role = c("aut", "cre")),
-           person("Axel Gerhard", "Rossberg",
-                  email = "a.rossberg@qmul.ac.uk",
-                  role = "aut")
+Authors@R: c(
+    person("Thomas Julian", "Del Santo O'Neill", 
+           email = "t.j.delsantooneill@qmul.ac.uk", 
+           role = c("aut", "cre")),
+    person("Axel Gerhard", "Rossberg",
+           email = "a.rossberg@qmul.ac.uk",
+           role = "aut"))
 Maintainer: T.J. Del Santo O'Neill <t.j.delsantooneill@qmul.ac.uk>
 Description: An algorithm that computes harvesting rates at the Nash
     Equilibrium when exploiting natural interdependent resources. The
