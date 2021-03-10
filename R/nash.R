@@ -1,11 +1,14 @@
 #' Computes Nash Equilibrium harvesting rates
 #'
-#' Description
+#' Function that
 #'
-#' @param par
-#' @param ...
-#' @param fn
-#' @param method
+#' @param par Vector of harvesting rates of length equal to the number
+#'   of harvested species.
+#' @param ... Further arguments to be passed to \code{fn}.
+#' @param fn Function that runs the ODE model taking harvesting rates
+#'   as input and returning simulated yields at equilibrium.
+#' @param method method utilised to compute harvesting rates at the
+#' Nash equilibrium: (i) `LV` or (ii) `dummy` method.
 #' @param F.increase
 #' @param yield.cruves
 #' @param conv.criterion

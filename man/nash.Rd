@@ -21,5 +21,8 @@ nash(
 
 }
 \description{
-Description
+Function that (i) takes harvesting values; (ii) reparameterises
+the model; (iii) simulates forward in time to equilibrium returning
+yields for commercially-important species averaged over a certain
+time window.
 }

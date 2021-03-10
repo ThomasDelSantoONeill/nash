@@ -55,6 +55,9 @@ fn_rpath <- function(par, simul.years = 100, aged.str, data.years,
   if (!integration.method%in%list("RK4", "AB")){
     stop("Sorry but the integration method introduced is not implemented")
   }
+  if (!("Rpath" %in% .packages(all.available = TRUE))) {
+    stop("`fn_Rpath` works only in conjunction with the Rpath package.")
+  }
   # LOCAL VARIABLES
   sppname <- IDnames
   harvesting <- par
