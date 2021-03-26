@@ -14,7 +14,7 @@
 #'
 #' @return
 #' @export
-fn_rpath <- function(par, simul.years = 100, aged.str, data.years,
+fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
                      IDnames, rsim.mod, rpath.params, avg.window = 10,
                      integration.method = "RK4") {
   # VALIDATOR

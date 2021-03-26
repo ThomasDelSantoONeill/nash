@@ -16,7 +16,7 @@
 #' @return
 #' @export
 nash <- function(par, fn, ..., method = "LV", F.increase = 0.1,
-                 yield.curves = TRUE, conv.criterion = 0.001){
+                 yield.curves = FALSE, conv.criterion = 0.001){
   # VALIDATOR
   if (!is.vector(par)) {
     stop("`par` is not a vector.")
