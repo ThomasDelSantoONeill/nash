@@ -8,7 +8,7 @@
 #' @param fn Function that runs the ODE model taking harvesting rates
 #'   as input and returning simulated yields at equilibrium.
 #' @param method method utilised to compute harvesting rates at the
-#' Nash equilibrium: (i) `LV` or (ii) `dummy` method.
+#' Nash equilibrium: (i) `\code{LV}` or (ii) `\code{dummy}` method.
 #' @param F.increase
 #' @param yield.cruves
 #' @param conv.criterion
