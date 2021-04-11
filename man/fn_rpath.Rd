@@ -7,7 +7,7 @@
 fn_rpath(
   par,
   simul.years = 100,
-  aged.str,
+  aged.str = TRUE,
   data.years,
   IDnames,
   rsim.mod,

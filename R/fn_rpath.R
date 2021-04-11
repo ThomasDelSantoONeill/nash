@@ -1,19 +1,19 @@
-#' Computes long-term equilibrium yields for \code{Rpath} models
+#'Computes long-term equilibrium yields for \code{Rpath} models
 #'
-#' Description
+#'Description
 #'
-#' @param par
-#' @param simul.years
-#' @param aged.str
-#' @param data.years
-#' @param IDnames
-#' @param rsim.mod
-#' @param rpath.params
-#' @param avg.window
-#' @param integration.method
+#'@param par
+#'@param simul.years
+#'@param aged.str
+#'@param data.years
+#'@param IDnames
+#'@param rsim.mod
+#'@param rpath.params
+#'@param avg.window
+#'@param integration.method
 #'
-#' @return
-#' @export
+#'@return
+#'@export
 fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
                      IDnames, rsim.mod, rpath.params, avg.window = 10,
                      integration.method = "RK4") {

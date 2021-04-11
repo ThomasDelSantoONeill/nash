@@ -1,22 +1,27 @@
-#' Computes Nash Equilibrium harvesting rates
+#'Computes harvesting rates at the Nash Equilibrium
 #'
-#' Function that
+#'Function that takes a numeric vector `\code{par}` of initial harvesting rates
+#' to be optimised by evaluating the objective function `\code{fn}` to be
+#' maximised. The argument structure is very much alike \code{\link{optim}}.
 #'
-#' @param par Vector of harvesting rates of length equal to the number
-#'   of harvested species.
-#' @param ... Further arguments to be passed to \code{fn}.
-#' @param fn Function that runs the ODE model taking harvesting rates
-#'   as input and returning simulated yields at equilibrium.
-#' @param method method utilised to compute harvesting rates at the
-#' Nash equilibrium: (i) `\code{LV}` or (ii) `\code{dummy}` method.
-#' @param F.increase
-#' @param yield.cruves
-#' @param conv.criterion
+#'@param par Vector of harvesting rates of length equal to the number of
+#' harvested species.
+#'@param fn Function that runs the ODE model taking harvesting rates as input
+#' and returning simulated yields at equilibrium.
+#'@param ... Further arguments to be passed to \code{fn}.
+#'@param method method utilised to compute Nash Equilibrium harvesting rates:
+#' (i) `\code{LV}` or (ii) `\code{dummy}` method.
+#'@param yield.cruves Logical if equilibrium yields are to be computed for each
+#' \eqn{i} species whilst keeping the rest at the optimised \code{par} levels
+#' (\emph{i.e.} at the Nash Equilibrium).
+#'@param conv.criterion Absolute convergence tolerance set by default to
+#' \eqn{< 0.001}.
 #'
-#' @return
-#' @export
-nash <- function(par, fn, ..., method = "LV", F.increase = 0.1,
-                 yield.curves = FALSE, conv.criterion = 0.001){
+#'@details Something
+#'@return something
+#'@export
+nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
+                 conv.criterion = 0.001){
   # VALIDATOR
   if (!is.vector(par)) {
     stop("`par` is not a vector.")
@@ -32,6 +37,7 @@ nash <- function(par, fn, ..., method = "LV", F.increase = 0.1,
     nSpp <- length(par)
     nash_fncalls <- 0
     n.iter <- 100
+    F.increase <- 0.1
     Nash_Fs <- array(dim = c(n.iter, nSpp))
     Nash_Bs <- array(dim = c(n.iter, nSpp))
     Nash_Rs <- array(dim = c(n.iter, nSpp))
@@ -82,8 +88,8 @@ nash <- function(par, fn, ..., method = "LV", F.increase = 0.1,
       # Convergence statement
       if (iter>1) {
         if (max(abs(F_new / Nash_Fs[(iter-1),] -1)) < conv.criterion) {
-          print(paste("Nash equilibrium found after ", iter, " iterations with",
-                      nash_fncalls, " function calls."))
+          print(paste("Nash equilibrium found after ", iter,
+                      " iterations with", nash_fncalls, " function calls."))
           break
         }
       }
@@ -108,7 +114,8 @@ nash <- function(par, fn, ..., method = "LV", F.increase = 0.1,
     for (iter in 1:n.iter) {
       for (j in 1:nSpp) {#Length of Spp vector
         output <- optim(par = par[j], fn = Yield, Hvec = par, j = j,
-                        control = list(fnscale = -1, abstol = conv.criterion, factr = 1e12),
+                        control = list(fnscale = -1, abstol = conv.criterion,
+                                       factr = 1e12),
                         method = "BFGS", hessian = TRUE)
         par[j] = output$par
         nash_fncalls <- nash_fncalls + output$counts[1]
@@ -117,11 +124,11 @@ nash <- function(par, fn, ..., method = "LV", F.increase = 0.1,
       print(max(abs(F.eq / Nash_Hs[(iter),] -1)))
       F.eq <- par
       if (iter>1) {
-        if (max(abs(Nash_Hs[iter,] / Nash_Hs[(iter-1),] -1)) < conv.criterion) {
-          print(paste("Nash equilibrium found after ", iter, " iterations with",
-                      nash_fncalls, " function calls."))
+        if (max(abs(Nash_Hs[iter,] / Nash_Hs[(iter-1),] -1)) < conv.criterion){
+          print(paste("Nash equilibrium found after ", iter,
+                      " iterations with", nash_fncalls, " function calls."))
           break
-        }
+          }
       }
     }
     # OUTPUT
@@ -130,7 +137,6 @@ nash <- function(par, fn, ..., method = "LV", F.increase = 0.1,
   if (yield.curves == TRUE) {
     Yield <- function(par, Hvec, j){
       Hvec[j] <- par
-      nash_fncalls <- nash_fncalls + 1
       as.numeric(fn(Hvec, ...))[j]
     }
     Fvec <- seq(0,1.5,0.025)

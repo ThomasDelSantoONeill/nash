@@ -2,27 +2,37 @@
 % Please edit documentation in R/nash.R
 \name{nash}
 \alias{nash}
-\title{Computes Nash Equilibrium harvesting rates}
+\title{Computes harvesting rates at the Nash Equilibrium}
 \usage{
-nash(
-  par,
-  fn,
-  ...,
-  method = "LV",
-  F.increase = 0.1,
-  yield.curves = TRUE,
-  conv.criterion = 0.001
-)
+nash(par, fn, ..., method = "LV", yield.curves = FALSE, conv.criterion = 0.001)
 }
 \arguments{
-\item{conv.criterion}{}
+\item{par}{Vector of harvesting rates of length equal to the number of
+harvested species.}
+
+\item{fn}{Function that runs the ODE model taking harvesting rates as input
+and returning simulated yields at equilibrium.}
+
+\item{...}{Further arguments to be passed to \code{fn}.}
+
+\item{method}{method utilised to compute Nash Equilibrium harvesting rates:
+(i) `\code{LV}` or (ii) `\code{dummy}` method.}
+
+\item{conv.criterion}{Absolute convergence tolerance set by default to
+\eqn{< 0.001}.}
+
+\item{yield.cruves}{Logical if equilibrium yields are to be computed for each
+\eqn{i} species whilst keeping the rest at the optimised \code{par} levels
+(\emph{i.e.} at the Nash Equilibrium).}
 }
 \value{
-
+something
 }
 \description{
-Function that (i) takes harvesting values; (ii) reparameterises
-the model; (iii) simulates forward in time to equilibrium returning
-yields for commercially-important species averaged over a certain
-time window.
+Function that takes a numeric vector `\code{par}` of initial harvesting rates
+to be optimised by evaluating the objective function `\code{fn}` to be
+maximised. The argument structure is very much alike \code{\link{optim}}.
+}
+\details{
+Something
 }
