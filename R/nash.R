@@ -80,7 +80,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       Nash_Rs[iter,] <- r
       # Re-running the model to equilibrium with new Nash Fs
       par <- as.numeric(F_new)
-      print(max(abs(F.eq / Nash_Fs[(iter),] -1)))
+      # print(max(abs(F.eq / Nash_Fs[(iter),] -1)))
       yields <- fn(par, ...)
       B.eq <- as.numeric(yields) / par
       F.eq <- par
@@ -88,8 +88,8 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       # Convergence statement
       if (iter>1) {
         if (max(abs(F_new / Nash_Fs[(iter-1),] -1)) < conv.criterion) {
-          print(paste("Nash equilibrium found after ", iter,
-                      " iterations with", nash_fncalls, " function calls."))
+          # print(paste("Nash equilibrium found after ", iter,
+          #             " iterations with", nash_fncalls, " function calls."))
           break
         }
       }
@@ -121,12 +121,12 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
         nash_fncalls <- nash_fncalls + output$counts[1]
       }
       Nash_Hs[iter,] <- par
-      print(max(abs(F.eq / Nash_Hs[(iter),] -1)))
+      # print(max(abs(F.eq / Nash_Hs[(iter),] -1)))
       F.eq <- par
       if (iter>1) {
         if (max(abs(Nash_Hs[iter,] / Nash_Hs[(iter-1),] -1)) < conv.criterion){
-          print(paste("Nash equilibrium found after ", iter,
-                      " iterations with", nash_fncalls, " function calls."))
+          # print(paste("Nash equilibrium found after ", iter,
+          #             " iterations with", nash_fncalls, " function calls."))
           break
           }
       }
