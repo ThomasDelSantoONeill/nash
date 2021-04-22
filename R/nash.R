@@ -16,12 +16,13 @@
 #' (\emph{i.e.} at the Nash Equilibrium).
 #'@param conv.criterion Absolute convergence tolerance set by default to
 #' \eqn{< 0.001}.
+#' @param n.iter
 #'
 #'@details Something
 #'@return something
 #'@export
 nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
-                 conv.criterion = 0.001){
+                 conv.criterion = 0.001, n.iter = 100, Bcons = 10){
   # VALIDATOR
   if (!is.vector(par)) {
     stop("`par` is not a vector.")
@@ -36,17 +37,17 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     # LOCAL VARIABLES
     nSpp <- length(par)
     nash_fncalls <- 0
-    n.iter <- 100
     F.increase <- 0.1
     Nash_Fs <- array(dim = c(n.iter, nSpp))
     Nash_Bs <- array(dim = c(n.iter, nSpp))
     Nash_Rs <- array(dim = c(n.iter, nSpp))
-    yields <- fn(par, ...)
+    yields <- fn(par, ...)$yields
     B.eq <- as.numeric(yields) / par
     F.eq <- par
     M <- matrix(nrow = nSpp, ncol = nSpp)
+    ## Initial biomass for CONSERVATION CONSTRAINTS
+    B0 <- fn(par, ...)$B0
     # ALGORITHM
-    # `...` is for arguments that our algorithm does not recognise but `fn` does
     for (iter in 1:n.iter) {
       for (i in 1:nSpp) {
         #Parameters
@@ -55,10 +56,10 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
         par.p[i] <- par.p[i] + F.increase
         par.m[i] <- par.m[i] - F.increase
         #Running model
-        yields.p <- fn(par.p, ...)
+        yields.p <- fn(par.p, ...)$yields
         B.p <- as.numeric(yields.p) / par.p
         nash_fncalls <- nash_fncalls + 1
-        yields.m <- fn(par.m, ...)
+        yields.m <- fn(par.m, ...)$yields
         B.m <- as.numeric(yields.m) / par.m
         nash_fncalls <- nash_fncalls + 1
         #Populating M
@@ -72,8 +73,16 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       G <- -1 * solve(M)
       r <- (G %*% B.eq) + F.eq
       G_hat <- diag(1 / (diag(solve(G))))
+      # Bmsy
       B_new <- solve(G + G_hat, r)
+      ## CONSERVATION CONSTRAINTS Method
+      targeted <- as.vector(B_new>B0*(Bcons/100))
+      if (sum(targeted)!=length(targeted)) {
+        targeted[which.min(B_new/(B0*(Bcons/100)))]
+      }
+      # Fmsy
       F_new <- G_hat %*% B_new
+
       ##	Saving
       Nash_Fs[iter,] <- F_new
       Nash_Bs[iter,] <- B_new
@@ -81,7 +90,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       # Re-running the model to equilibrium with new Nash Fs
       par <- as.numeric(F_new)
       # print(max(abs(F.eq / Nash_Fs[(iter),] -1)))
-      yields <- fn(par, ...)
+      yields <- fn(par, ...)$yields
       B.eq <- as.numeric(yields) / par
       F.eq <- par
       nash_fncalls <- nash_fncalls + 1
@@ -109,7 +118,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     Yield <- function(par, Hvec, j){
       Hvec[j] <- par
       nash_fncalls <- nash_fncalls + 1
-      as.numeric(fn(Hvec, ...))[j]
+      as.numeric(fn(Hvec, ...)$yields)[j]
     }
     for (iter in 1:n.iter) {
       for (j in 1:nSpp) {#Length of Spp vector
@@ -137,7 +146,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
   if (yield.curves == TRUE) {
     Yield <- function(par, Hvec, j){
       Hvec[j] <- par
-      as.numeric(fn(Hvec, ...))[j]
+      as.numeric(fn(Hvec, ...)$yields)[j]
     }
     Fvec <- seq(0,1.5,0.025)
     Yieldeq <- array(dim = c(length(Fvec), length(par)))

@@ -62,6 +62,7 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
   sppname <- IDnames
   harvesting <- par
   simul.years <- simul.years
+  B0 <- rsim.mod$params$B_BaseRef[sppname]
   # ADJUST SCENARIO
   if (integration.method == "AB") {
     # Setting integration flags
@@ -148,18 +149,19 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
                                  sim.year = (data.years+1):simul.years,
                                  sim.month = 0, value = harvesting[i])
     }
-    # RUN SIMULATION & COMPUTE YIELDS
-    rsim.simul <- rsim.run(rsim.mod, method = integration.method,
-                           years = 1:simul.years)
-    yields <- array(dim = c(nrow(rsim.simul$annual_Biomass), length(adname)))
-    for (i in 1:nrow(rsim.simul$annual_Biomass)) {
-      yields[i,] <- rsim.simul$annual_Biomass[i,sppname] * harvesting
-    }
+  # RUN SIMULATION & COMPUTE YIELDS
+  rsim.simul <- rsim.run(rsim.mod, method = integration.method,
+                         years = 1:simul.years)
+  yields <- array(dim = c(nrow(rsim.simul$annual_Biomass), length(adname)))
+  for (i in 1:nrow(rsim.simul$annual_Biomass)) {
+    yields[i,] <- rsim.simul$annual_Biomass[i,sppname] * harvesting
+  }
   }
   names <- c()
   for (i in 1:ncol(yields)) {
     names <- append(names, paste("Spp",i))
   }
   colnames(yields) <- names
-  return(colMeans(tail(yields, n = avg.window)))
+  outlist <- list(yields = colMeans(tail(yields, n = avg.window)), B0 = B0)
+  return(outlist)
 }
