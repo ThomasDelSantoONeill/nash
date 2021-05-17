@@ -77,15 +77,36 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       B_new <- solve(G + G_hat, r)
       ## CONSERVATION CONSTRAINTS Method
       targeted <- as.vector(B_new>B0*(Bcons/100))
-      if (sum(targeted)!=length(targeted)) {
-        targeted[which.min(B_new/(B0*(Bcons/100)))]
+      # Define Blim HERE
+      100
+      # Start with a targeted with all true
+      while (TRUE) {
+        # Figure out which is the worse ratio
+        conspp <- which.min(B_new/(B0*(Bcons/100)))
+        # Is this ratio smaller than 1 if not stop if yes;
+        targeted[conssp] <- FALSE
+        # Remove from G matrix
+        Gff <- G[targeted,targeted]
+        Gfn <- G[targeted,!targeted]
+
+        # Calculate the new r but I need to remove the identified Conspp
+        r_new <- (r[targeted] - Gfn %*% Blim[!targeted])
+        ## Here B.eq would be B except for the conserved spp where B is set to
+        ## B0*(Bcons/100)) and F.eq to 0
+        G_hat <- diag(1 / (diag(solve(Gff))))
+        # Bmsy
+        B_new <- solve(Gff + G_hat, r_new)
       }
+      #Reconstruct full B vector
+      #Bcomplete <- rep(NA, nspp)
+      #Bcomplete[targeted] <- b_new
+      #Bcomplete[!targeted] <- blim[!targeted]
       # Fmsy
-      F_new <- G_hat %*% B_new
+      F_new <- r - G %*% Bcomplete
 
       ##	Saving
       Nash_Fs[iter,] <- F_new
-      Nash_Bs[iter,] <- B_new
+      Nash_Bs[iter,] <- Bcomplete
       Nash_Rs[iter,] <- r
       # Re-running the model to equilibrium with new Nash Fs
       par <- as.numeric(F_new)
