@@ -41,12 +41,13 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     Nash_Fs <- array(dim = c(n.iter, nSpp))
     Nash_Bs <- array(dim = c(n.iter, nSpp))
     Nash_Rs <- array(dim = c(n.iter, nSpp))
-    yields <- fn(par, ...)
+    output <- fn(par, ...)
+    yields <- output$yields
+    ## Initial biomass for CONSERVATION CONSTRAINTS
+    B0 <- output$B0
     B.eq <- as.numeric(yields) / par
     F.eq <- par
     M <- matrix(nrow = nSpp, ncol = nSpp)
-    ## Initial biomass for CONSERVATION CONSTRAINTS
-    B0 <- fn(rep(0,nSpp), ...)
     # ALGORITHM
     # `...` is for arguments that our algorithm does not recognise but `fn` does
     for (iter in 1:n.iter) {
@@ -57,10 +58,10 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
         par.p[i] <- par.p[i] + F.increase
         par.m[i] <- par.m[i] - F.increase
         #Running model
-        yields.p <- fn(par.p, ...)
+        yields.p <- fn(par.p, ...)$yields
         B.p <- as.numeric(yields.p) / par.p
         nash_fncalls <- nash_fncalls + 1
-        yields.m <- fn(par.m, ...)
+        yields.m <- fn(par.m, ...)$yields
         B.m <- as.numeric(yields.m) / par.m
         nash_fncalls <- nash_fncalls + 1
         #Populating M
@@ -113,16 +114,16 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       Nash_Rs[iter,] <- r
       # Re-running the model to equilibrium with new Nash Fs
       par <- as.numeric(F_new)
-      # print(max(abs(F.eq / Nash_Fs[(iter),] -1)))
-      yields <- fn(par, ...)
+      print(max(abs(F.eq / Nash_Fs[(iter),] -1)))
+      yields <- fn(par, ...)$yields
       B.eq <- as.numeric(yields) / par
       F.eq <- par
       nash_fncalls <- nash_fncalls + 1
       # Convergence statement
       if (iter>1) {
         if (max(abs(F_new / Nash_Fs[(iter-1),] -1)) < conv.criterion) {
-          # print(paste("Nash equilibrium found after ", iter, " iterations with",
-          #             nash_fncalls, " function calls."))
+          print(paste("Nash equilibrium found after ", iter, " iterations with",
+                      nash_fncalls, " function calls."))
           break
         }
       }
@@ -143,7 +144,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     Yield <- function(par, Hvec, j){
       Hvec[j] <- par
       nash_fncalls <- nash_fncalls + 1
-      as.numeric(fn(Hvec, ...))[j]
+      as.numeric(fn(Hvec, ...)$yields)[j]
     }
     for (iter in 1:n.iter) {
       for (j in 1:nSpp) {#Length of Spp vector
@@ -171,7 +172,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     Yield <- function(par, Hvec, j){
       Hvec[j] <- par
       nash_fncalls <- nash_fncalls + 1
-      as.numeric(fn(Hvec, ...))[j]
+      as.numeric(fn(Hvec, ...)$yields)[j]
     }
     Fvec <- seq(0,1.5,0.025)
     Yieldeq <- array(dim = c(length(Fvec), length(par)))
