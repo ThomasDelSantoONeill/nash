@@ -1,8 +1,9 @@
 #'Computes harvesting rates at the Nash Equilibrium
 #'
 #'Function that takes a numeric vector `\code{par}` of initial harvesting rates
-#' to be optimised by evaluating the objective function `\code{fn}` to be
-#' maximised. The argument structure is very much alike \code{\link{optim}}.
+#' to be optimised by evaluating the objective function `\code{fn}` that is to
+#' be maximised. Its structure in terms of arguments and outputs is analogous
+#' to that of \code{\link{optim}}.
 #'
 #'@param par Vector of harvesting rates of length equal to the number of
 #' harvested species.
@@ -23,7 +24,7 @@
 #'@export
 nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
                  conv.criterion = 0.001, Bcons = 10, F.increase = 0.1){
-  # VALIDATOR
+  ### VALIDATOR
   if (!is.vector(par)) {
     stop("`par` is not a vector.")
   }
@@ -34,7 +35,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     stop("Sorry but this method is not implemented")
   }
   if (method == "LV") {
-    # LOCAL VARIABLES
+    ### LOCAL VARIABLES
     nSpp <- length(par)
     nash_fncalls <- 0
     n.iter <- 100
@@ -43,15 +44,14 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     Nash_Rs <- array(dim = c(n.iter, nSpp))
     output <- fn(par, ...)
     yields <- output$yields
-    ## Initial biomass for CONSERVATION CONSTRAINTS
-    B0 <- output$B0
+    B0 <- output$B0 # Initial biomass used for conservation constraints
     B.eq <- as.numeric(yields) / par
     F.eq <- par
     M <- matrix(nrow = nSpp, ncol = nSpp)
-    # ALGORITHM
-    # `...` is for arguments that our algorithm does not recognise but `fn` does
+    ### ALGORITHM
     for (iter in 1:n.iter) {
       for (i in 1:nSpp) {
+        # Avoid that any element of par = F.increase
         #Parameters
         par.p <- par
         par.m <- par
@@ -72,49 +72,58 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
         print("Initial M is singular and hence non invertible")
         print(extinct.name)
       }
+      # Interaction Matrix and growth rates
       G <- -1 * solve(M)
       r <- (G %*% B.eq) + F.eq
       G_hat <- diag(1 / (diag(solve(G))))
-      # Bmsy
+      # Bnash
       B_new <- solve(G + G_hat, r)
-      ## CONSERVATION CONSTRAINTS Method
-      Blim <- B0*(Bcons/100)
-      targeted <- as.vector(as.numeric(B_new)>B0*(Bcons/100))
-      while (all(targeted)==TRUE) {
-        # Figure out which is the worse ratio
-        ratios <- as.numeric(B_new)/Blim
-        consspp <- which.min(ratios)
-        # Is this ratio smaller than 1 if not stop if yes;
-        if (ratios[consspp] < 1) {
+      ### CONSERVATION CONSTRAINTS
+      # Define Bcons state
+      Bcons <- B0*(Bper/100)
+      # B vector if any i is to be conserved
+      Bcomplete <- rep(NA, nSpp)
+      # Targeted with all TRUE entries
+      targeted <- !vector(mode = "logical", length = nSpp)
+      Bcomplete[targeted] <- as.numeric(B_new)
+      # Loop
+      while (any(targeted)) {
+        ratios <- Bcons/as.numeric(Bcomplete)
+        if (all(ratios > 1)) {
+          # Which i is in the worst state; max ratio indicates that
+          # the new Bnash computed is well below Bcons and therefore
+          # in a very bad state.
+          consspp <- which.max(ratios)
+          # Reduce targeted TRUE vector by 1 (i.e. the species being
+          # conserved)
           targeted[consspp] <- FALSE
-          # Remove from G matrix
-          Gff <- G[targeted,targeted]
-          Gfn <- G[targeted,!targeted]
-          # Calculate the new r but I need to remove the identified Conspp
-          r_new <- (r[targeted] - Gfn %*% Blim[!targeted])
-          ## Here B.eq would be B except for the conserved spp where B is set to
-          ## B0*(Bcons/100)) and F.eq to 0
+          # Remove consspp from the system and compute new Bnash
+          Gff <- G[targeted,targeted,drop=F]
+          Gfn <- G[targeted,!targeted,drop=F]
+          # If all species are below Bcons then Gff will be empty
+          if (det(Gff)==1) {
+            Bcomplete[!targeted] <- Bcons[!targeted]
+            break
+          }
+          r_new <- (r[targeted,drop=F] - Gfn %*% Bcons[!targeted,drop=F])
           G_hat <- diag(1 / (diag(solve(Gff))))
-          # Bmsy
+          # Bnash
           B_new <- solve(Gff + G_hat, r_new)
+          Bcomplete[targeted] <- B_new
+          Bcomplete[!targeted] <- Bcons[!targeted]
         } else {
           break
         }
       }
-      #Reconstruct full B vector
-      Bcomplete <- rep(NA, nSpp)
-      Bcomplete[targeted] <- B_new
-      Bcomplete[!targeted] <- Blim[!targeted]
-      # Fmsy
+      # Fnash
       F_new <- r - G %*% Bcomplete
-
-      ##	Saving
+      # Saving
       Nash_Fs[iter,] <- F_new
       Nash_Bs[iter,] <- B_new
       Nash_Rs[iter,] <- r
       # Re-running the model to equilibrium with new Nash Fs
       par <- as.numeric(F_new)
-      print(max(abs(F.eq / Nash_Fs[(iter),] -1)))
+      # print(max(abs(F.eq / Nash_Fs[(iter),] -1)))
       yields <- fn(par, ...)$yields
       B.eq <- as.numeric(yields) / par
       F.eq <- par
@@ -122,15 +131,22 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       # Convergence statement
       if (iter>1) {
         if (max(abs(F_new / Nash_Fs[(iter-1),] -1)) < conv.criterion) {
-          print(paste("Nash equilibrium found after ", iter, " iterations with",
-                      nash_fncalls, " function calls."))
+          # print(paste("Nash equilibrium found after ", iter,
+          #             " iterations with", nash_fncalls,
+          #             " function calls."))
           break
         }
       }
     }
-    # OUTPUT
-    outlist <- list(Nash_Fs = Nash_Fs[1:iter,], Nash_Bs = Nash_Bs[1:iter,],
-                    Nash_Rs = Nash_Rs[1:iter,], func.evals = nash_fncalls)
+    ### OUTPUT
+    # outlist <- list(Nash_Fs = Nash_Fs[1:iter,], Nash_Bs = Nash_Bs[1:iter,],
+    #                 Nash_Rs = Nash_Rs[1:iter,], func.evals = nash_fncalls)
+    outlist <- list(par = tail(na.omit(Nash_Fs), n = 1),
+                    value = fn(as.numeric(tail(na.omit(Nash_Fs),
+                                               n = 1)), ...)$yields,
+                    counts = nash_fncalls,
+                    convergence = paste("Nash equilibrium found after ", iter,
+                                        " iterations."))
   }
   if (method == "dummy") {
     # LOCAL VARIABLES
@@ -155,12 +171,12 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
         nash_fncalls <- nash_fncalls + output$counts[1]
       }
       Nash_Hs[iter,] <- par
-      print(max(abs(F.eq / Nash_Hs[(iter),] -1)))
+      # print(max(abs(F.eq / Nash_Hs[(iter),] -1)))
       F.eq <- par
       if (iter>1) {
         if (max(abs(Nash_Hs[iter,] / Nash_Hs[(iter-1),] -1)) < 0.001) {
-          print(paste("Nash equilibrium found after ", iter, " iterations with",
-                      nash_fncalls, " function calls."))
+          # print(paste("Nash equilibrium found after ", iter, " iterations with",
+          #             nash_fncalls, " function calls."))
           break
         }
       }
