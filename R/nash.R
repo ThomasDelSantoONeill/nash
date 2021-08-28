@@ -5,25 +5,71 @@
 #' be maximised. Its structure in terms of arguments and outputs is analogous
 #' to that of \code{\link{optim}}.
 #'
-#'@param par Vector of harvesting rates of length equal to the number of
+#'@param par Numeric vector of harvesting rates of length equal to the number of
 #' harvested species.
-#'@param fn Function that runs the ODE model taking harvesting rates as input
-#' and returning simulated yields at equilibrium.
+#'@param fn Function that runs the ODE model \code{par} as input and returns
+#' simulated yields at equilibrium.
 #'@param ... Further arguments to be passed to \code{fn}.
-#'@param method method utilised to compute Nash Equilibrium harvesting rates:
+#'@param method Method utilised to compute the Nash Equilibrium:
 #' (i) `\code{LV}` or (ii) `\code{dummy}` method.
-#'@param yield.cruves Logical if equilibrium yields are to be computed for each
-#' \eqn{i} species whilst keeping the rest at the optimised \code{par} levels
-#' (\emph{i.e.} at the Nash Equilibrium).
+#'@param yield.cruves Logical TRUE/FALSE if equilibrium yield curves for each
+#' species are desired.
 #'@param conv.criterion Absolute convergence tolerance set by default to
 #' \eqn{< 0.001}.
-#' @param n.iter
+#'@param Bper Percentage of the unharvested biomass. Default set to \eqn{0}.
+#'@param F.increase Double type numeric vector indicating the step size used
+#' to compute the interaction matrix.
 #'
-#'@details Something
-#'@return something
+#'@details For ecosystem models where \code{\link{Rpath-package}} is not
+#' employed, \code{fn} should also provide the biomass at equilibrium of the
+#' unexploited (\emph{i.e.} \code{par}\eqn{=0}) community if \code{Bper} is set
+#' \eqn{> 0}. Setting \code{Bper}{> 0} means not allowing the estimation of
+#' Nash Equilibrium biomasses to fall below \code{Bper} percentage of its
+#' unharvested biomass for any \eqn{i} species. In the literature, such a
+#' condition is known as \emph{constraint of biodiversity conservation}
+#' \insertCite{@see Matsuda2006 for details}{nash}; for instance,
+#' \insertCite{Worm2009;textual}{nash} utilised a \code{Bper}\eqn{=10} to
+#' defined a threshold under which any stock is considered collapsed.
+#'
+#' Equilibrium yield curves are obtained for each \eqn{i} species by applying
+#' different harvesting values to \eqn{i} whilst keeping the other species
+#' \eqn{j} at the optimised \code{par} levels (\emph{i.e.} at the Nash
+#' Equilibrium). As raised by \insertCite{Thorpe2017;textual}{nash}, this is
+#' one of the advantages of using the Nash Equilibrium as a representation of
+#' the \emph{Maximum Sustainable Yield} concept.
+#'
+#' To compute the interaction matrix a second order central difference quotient
+#' is used to approximate derivatives. \code{F.increase} is employed during
+#' this calculation as a step-size set by default to \eqn{0.1} to avoid
+#' truncation and/or rounding errors \insertCite{Pope2019}{nash}.
+#'
+#' The `\code{LV}` method is set by default given its performance advantage
+#' over the `\code{dummy}` method and is based on the protocol devised by
+#' \insertCite{Farcas2016}{nash}. For each species \eqn{i} in turn,
+#' \code{dummy} iteratively maximises the yield by adjusting the harvesting
+#' rates whereas \code{LV} does the same for all species at once per iteration.
+#'
+#'@return \code{nash} returns a list with the following components:
+#'\item{par}{Harvesting rates at the Nash Equilibrium.}
+#'\item{value}{Value of \code{fn} corresponding to the optimised \code{par}.}
+#'\item{counts}{Number of calls to \code{fn}.}
+#'\item{convergence}{Statement indicating the number of iterations for
+#'\code{conv.criterion} to be reached.}
+#'
+#'@references
+#'\insertRef{Matsuda2006}{nash}
+#'
+#'\insertRef{Worm2009}{nash}
+#'
+#'\insertRef{Thorpe2017}{nash}
+#'
+#'\insertRef{Pope2019}{nash}
+#'
+#'\insertRef{Farcas2016}{nash}
+#'
 #'@export
 nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
-                 conv.criterion = 0.001, Bcons = 10, F.increase = 0.1){
+                 conv.criterion = 0.001, Bper = 0, F.increase = 0.1){
   ### VALIDATOR
   if (!is.vector(par)) {
     stop("`par` is not a vector.")
@@ -149,23 +195,25 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
                                         " iterations."))
   }
   if (method == "dummy") {
-    # LOCAL VARIABLES
+    ### LOCAL VARIABLES
     nSpp <- length(par)
     nash_fncalls <- 0
     conv.criterion <- 0.001
     n.iter <- 100
     Nash_Hs <- array(dim = c(n.iter, nSpp))
     F.eq <- par
-    # Compute Spp yields one at a time
+    ### COMPUTE YIELDS ONE AT A TIME
     Yield <- function(par, Hvec, j){
       Hvec[j] <- par
       nash_fncalls <- nash_fncalls + 1
       as.numeric(fn(Hvec, ...)$yields)[j]
     }
+    ### ALGORITHM
     for (iter in 1:n.iter) {
-      for (j in 1:nSpp) {#Length of Spp vector
+      for (j in 1:nSpp) {
         output <- optim(par = par[j], fn = Yield, Hvec = par, j = j,
-                        control = list(fnscale = -1, abstol = 0.001, factr = 1e12),
+                        control = list(fnscale = -1, abstol = 0.001,
+                                       factr = 1e12),
                         method = "BFGS", hessian = TRUE)
         par[j] = output$par
         nash_fncalls <- nash_fncalls + output$counts[1]
@@ -175,33 +223,42 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       F.eq <- par
       if (iter>1) {
         if (max(abs(Nash_Hs[iter,] / Nash_Hs[(iter-1),] -1)) < 0.001) {
-          # print(paste("Nash equilibrium found after ", iter, " iterations with",
-          #             nash_fncalls, " function calls."))
+          # print(paste("Nash equilibrium found after ", iter,
+          #             " iterations with", nash_fncalls,
+          #             " function calls."))
           break
         }
       }
     }
-    # OUTPUT
-    outlist <- list(Nash_Fs = Nash_Hs[1:iter,], func.evals = nash_fncalls)
+    ### OUTPUT
+    # outlist <- list(Nash_Fs = Nash_Hs[1:iter,], func.evals = nash_fncalls)
+    outlist <- list(par = tail(na.omit(Nash_Hs), n = 1),
+                    value = fn(as.numeric(tail(na.omit(Nash_Hs),
+                                               n = 1)), ...)$yields,
+                    counts = nash_fncalls,
+                    convergence = paste("Nash equilibrium found after ", iter,
+                                        " iterations."))
   }
+  ### EQUILIBRIUM YIELD CURVES
   if (yield.curves == TRUE) {
     Yield <- function(par, Hvec, j){
       Hvec[j] <- par
       nash_fncalls <- nash_fncalls + 1
       as.numeric(fn(Hvec, ...)$yields)[j]
     }
-    Fvec <- seq(0,1.5,0.025)
-    Yieldeq <- array(dim = c(length(Fvec), length(par)))
+    Yieldeq <- list()
     par <- c()
     if (method=="dummy" | method=="LV") {
-      par <- as.numeric(tail(outlist$Nash_Fs, n = 1))
+      par <- as.numeric(tail(na.omit(Nash_Fs),n = 1))
     }
     for (i in 1:length(par)) {
-      Yieldeq[,i] <- sapply(X = Fvec, FUN = Yield, Hvec = par, j = i)
+      Fvec <- seq(0,par[i]*2,0.025)
+      Yieldspp <- sapply(X = Fvec, FUN = Yield, Hvec = par, j = i)
+      outyield <- cbind(Fvec, Yieldspp)
+      Yieldeq[[i]] <- outyield
     }
-    Yieldeq <- cbind(Fvec, Yieldeq)
-    outlist$Yieldeq <- Yieldeq
+    outlist$YieldEQ <- Yieldeq
   }
-  # Return
+  ### RETURN
   return(outlist)
 }

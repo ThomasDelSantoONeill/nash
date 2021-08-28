@@ -1,4 +1,4 @@
-#'Computes long-term equilibrium yields for \code{Rpath} models
+#'Computes long-term equilibrium yields for \code{\link{Rpath-package}} models
 #'
 #'Description
 #'
@@ -69,14 +69,14 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
     NoIntegrateSpp <- as.vector(rsim.mod$params$spname[rsim.mod$params$PBopt > 24])
     for (i in 1:length(NoIntegrateSpp)) {
       name <- NoIntegrateSpp[i]
-      rsim.mod <- adjust.scenario(rsim.mod, parameter = "NoIntegrate", 
+      rsim.mod <- adjust.scenario(rsim.mod, parameter = "NoIntegrate",
                                   group = name, value = 0)
     }
   }
   # NOTE: Ensure effort is set to 0 to play with harvesting rates.
   fleet_name <- as.character(colnames(rsim.mod$fishing$ForcedEffort))
   for (i in 1:length(fleet_name)) {
-    rsim.mod <- adjust.fishing(rsim.mod, parameter = "ForcedEffort", 
+    rsim.mod <- adjust.fishing(rsim.mod, parameter = "ForcedEffort",
                                group = fleet_name[i],
                                sim.year = 1:simul.years, sim.month = 0,
                                value = 0)
@@ -95,15 +95,15 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
            parameterisation.")
     }
     for (i in 1:length(juvname)) {
-      rsim.mod <- adjust.fishing(Rsim.scenario = rsim.mod, 
+      rsim.mod <- adjust.fishing(Rsim.scenario = rsim.mod,
                                  parameter = "ForcedFRate",
-                                 group = juvname[i], 
+                                 group = juvname[i],
                                  sim.year = (data.years+1):simul.years,
-                                 sim.month = 0, 
+                                 sim.month = 0,
                                  value = harvesting[i]*JuvFProp[i])
-      rsim.mod <- adjust.fishing(Rsim.scenario = rsim.mod, 
+      rsim.mod <- adjust.fishing(Rsim.scenario = rsim.mod,
                                  parameter = "ForcedFRate",
-                                 group = adname[i], 
+                                 group = adname[i],
                                  sim.year = (data.years+1):simul.years,
                                  sim.month = 0, value = harvesting[i])
     }
@@ -112,16 +112,16 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
       elements <- n.aged.str + (1:length(non.aged.groups))
       for (i in 1:length(elements)) {
         element <- elements[i]
-        rsim.mod <- adjust.fishing(Rsim.scenario = rsim.mod, 
+        rsim.mod <- adjust.fishing(Rsim.scenario = rsim.mod,
                                    parameter = "ForcedFRate",
-                                   group = non.aged.groups[i], 
+                                   group = non.aged.groups[i],
                                    sim.year = (data.years+1):simul.years,
                                    sim.month = 0, value = harvesting[element])
       }
       # RUN SIMULATION & COMPUTE YIELDS
-      rsim.simul <- rsim.run(rsim.mod, method = integration.method, 
+      rsim.simul <- rsim.run(rsim.mod, method = integration.method,
                              years = 1:simul.years)
-      yields <- array(dim = c(nrow(rsim.simul$annual_Biomass), 
+      yields <- array(dim = c(nrow(rsim.simul$annual_Biomass),
                               length(harvesting)))
       for (i in 1:nrow(rsim.simul$annual_Biomass)) {
         adY <- rsim.simul$annual_Biomass[i, adname] * harvesting[1:n.aged.str]
@@ -132,9 +132,9 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
       }
     } else if ((length(IDnames) > length(stanza.names)) == FALSE) {
       # RUN SIMULATION & COMPUTE YIELDS
-      rsim.simul <- rsim.run(rsim.mod, method = integration.method, 
+      rsim.simul <- rsim.run(rsim.mod, method = integration.method,
                              years = 1:simul.years)
-      yields <- array(dim = c(nrow(rsim.simul$annual_Biomass), 
+      yields <- array(dim = c(nrow(rsim.simul$annual_Biomass),
                               length(harvesting)))
       for (i in 1:nrow(rsim.simul$annual_Biomass)) {
         adY <- rsim.simul$annual_Biomass[i, adname] * harvesting[1:length(adname)]
@@ -144,9 +144,9 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
     }
   } else if (aged.str == FALSE) {
     for (i in 1:length(sppname)) {
-      rsim.mod <- adjust.fishing(Rsim.scenario = rsim.mod, 
+      rsim.mod <- adjust.fishing(Rsim.scenario = rsim.mod,
                                  parameter = "ForcedFRate",
-                                 group = sppname[i], 
+                                 group = sppname[i],
                                  sim.year = (data.years+1):simul.years,
                                  sim.month = 0, value = harvesting[i])
     }

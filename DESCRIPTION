@@ -21,7 +21,9 @@ Description: An algorithm that computes harvesting rates at the Nash
     `Rpath`.
 License: What license is it under?
 Imports:
-    Rpath (>= 0.0.1.2)
+    Rpath (>= 0.0.1.2),
+    Rdpack
+RdMacros: Rdpack
 Suggests:
     knitr,
     rmarkdown

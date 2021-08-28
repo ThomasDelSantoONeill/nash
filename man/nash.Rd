@@ -4,35 +4,84 @@
 \alias{nash}
 \title{Computes harvesting rates at the Nash Equilibrium}
 \usage{
-nash(par, fn, ..., method = "LV", yield.curves = FALSE, conv.criterion = 0.001)
+nash(par, fn, ..., method = "LV", yield.curves = FALSE, conv.criterion = 0.001,
+Bper = 0, F.increase = 0.1)
 }
 \arguments{
-\item{par}{Vector of harvesting rates of length equal to the number of
+\item{par}{Numeric vector of harvesting rates of length equal to the number of
 harvested species.}
 
-\item{fn}{Function that runs the ODE model taking harvesting rates as input
-and returning simulated yields at equilibrium.}
+\item{fn}{Function that runs the ODE model \code{par} as input and returns
+simulated yields at equilibrium.}
 
 \item{...}{Further arguments to be passed to \code{fn}.}
 
-\item{method}{method utilised to compute Nash Equilibrium harvesting rates:
+\item{method}{Method utilised to compute the Nash Equilibrium:
 (i) `\code{LV}` or (ii) `\code{dummy}` method.}
 
 \item{conv.criterion}{Absolute convergence tolerance set by default to
 \eqn{< 0.001}.}
 
-\item{yield.cruves}{Logical if equilibrium yields are to be computed for each
-\eqn{i} species whilst keeping the rest at the optimised \code{par} levels
-(\emph{i.e.} at the Nash Equilibrium).}
+\item{Bper}{Percentage of the unharvested biomass. Default set to \eqn{0}.}
+
+\item{F.increase}{Double type numeric vector indicating the step size used
+to compute the interaction matrix.}
+
+\item{yield.cruves}{Logical TRUE/FALSE if equilibrium yield curves for each
+species are desired.}
 }
 \value{
-something
+\code{nash} returns a list with the following components:
+\item{par}{Harvesting rates at the Nash Equilibrium.}
+\item{value}{Value of \code{fn} corresponding to the optimised \code{par}.}
+\item{counts}{Number of calls to \code{fn}.}
+\item{convergence}{Statement indicating the number of iterations for
+\code{conv.criterion} to be reached.}
 }
 \description{
 Function that takes a numeric vector `\code{par}` of initial harvesting rates
-to be optimised by evaluating the objective function `\code{fn}` to be
-maximised. The argument structure is very much alike \code{\link{optim}}.
+to be optimised by evaluating the objective function `\code{fn}` that is to
+be maximised. Its structure in terms of arguments and outputs is analogous
+to that of \code{\link{optim}}.
 }
 \details{
-Something
+For ecosystem models where \code{\link{Rpath-package}} is not
+employed, \code{fn} should also provide the biomass at equilibrium of the
+unexploited (\emph{i.e.} \code{par}\eqn{=0}) community if \code{Bper} is set
+\eqn{> 0}. Setting \code{Bper}{> 0} means not allowing the estimation of
+Nash Equilibrium biomasses to fall below \code{Bper} percentage of its
+unharvested biomass for any \eqn{i} species. In the literature, such a
+condition is known as \emph{constraint of biodiversity conservation}
+\insertCite{@see Matsuda2006 for details}{nash}; for instance,
+\insertCite{Worm2009;textual}{nash} utilised a \code{Bper}\eqn{=10} to
+defined a threshold under which any stock is considered collapsed.
+
+Equilibrium yield curves are obtained for each \eqn{i} species by applying
+different harvesting values to \eqn{i} whilst keeping the other species
+\eqn{j} at the optimised \code{par} levels (\emph{i.e.} at the Nash
+Equilibrium). As raised by \insertCite{Thorpe2017;textual}{nash}, this is
+one of the advantages of using the Nash Equilibrium as a representation of
+the \emph{Maximum Sustainable Yield} concept.
+
+To compute the interaction matrix a second order central difference quotient
+is used to approximate derivatives. \code{F.increase} is employed during
+this calculation as a step-size set by default to \eqn{0.1} to avoid
+truncation and/or rounding errors \insertCite{Pope2019}{nash}.
+
+The `\code{LV}` method is set by default given its performance advantage
+over the `\code{dummy}` method and is based on the protocol devised by
+\insertCite{Farcas2016}{nash}. For each species \eqn{i} in turn,
+\code{dummy} iteratively maximises the yield by adjusting the harvesting
+rates whereas \code{LV} does the same for all species at once per iteration.
+}
+\references{
+\insertRef{Matsuda2006}{nash}
+
+\insertRef{Worm2009}{nash}
+
+\insertRef{Thorpe2017}{nash}
+
+\insertRef{Pope2019}{nash}
+
+\insertRef{Farcas2016}{nash}
 }
