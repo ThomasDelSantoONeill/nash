@@ -1,23 +1,64 @@
 #'Computes long-term equilibrium yields for \code{\link{Rpath-package}} models
 #'
-#'Description
+#'Viable \code{fn} to be used as input for \code{\link{nash}} when the
+#' \code{\link{Rpath-package}} is used as operating ecological model
+#' \insertCite{@see Lucey2020 for details}{nash}. \code{fn_rpath} takes the
+#' harvesting rates as the numeric type vector \code{par} returning simulated
+#' yields at equilibrium.
 #'
-#'@param par
-#'@param simul.years
-#'@param aged.str
-#'@param data.years
-#'@param IDnames
-#'@param rsim.mod
-#'@param rpath.params
-#'@param avg.window
-#'@param integration.method
+#'@param par Numeric vector of harvesting rates of length equal to the number of
+#' harvested species.
+#'@param simul.years Desired simulation time.
+#'@param aged.str Logical TRUE/FALSE if multistanza functional groups are
+#' included in the model.
+#'@param data.years Numeric vector indicating the years worth of data used to
+#' parameterise the \code{Rpath} model.
+#'@param IDnames Character vector with the names of the species for which
+#' Nash Equilibrium harvesting rates are computed. Note that these names must
+#' coincide with the ones used during the construction of the \code{Rpath}
+#' model.
+#'@param rsim.mod \code{Rpath}'s \code{rsim.scenario} object.
+#'@param rpath.params \code{Rpath}'s \code{rpath.parameters} object.
+#'@param avg.window Numeric type vector indicating the time window used to
+#' average equilibrium yields.
+#'@param integration.method Numerical integration routine used to solve the
+#' \code{rsim.mod} object. Character vector with values (i) `\code{RK4}` or
+#' (ii) `\code{AB}`.
 #'
-#'@return
+#'@details The \code{avg.window} argument becomes useful in case the dynamics
+#' of the model reaches a steady state (\emph{e.g.} a limit cycle) rather than
+#' a stable point attractor.
+#'
+#' The numerical integration methods implemented in the
+#' \code{\link{Rpath-package}} are the 4th order Runge-Kutta (\code{RK4}) and
+#' the two-step Adams-Bashforth (\code{AB}) method. The trade-off between both
+#' methods is accuracy and speed, with \code{RK4} being more accurate but
+#' slower than the \code{AB} method
+#' \insertCite{@see Lucey2020 for details}{nash}.
+#'
+#' \code{fn_rpath} works for aged structure models in which multistanza species
+#' are partition into adults and juveniles. Then a fixed harvesting rate ratio
+#' between adults and juveniles is computed and retained when the function
+#' \code{\link{nash}} is called.
+#'
+#' The biomass reference level \code{B0} returned by \code{fn_rpath} is
+#' employed for conservation constraints during the Nash Equilibrium
+#' computation (see \code{\link{nash}} for details).
+#'
+#'@return The function \code{fn_rpath} returns a list with the following
+#' components:
+#'\item{yields}{Simulated equilibrium yields for each element in \code{par}.}
+#'\item{B0}{Biomass reference levels computed through the mass balance module
+#' of the \code{\link{Rpath-package}}.}
+#'
+#'@references
+#'\insertRef{Lucey2020}{nash}
+#'
 #'@export
 fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
                      IDnames, rsim.mod, rpath.params, avg.window = 10,
                      integration.method = "RK4") {
-  # VALIDATOR
+  ### VALIDATOR
   if (!is.vector(par)) {
     stop("`par` is not a vector.")
   }
@@ -31,8 +72,8 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
     stop("`data.years` must be a single numeric value.")
   }
   if (aged.str == TRUE && !is.list(rpath.params)) {
-    stop("For aged structure models, the Rpath's balanced parameter object needs
-         to be provided.")
+    stop("For aged structure models, the Rpath's balanced parameter object
+         needs to be provided.")
   }
   if (aged.str == FALSE && length(par) < length(IDnames)) {
     stop("The length of `par` and the length of `IDnames` must be equal for
@@ -53,27 +94,29 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
     stop("`avg.window` must be a single numeric value.")
   }
   if (!integration.method%in%list("RK4", "AB")){
-    stop("Sorry but the integration method introduced is not implemented")
+    stop("Sorry but the integration method introduced is not implemented in
+         Rpath's solver engine.")
   }
   if (!("Rpath" %in% .packages(all.available = TRUE))) {
     stop("`fn_Rpath` works only in conjunction with the Rpath package.")
   }
-  # LOCAL VARIABLES
+  ### LOCAL VARIABLES
   sppname <- IDnames
   harvesting <- par
   simul.years <- simul.years
   B0 <- rsim.mod$params$B_BaseRef[sppname]
-  # ADJUST SCENARIO
+  ### ADJUST SCENARIO if Adams-Bashforth method is used
   if (integration.method == "AB") {
     # Setting integration flags
-    NoIntegrateSpp <- as.vector(rsim.mod$params$spname[rsim.mod$params$PBopt > 24])
+    NoIntegrateSpp <- as.vector(rsim.mod$params$spname[
+      rsim.mod$params$PBopt > 24])
     for (i in 1:length(NoIntegrateSpp)) {
       name <- NoIntegrateSpp[i]
       rsim.mod <- adjust.scenario(rsim.mod, parameter = "NoIntegrate",
                                   group = name, value = 0)
     }
   }
-  # NOTE: Ensure effort is set to 0 to play with harvesting rates.
+  # NOTE: Ensuring effort = 0 to play only with harvesting rates.
   fleet_name <- as.character(colnames(rsim.mod$fishing$ForcedEffort))
   for (i in 1:length(fleet_name)) {
     rsim.mod <- adjust.fishing(rsim.mod, parameter = "ForcedEffort",
@@ -81,7 +124,7 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
                                sim.year = 1:simul.years, sim.month = 0,
                                value = 0)
   }
-  # AGE-STRUCTURED MODELS
+  ### AGE-STRUCTURED MODELS
   if (aged.str == TRUE) {
     n.aged.str <- rsim.mod$stanzas$Nsplit
     stanza.names <- rpath.params$stanzas$stindiv$Group
@@ -118,27 +161,32 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
                                    sim.year = (data.years+1):simul.years,
                                    sim.month = 0, value = harvesting[element])
       }
-      # RUN SIMULATION & COMPUTE YIELDS
+      # Run simulation and compute yields
       rsim.simul <- rsim.run(rsim.mod, method = integration.method,
                              years = 1:simul.years)
       yields <- array(dim = c(nrow(rsim.simul$annual_Biomass),
                               length(harvesting)))
       for (i in 1:nrow(rsim.simul$annual_Biomass)) {
-        adY <- rsim.simul$annual_Biomass[i, adname] * harvesting[1:n.aged.str]
-        juvY <- rsim.simul$annual_Biomass[i, juvname] * harvesting[1:n.aged.str] * JuvFProp
+        adY <- rsim.simul$annual_Biomass[i, adname] *
+          harvesting[1:n.aged.str]
+        juvY <- rsim.simul$annual_Biomass[i, juvname] *
+          harvesting[1:n.aged.str] * JuvFProp
         yield <- adY + juvY
-        non.aged.yield <- rsim.simul$annual_Biomass[i, non.aged.groups] * harvesting[-c(1:n.aged.str)]
+        non.aged.yield <- rsim.simul$annual_Biomass[i, non.aged.groups] *
+          harvesting[-c(1:n.aged.str)]
         yields[i,] <- append(yield, non.aged.yield)
       }
     } else if ((length(IDnames) > length(stanza.names)) == FALSE) {
-      # RUN SIMULATION & COMPUTE YIELDS
+      # Run simulation and compute yields
       rsim.simul <- rsim.run(rsim.mod, method = integration.method,
                              years = 1:simul.years)
       yields <- array(dim = c(nrow(rsim.simul$annual_Biomass),
                               length(harvesting)))
       for (i in 1:nrow(rsim.simul$annual_Biomass)) {
-        adY <- rsim.simul$annual_Biomass[i, adname] * harvesting[1:length(adname)]
-        juvY <- rsim.simul$annual_Biomass[i, juvname] * harvesting[1:length(juvname)] * JuvFProp
+        adY <- rsim.simul$annual_Biomass[i, adname] *
+          harvesting[1:length(adname)]
+        juvY <- rsim.simul$annual_Biomass[i, juvname] *
+          harvesting[1:length(juvname)] * JuvFProp
         yields[i,] <- adY + juvY
       }
     }
@@ -150,7 +198,7 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
                                  sim.year = (data.years+1):simul.years,
                                  sim.month = 0, value = harvesting[i])
     }
-    # RUN SIMULATION & COMPUTE YIELDS
+    # Run simulation and compute yields
     rsim.simul <- rsim.run(rsim.mod, method = integration.method,
                            years = 1:simul.years)
     yields <- array(dim = c(nrow(rsim.simul$annual_Biomass), length(adname)))

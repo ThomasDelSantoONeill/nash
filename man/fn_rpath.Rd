@@ -2,26 +2,74 @@
 % Please edit documentation in R/fn_rpath.R
 \name{fn_rpath}
 \alias{fn_rpath}
-\title{Computes long-term equilibrium yields for \code{Rpath} models}
+\title{Computes long-term equilibrium yields for \code{\link{Rpath-package}} models}
 \usage{
-fn_rpath(
-  par,
-  simul.years = 100,
-  aged.str = TRUE,
-  data.years,
-  IDnames,
-  rsim.mod,
-  rpath.params,
-  avg.window = 10,
-  integration.method = "RK4"
-)
+fn_rpath(par, simul.years = 100, aged.str = TRUE, data.years, IDnames, rsim.mod,
+rpath.params, avg.window = 10, integration.method = "RK4")
 }
 \arguments{
-\item{integration.method}{}
+\item{par}{Numeric vector of harvesting rates of length equal to the number of
+harvested species.}
+
+\item{simul.years}{Desired simulation time.}
+
+\item{aged.str}{Logical TRUE/FALSE if multistanza functional groups are
+included in the model.}
+
+\item{data.years}{Numeric vector indicating the years worth of data used to
+parameterise the \code{Rpath} model.}
+
+\item{IDnames}{Character vector with the names of the species for which
+Nash Equilibrium harvesting rates are computed. Note that these names must
+coincide with the ones used during the construction of the \code{Rpath}
+model.}
+
+\item{rsim.mod}{\code{Rpath}'s \code{rsim.scenario} object.}
+
+\item{rpath.params}{\code{Rpath}'s \code{rpath.parameters} object.}
+
+\item{avg.window}{Numeric type vector indicating the time window used to
+average equilibrium yields.}
+
+\item{integration.method}{Numerical integration routine used to solve the
+\code{rsim.mod} object. Character vector with values (i) `\code{RK4}` or
+(ii) `\code{AB}`.}
 }
 \value{
-
+The function \code{fn_rpath} returns a list with the following
+components:
+\item{yields}{Simulated equilibrium yields for each element in \code{par}.}
+\item{B0}{Biomass reference levels computed through the mass balance module
+of the \code{\link{Rpath-package}}.}
 }
 \description{
-Description
+Viable \code{fn} to be used as input for \code{\link{nash}} when the
+\code{\link{Rpath-package}} is used as operating ecological model
+\insertCite{@see Lucey2020 for details}{nash}. \code{fn_rpath} takes the
+harvesting rates as the numeric type vector \code{par} returning simulated
+yields at equilibrium.
+}
+\details{
+The \code{avg.window} argument becomes useful in case the dynamics
+of the model reaches a steady state (\emph{e.g.} a limit cycle) rather than
+a stable point attractor.
+
+The numerical integration methods implemented in the
+\code{\link{Rpath-package}} are the 4th order Runge-Kutta (\code{RK4}) and
+the two-step Adams-Bashforth (\code{AB}) method. The trade-off between both
+methods is accuracy and speed, with \code{RK4} being more accurate but
+slower than the \code{AB} method
+\insertCite{@see Lucey2020 for details}{nash}.
+
+\code{fn_rpath} works for aged structure models in which multistanza species
+are partition into adults and juveniles. Then a fixed harvesting rate ratio
+between adults and juveniles is computed and retained when the function
+\code{\link{nash}} is called.
+
+The biomass reference level \code{B0} returned by \code{fn_rpath} is
+employed for conservation constraints during the Nash Equilibrium
+computation (see \code{\link{nash}} for details).
+}
+\references{
+\insertRef{Lucey2020}{nash}
 }

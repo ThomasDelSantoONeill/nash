@@ -7,8 +7,8 @@
 #'
 #'@param par Numeric vector of harvesting rates of length equal to the number of
 #' harvested species.
-#'@param fn Function that runs the ODE model \code{par} as input and returns
-#' simulated yields at equilibrium.
+#'@param fn Function that runs the ODE model with \code{par} as input and
+#' returns simulated yields at equilibrium.
 #'@param ... Further arguments to be passed to \code{fn}.
 #'@param method Method utilised to compute the Nash Equilibrium:
 #' (i) `\code{LV}` or (ii) `\code{dummy}` method.
@@ -20,13 +20,14 @@
 #'@param F.increase Double type numeric vector indicating the step size used
 #' to compute the interaction matrix.
 #'
-#'@details For ecosystem models where \code{\link{Rpath-package}} is not
-#' employed, \code{fn} should also provide the biomass at equilibrium of the
-#' unexploited (\emph{i.e.} \code{par}\eqn{=0}) community if \code{Bper} is set
-#' \eqn{> 0}. Setting \code{Bper}{> 0} means not allowing the estimation of
-#' Nash Equilibrium biomasses to fall below \code{Bper} percentage of its
-#' unharvested biomass for any \eqn{i} species. In the literature, such a
-#' condition is known as \emph{constraint of biodiversity conservation}
+#'@details For ecosystem models where \code{\link{Rpath-package}}
+#' (\insertCite{Lucey2020}{nash}) is not employed, \code{fn} should also
+#' provide the biomass at equilibrium of the unexploited (\emph{i.e.}
+#' \code{par}\eqn{=0}) community if \code{Bper} is set \eqn{> 0}. Setting
+#' \code{Bper}{> 0} means not allowing the estimation of Nash Equilibrium
+#' biomasses to fall below \code{Bper} percentage of its unharvested biomass
+#' for any \eqn{i} species. In the literature, such a condition is known as
+#' \emph{constraint of biodiversity conservation}
 #' \insertCite{@see Matsuda2006 for details}{nash}; for instance,
 #' \insertCite{Worm2009;textual}{nash} utilised a \code{Bper}\eqn{=10} to
 #' defined a threshold under which any stock is considered collapsed.
@@ -49,7 +50,7 @@
 #' \code{dummy} iteratively maximises the yield by adjusting the harvesting
 #' rates whereas \code{LV} does the same for all species at once per iteration.
 #'
-#'@return \code{nash} returns a list with the following components:
+#'@return The function \code{nash} returns a list with the following components:
 #'\item{par}{Harvesting rates at the Nash Equilibrium.}
 #'\item{value}{Value of \code{fn} corresponding to the optimised \code{par}.}
 #'\item{counts}{Number of calls to \code{fn}.}
@@ -66,6 +67,8 @@
 #'\insertRef{Pope2019}{nash}
 #'
 #'\insertRef{Farcas2016}{nash}
+#'
+#'\insertRef{Lucey2020}{nash}
 #'
 #'@export
 nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
