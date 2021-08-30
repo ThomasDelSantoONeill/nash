@@ -46,7 +46,7 @@ to that of \code{\link{optim}}.
 }
 \details{
 For ecosystem models where \code{\link{Rpath-package}}
-(\insertCite{Lucey2020}{nash}) is not employed, \code{fn} should also
+\insertCite{Lucey2020}{nash} is not employed, \code{fn} should also
 provide the biomass at equilibrium of the unexploited (\emph{i.e.}
 \code{par}\eqn{=0}) community if \code{Bper} is set \eqn{> 0}. Setting
 \code{Bper}{> 0} means not allowing the estimation of Nash Equilibrium
@@ -57,10 +57,13 @@ for any \eqn{i} species. In the literature, such a condition is known as
 \insertCite{Worm2009;textual}{nash} utilised a \code{Bper}\eqn{=10} to
 defined a threshold under which any stock is considered collapsed.
 
+\loadmathjax
 Equilibrium yield curves are obtained for each \eqn{i} species by applying
 different harvesting values to \eqn{i} whilst keeping the other species
 \eqn{j} at the optimised \code{par} levels (\emph{i.e.} at the Nash
-Equilibrium). As raised by \insertCite{Thorpe2017;textual}{nash}, this is
+Equilibrium). These harvesting values applied to \eqn{i} run from \eqn{0}
+to \mjeqn{F_{\text{Nash},i}\times 2}{ascii} in increments of \eqn{0.025}.
+As raised by \insertCite{Thorpe2017;textual}{nash}, this is
 one of the advantages of using the Nash Equilibrium as a representation of
 the \emph{Maximum Sustainable Yield} concept.
 

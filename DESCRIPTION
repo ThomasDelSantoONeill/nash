@@ -22,8 +22,11 @@ Description: An algorithm that computes harvesting rates at the Nash
 License: What license is it under?
 Imports:
     Rpath (>= 0.0.1.2),
-    Rdpack
-RdMacros: Rdpack
+    Rdpack,
+    mathjaxr
+RdMacros: 
+    Rdpack,
+    mathjaxr
 Suggests:
     knitr,
     rmarkdown
