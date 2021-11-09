@@ -23,8 +23,7 @@ License: GPL-3
 Imports:
     Rpath (>= 0.0.1.2),
     Rdpack,
-    mathjaxr,
-    progress
+    mathjaxr
 RdMacros: 
     Rdpack,
     mathjaxr

@@ -41,15 +41,8 @@
 #' between adults and juveniles is computed and retained when the function
 #' \code{\link{nash}} is called.
 #'
-#' The biomass reference level \code{B0} returned by \code{fn_rpath} is
-#' employed for conservation constraints during the Nash Equilibrium
-#' computation (see \code{\link{nash}} for details).
-#'
-#'@return The function \code{fn_rpath} returns a list with the following
-#' components:
-#'\item{yields}{Simulated equilibrium yields for each element in \code{par}.}
-#'\item{B0}{Biomass reference levels computed through the mass balance module
-#' of the \code{\link{Rpath-package}}.}
+#'@return The function \code{fn_rpath} returns an atomic vector of real
+#' double-precision long-term yields.
 #'
 #'@references
 #'\insertRef{Lucey2020}{nash}
@@ -104,7 +97,7 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
   sppname <- IDnames
   harvesting <- par
   simul.years <- simul.years
-  B0 <- rsim.mod$params$B_BaseRef[sppname]
+  # B0 <- rsim.mod$params$B_BaseRef[sppname]
   ### ADJUST SCENARIO if Adams-Bashforth method is used
   if (integration.method == "AB") {
     # Setting integration flags
@@ -211,6 +204,7 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
     names <- append(names, paste("Spp",i))
   }
   colnames(yields) <- names
-  outlist <- list(yields = colMeans(tail(yields, n = avg.window)), B0 = B0)
+  # outlist <- list(yields = colMeans(tail(yields, n = avg.window)), B0 = B0)
+  outlist <- colMeans(tail(yields, n = avg.window))
   return(outlist)
 }

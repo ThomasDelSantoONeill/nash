@@ -11,26 +11,23 @@
 #' returns simulated yields at equilibrium.
 #'@param ... Further arguments to be passed to \code{fn}.
 #'@param method Method utilised to compute the Nash Equilibrium:
-#' (i) `\code{LV}` or (ii) `\code{dummy}` method.
+#' (i) `\code{LV}` or (ii) `\code{round-robin}` method.
 #'@param yield.cruves Logical TRUE/FALSE if equilibrium yield curves for each
 #' species are desired.
 #'@param conv.criterion Absolute convergence tolerance set by default to
 #' \eqn{< 0.001}.
-#'@param Bper Percentage of the unharvested biomass. Default set to \eqn{0}.
+#'@param Bcons Biomass conservation threshold. Default set to \eqn{0}.
 #'@param F.increase Double type numeric vector indicating the step size used
 #' to compute the interaction matrix.
 #'
-#'@details For ecosystem models where \code{\link{Rpath-package}}
-#' \insertCite{Lucey2020}{nash} is not employed, \code{fn} should also
-#' provide the biomass at equilibrium of the unexploited (\emph{i.e.}
-#' \code{par}\eqn{=0}) community if \code{Bper} is set \eqn{> 0}. Setting
-#' \code{Bper}{> 0} means not allowing the estimation of Nash Equilibrium
-#' biomasses to fall below \code{Bper} percentage of its unharvested biomass
-#' for any \eqn{i} species. In the literature, such a condition is known as
-#' \emph{constraint of biodiversity conservation}
-#' \insertCite{@see Matsuda2006 for details}{nash}; for instance,
-#' \insertCite{Worm2009;textual}{nash} utilised a \code{Bper}\eqn{=10} to
-#' defined a threshold under which any stock is considered collapsed.
+#'@details For ecosystem models where there is some interest in keeping some or
+#' all harvested species above a certain biomass state limit, \code{Bcons}
+#' should be populated with non zero biomass values. The length of this vector
+#' must be the same as \code{par} and set to non zero where relevant. In the
+#' literature, is common practice to fixed such \emph{constraint of biodiversity
+#' conservation} \insertCite{Matsuda2006}{nash} to \eqn{10\%} of the virgin
+#' biomass; level at which a stock is considered collapsed
+#' \insertCite{Worm2009}{nash}.
 #'
 #'\loadmathjax
 #' Equilibrium yield curves are obtained for each \eqn{i} species by applying
@@ -48,9 +45,9 @@
 #' truncation and/or rounding errors \insertCite{Pope2019}{nash}.
 #'
 #' The `\code{LV}` method is set by default given its performance advantage
-#' over the `\code{dummy}` method and is based on the protocol devised by
+#' over the `\code{round-robin}` method and is based on the protocol devised by
 #' \insertCite{Farcas2016}{nash}. For each species \eqn{i} in turn,
-#' \code{dummy} iteratively maximises the yield by adjusting the harvesting
+#' \code{round-robin} iteratively maximises the yield by adjusting the harvesting
 #' rates whereas \code{LV} does the same for all species at once per iteration.
 #'
 #'@return The function \code{nash} returns a list with the following components:
@@ -75,7 +72,7 @@
 #'
 #'@export
 nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
-                 conv.criterion = 0.001, Bper = 0, F.increase = 0.1){
+                 conv.criterion = 0.001, Bcons = 0, F.increase = 0.1){
   ### VALIDATOR
   if (!is.vector(par)) {
     stop("`par` is not a vector.")
@@ -83,7 +80,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
   if (length(par) < 1) {
     stop("`par` must be a vector of length >= 1")
   }
-  if (!method%in%list("LV", "dummy")){
+  if (!method%in%list("LV", "round-robin")){
     stop("Sorry but this method is not implemented")
   }
   if (method == "LV") {
@@ -96,7 +93,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     Nash_Rs <- array(dim = c(n.iter, nSpp))
     output <- fn(par, ...)
     yields <- output$yields
-    B0 <- output$B0 # Initial biomass used for conservation constraints
+    # B0 <- output$B0 # Initial biomass used for conservation constraints
     # Avoid numerical errors computing M due to par elements being exactly =
     #   to F.increase
     if (any(par==F.increase)==TRUE) {
@@ -137,7 +134,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       B_new <- solve(G + G_hat, r)
       ### CONSERVATION CONSTRAINTS
       # Define Bcons state
-      Bcons <- B0*(Bper/100)
+      # Bcons <- B0*(Bper/100)
       # B vector if any i is to be conserved
       Bcomplete <- rep(NA, nSpp)
       # Targeted with all TRUE entries
@@ -205,7 +202,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
                     convergence = paste("Nash equilibrium found after ", iter,
                                         " iterations."))
   }
-  if (method == "dummy") {
+  if (method == "round-robin") {
     ### LOCAL VARIABLES
     nSpp <- length(par)
     nash_fncalls <- 0
@@ -259,7 +256,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     }
     Yieldeq <- list()
     par <- c()
-    if (method=="dummy" | method=="LV") {
+    if (method=="round-robin" | method=="LV") {
       par <- as.numeric(tail(na.omit(Nash_Fs),n = 1))
     }
     for (i in 1:length(par)) {
