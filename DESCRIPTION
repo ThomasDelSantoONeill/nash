@@ -1,7 +1,7 @@
 Package: nash
 Type: Package
-Title: Computation of Nash Equilibrium Harvesting Rates for
-       Interdependent Natural Resources
+Title: An efficient algorithm for Nash equilibria when harvesting interacting
+    natural living resources.
 Version: 0.1.0
 Authors@R: c(
     person("Thomas Julian", "Del Santo O'Neill", 
@@ -19,11 +19,12 @@ Description: An algorithm that computes harvesting rates at the Nash
     `fn_rpath` that streamlines the aforementioned specifically for 
     Ecopaht with Ecosim models formulated via its R implementation 
     `Rpath`.
-License: What license is it under?
+License: GPL-3
 Imports:
     Rpath (>= 0.0.1.2),
     Rdpack,
-    mathjaxr
+    mathjaxr,
+    progress
 RdMacros: 
     Rdpack,
     mathjaxr

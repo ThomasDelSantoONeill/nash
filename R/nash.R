@@ -97,13 +97,18 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     output <- fn(par, ...)
     yields <- output$yields
     B0 <- output$B0 # Initial biomass used for conservation constraints
+    # Avoid numerical errors computing M due to par elements being exactly =
+    #   to F.increase
+    if (any(par==F.increase)==TRUE) {
+      elements <- which(par==F.increase)
+      par[elements] <- par[elements] + 1e-5
+    }
     B.eq <- as.numeric(yields) / par
     F.eq <- par
     M <- matrix(nrow = nSpp, ncol = nSpp)
     ### ALGORITHM
     for (iter in 1:n.iter) {
       for (i in 1:nSpp) {
-        # Avoid that any element of par = F.increase
         #Parameters
         par.p <- par
         par.m <- par
