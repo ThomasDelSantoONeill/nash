@@ -25,7 +25,7 @@
 #' should be populated with non zero biomass values. The length of this vector
 #' must be the same as \code{par} and set to non zero where relevant. In the
 #' literature, is common practice to fixed such \emph{constraint of biodiversity
-#' conservation} \insertCite{Matsuda2006}{nash} to \eqn{10\%} of the virgin
+#' conservation} \insertCite{Matsuda2006}{nash} to \eqn{10%} of the virgin
 #' biomass; level at which a stock is considered collapsed
 #' \insertCite{Worm2009}{nash}.
 #'
