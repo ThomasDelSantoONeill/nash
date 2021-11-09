@@ -4,17 +4,8 @@
 \alias{fn_rpath}
 \title{Computes long-term equilibrium yields for \code{\link{Rpath-package}} models}
 \usage{
-fn_rpath(
-  par,
-  simul.years = 100,
-  aged.str = TRUE,
-  data.years,
-  IDnames,
-  rsim.mod,
-  rpath.params,
-  avg.window = 10,
-  integration.method = "RK4"
-)
+fn_rpath(par, simul.years = 100, aged.str = TRUE, data.years, IDnames, rsim.mod,
+ rpath.params, avg.window = 10, integration.method = "RK4")
 }
 \arguments{
 \item{par}{Numeric vector of harvesting rates of length equal to the number of

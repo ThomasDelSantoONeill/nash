@@ -4,16 +4,8 @@
 \alias{nash}
 \title{Computes harvesting rates at the Nash Equilibrium}
 \usage{
-nash(
-  par,
-  fn,
-  ...,
-  method = "LV",
-  yield.curves = FALSE,
-  conv.criterion = 0.001,
-  Bcons = 0,
-  F.increase = 0.1
-)
+nash(par, fn, ..., method = "LV", yield.curves = FALSE, conv.criterion = 0.001,
+ Bcons = 0, F.increase = 0.1)
 }
 \arguments{
 \item{par}{Numeric vector of harvesting rates of length equal to the number of
