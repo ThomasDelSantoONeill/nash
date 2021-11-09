@@ -4,8 +4,17 @@
 \alias{fn_rpath}
 \title{Computes long-term equilibrium yields for \code{\link{Rpath-package}} models}
 \usage{
-fn_rpath(par, simul.years = 100, aged.str = TRUE, data.years, IDnames, rsim.mod,
-rpath.params, avg.window = 10, integration.method = "RK4")
+fn_rpath(
+  par,
+  simul.years = 100,
+  aged.str = TRUE,
+  data.years,
+  IDnames,
+  rsim.mod,
+  rpath.params,
+  avg.window = 10,
+  integration.method = "RK4"
+)
 }
 \arguments{
 \item{par}{Numeric vector of harvesting rates of length equal to the number of
@@ -36,11 +45,8 @@ average equilibrium yields.}
 (ii) `\code{AB}`.}
 }
 \value{
-The function \code{fn_rpath} returns a list with the following
-components:
-\item{yields}{Simulated equilibrium yields for each element in \code{par}.}
-\item{B0}{Biomass reference levels computed through the mass balance module
-of the \code{\link{Rpath-package}}.}
+The function \code{fn_rpath} returns an atomic vector of real
+double-precision long-term yields.
 }
 \description{
 Viable \code{fn} to be used as input for \code{\link{nash}} when the
@@ -65,10 +71,6 @@ slower than the \code{AB} method
 are partition into adults and juveniles. Then a fixed harvesting rate ratio
 between adults and juveniles is computed and retained when the function
 \code{\link{nash}} is called.
-
-The biomass reference level \code{B0} returned by \code{fn_rpath} is
-employed for conservation constraints during the Nash Equilibrium
-computation (see \code{\link{nash}} for details).
 }
 \references{
 \insertRef{Lucey2020}{nash}

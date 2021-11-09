@@ -2,4 +2,3 @@
 
 export(fn_rpath)
 export(nash)
-import(mathjaxr)
