@@ -92,7 +92,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     Nash_Bs <- array(dim = c(n.iter, nSpp))
     Nash_Rs <- array(dim = c(n.iter, nSpp))
     output <- fn(par, ...)
-    yields <- output$yields
+    yields <- output
     # B0 <- output$B0 # Initial biomass used for conservation constraints
     # Avoid numerical errors computing M due to par elements being exactly =
     #   to F.increase
@@ -112,10 +112,10 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
         par.p[i] <- par.p[i] + F.increase
         par.m[i] <- par.m[i] - F.increase
         #Running model
-        yields.p <- fn(par.p, ...)$yields
+        yields.p <- fn(par.p, ...)
         B.p <- as.numeric(yields.p) / par.p
         nash_fncalls <- nash_fncalls + 1
-        yields.m <- fn(par.m, ...)$yields
+        yields.m <- fn(par.m, ...)
         B.m <- as.numeric(yields.m) / par.m
         nash_fncalls <- nash_fncalls + 1
         #Populating M
@@ -178,7 +178,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       # Re-running the model to equilibrium with new Nash Fs
       par <- as.numeric(F_new)
       # print(max(abs(F.eq / Nash_Fs[(iter),] -1)))
-      yields <- fn(par, ...)$yields
+      yields <- fn(par, ...)
       B.eq <- as.numeric(yields) / par
       F.eq <- par
       nash_fncalls <- nash_fncalls + 1
@@ -197,7 +197,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     #                 Nash_Rs = Nash_Rs[1:iter,], func.evals = nash_fncalls)
     outlist <- list(par = tail(na.omit(Nash_Fs), n = 1),
                     value = fn(as.numeric(tail(na.omit(Nash_Fs),
-                                               n = 1)), ...)$yields,
+                                               n = 1)), ...),
                     counts = nash_fncalls,
                     convergence = paste("Nash equilibrium found after ", iter,
                                         " iterations."))
@@ -214,7 +214,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     Yield <- function(par, Hvec, j){
       Hvec[j] <- par
       nash_fncalls <- nash_fncalls + 1
-      as.numeric(fn(Hvec, ...)$yields)[j]
+      as.numeric(fn(Hvec, ...))[j]
     }
     ### ALGORITHM
     for (iter in 1:n.iter) {
@@ -242,7 +242,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     # outlist <- list(Nash_Fs = Nash_Hs[1:iter,], func.evals = nash_fncalls)
     outlist <- list(par = tail(na.omit(Nash_Hs), n = 1),
                     value = fn(as.numeric(tail(na.omit(Nash_Hs),
-                                               n = 1)), ...)$yields,
+                                               n = 1)), ...),
                     counts = nash_fncalls,
                     convergence = paste("Nash equilibrium found after ", iter,
                                         " iterations."))
@@ -252,7 +252,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     Yield <- function(par, Hvec, j){
       Hvec[j] <- par
       nash_fncalls <- nash_fncalls + 1
-      as.numeric(fn(Hvec, ...)$yields)[j]
+      as.numeric(fn(Hvec, ...))[j]
     }
     Yieldeq <- list()
     par <- c()
