@@ -72,7 +72,8 @@
 #'
 #'@export
 nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
-                 conv.criterion = 0.001, Bcons = 0, F.increase = 0.1){
+                 conv.criterion = 0.001, Bcons = 0, F.increase = 0.1,
+                 progress = TRUE){
   ### VALIDATOR
   if (!is.vector(par)) {
     stop("`par` is not a vector.")
@@ -177,7 +178,9 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       Nash_Rs[iter,] <- r
       # Re-running the model to equilibrium with new Nash Fs
       par <- as.numeric(F_new)
-      # print(max(abs(F.eq / Nash_Fs[(iter),] -1)))
+      if (progress == TRUE) {
+        print(max(abs(F.eq / Nash_Fs[(iter),] -1)))
+      }
       yields <- fn(par, ...)
       B.eq <- as.numeric(yields) / par
       F.eq <- par
@@ -227,7 +230,9 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
         nash_fncalls <- nash_fncalls + output$counts[1]
       }
       Nash_Hs[iter,] <- par
-      # print(max(abs(F.eq / Nash_Hs[(iter),] -1)))
+      if (progress == TRUE) {
+        print(max(abs(F.eq / Nash_Hs[(iter),] -1)))
+      }
       F.eq <- par
       if (iter>1) {
         if (max(abs(Nash_Hs[iter,] / Nash_Hs[(iter-1),] -1)) < 0.001) {
