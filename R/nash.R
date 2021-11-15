@@ -257,7 +257,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     Yieldeq <- list()
     par <- c()
     if (method=="round-robin" | method=="LV") {
-      par <- as.numeric(tail(na.omit(Nash_Fs),n = 1))
+      par <- as.numeric(outlist$par)
     }
     for (i in 1:length(par)) {
       Fvec <- seq(0,par[i]*2,0.025)
