@@ -88,7 +88,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     ### LOCAL VARIABLES
     nSpp <- length(par)
     nash_fncalls <- 0
-    n.iter <- 150
+    n.iter <- 200
     Nash_Fs <- array(dim = c(n.iter, nSpp))
     Nash_Bs <- array(dim = c(n.iter, nSpp))
     Nash_Rs <- array(dim = c(n.iter, nSpp))
@@ -210,7 +210,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     nSpp <- length(par)
     nash_fncalls <- 0
     conv.criterion <- 0.001
-    n.iter <- 150
+    n.iter <- 200
     Nash_Hs <- array(dim = c(n.iter, nSpp))
     F.eq <- par
     ### COMPUTE YIELDS ONE AT A TIME
