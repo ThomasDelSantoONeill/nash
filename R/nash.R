@@ -256,10 +256,12 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
   if (method == "SS") {
     ### LOCAL VARIABLES
     nSpp <- length(par)
+    nash_fncalls <- 0
     SS_Hs <- array(dim = c(2, nSpp))
     ### COMPUTE YIELDS ONE AT A TIME
     Yield <- function(par, Hvec, j){
       Hvec[j] <- par
+      nash_fncalls <- nash_fncalls + 1
       as.numeric(fn(Hvec, ...))[j]
     }
     ### ALGORITHM
@@ -269,10 +271,10 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
                       control = list(fnscale = -1,
                                      factr = 1e12),
                       method = "L-BFGS-B")
-      par[j] = output$par
-      SS_Hs[1,j] <- par[j]
+      SS_Hs[1,j] <- output$par
       SS_Hs[2,j] <- output$value
-      print(par)
+      nash_fncalls <- nash_fncalls + output$counts[1]
+      print(SS_Hs)
     }
     ### OUTPUT
     outlist <- list(par = SS_Hs[1,],
