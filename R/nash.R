@@ -224,7 +224,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     for (iter in 1:n.iter) {
       for (j in 1:nSpp) {
         output <- optim(par = par[j], fn = Yield, Hvec = par, j = j,
-                        control = list(fnscale = -1, abstol = 0.001,
+                        control = list(fnscale = -1,
                                        factr = 1e12),
                         method = "BFGS", hessian = TRUE)
         par[j] = output$par
@@ -253,6 +253,31 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
                     convergence = paste("Nash equilibrium found after ", iter,
                                         " iterations."))
   }
+  if (method == "SS") {
+    ### LOCAL VARIABLES
+    nSpp <- length(par)
+    SS_Hs <- array(dim = c(2, nSpp))
+    ### COMPUTE YIELDS ONE AT A TIME
+    Yield <- function(par, Hvec, j){
+      Hvec[j] <- par
+      as.numeric(fn(Hvec, ...))[j]
+    }
+    ### ALGORITHM
+    for (j in 1:nSpp) {
+      output <- optim(par = par[j], fn = Yield, Hvec = par, j = j,
+                      lower = 0,
+                      control = list(fnscale = -1,
+                                     factr = 1e12),
+                      method = "L-BFGS-B")
+      par[j] = output$par
+      SS_Hs[1,j] <- par[j]
+      SS_Hs[2,j] <- output$value
+      print(par)
+    }
+    ### OUTPUT
+    outlist <- list(par = SS_Hs[1,],
+                    value = SS_Hs[2,])
+  }
   ### EQUILIBRIUM YIELD CURVES
   if (yield.curves == TRUE) {
     Yield <- function(par, Hvec, j){
@@ -262,7 +287,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     }
     Yieldeq <- list()
     par <- c()
-    if (method=="round-robin" | method=="LV") {
+    if (method=="round-robin" | method=="LV" | method == "SS") {
       par <- as.numeric(outlist$par)
     }
     for (i in 1:length(par)) {
