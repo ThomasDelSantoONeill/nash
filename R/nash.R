@@ -34,7 +34,7 @@
 #' different harvesting values to \eqn{i} whilst keeping the other species
 #' \eqn{j} at the optimised \code{par} levels (\emph{i.e.} at the Nash
 #' Equilibrium). These harvesting values applied to \eqn{i} run from \eqn{0}
-#' to \mjeqn{F_{\text{Nash},i}\times 2}{ascii} in increments of \eqn{0.025}.
+#' to \mjeqn{F_{\text{Nash},i}\times 2}{ascii} in \eqn{\text{length.out}=30}.
 #' As raised by \insertCite{Thorpe2017;textual}{nash}, this is
 #' one of the advantages of using the Nash Equilibrium as a representation of
 #' the \emph{Maximum Sustainable Yield} concept.
@@ -293,7 +293,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       par <- as.numeric(outlist$par)
     }
     for (i in 1:length(par)) {
-      Fvec <- seq(0,par[i]*2,0.025)
+      Fvec <- seq(0,par[i]*2,length.out = 30)
       Yieldspp <- sapply(X = Fvec, FUN = Yield, Hvec = par, j = i)
       outyield <- cbind(Fvec, Yieldspp)
       Yieldeq[[i]] <- outyield
