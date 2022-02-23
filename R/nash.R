@@ -81,7 +81,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
   if (length(par) < 1) {
     stop("`par` must be a vector of length >= 1")
   }
-  if (!method%in%list("LV", "round-robin")){
+  if (!method%in%list("LV", "round-robin", "SS")){
     stop("Sorry but this method is not implemented")
   }
   if (method == "LV") {
