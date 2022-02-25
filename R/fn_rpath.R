@@ -50,7 +50,7 @@
 #'@export
 fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
                      IDnames, rsim.mod, rpath.params, avg.window = 10,
-                     integration.method = "RK4") {
+                     integration.method = "RK4", verbose = FALSE) {
   ### VALIDATOR
   if (!is.vector(par)) {
     stop("`par` is not a vector.")
@@ -204,7 +204,13 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
     names <- append(names, paste("Spp",i))
   }
   colnames(yields) <- names
-  # outlist <- list(yields = colMeans(tail(yields, n = avg.window)), B0 = B0)
-  outlist <- colMeans(tail(yields, n = avg.window))
-  return(outlist)
+  # verbose = TRUE returns the full run time series (default False)
+  # otherwise just return the colmean value
+  if (verbose) {
+    varires <- tail(yields, n = avg.window)
+    return(varires)
+  } else{
+    outlist <- colMeans(tail(yields, n = avg.window))
+    return(outlist)
+  }
 }
