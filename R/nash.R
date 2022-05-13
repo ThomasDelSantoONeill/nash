@@ -88,7 +88,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     ### LOCAL VARIABLES
     nSpp <- length(par)
     nash_fncalls <- 0
-    n.iter <- 200
+    n.iter <- 100
     Nash_Fs <- array(dim = c(n.iter, nSpp))
     Nash_Bs <- array(dim = c(n.iter, nSpp))
     Nash_Rs <- array(dim = c(n.iter, nSpp))
