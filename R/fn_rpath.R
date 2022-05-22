@@ -162,12 +162,12 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
                                 length(harvesting)))
       }
       for (i in 1:nrow(rsim.simul$annual_Biomass)) {
-        adY <- rsim.simul$annual_Biomass[i, adname] *
-          harvesting[1:n.aged.str]
-        juvY <- rsim.simul$annual_Biomass[i, juvname] *
-          harvesting[1:n.aged.str] * JuvFProp
-        non.aged.yield <- rsim.simul$annual_Biomass[i, non.aged.groups] *
-          harvesting[-c(1:n.aged.str)]
+        adY <- as.numeric(rsim.simul$annual_Biomass[i, adname] *
+          harvesting[1:n.aged.str])
+        juvY <- as.numeric(rsim.simul$annual_Biomass[i, juvname] *
+          harvesting[1:n.aged.str] * JuvFProp)
+        non.aged.yield <- as.numeric(rsim.simul$annual_Biomass[i, non.aged.groups] *
+          harvesting[-c(1:n.aged.str)])
         if (root.find) {
           yields[i,] <- append(c(rbind(juvY, adY)), non.aged.yield)
         } else{
@@ -187,10 +187,10 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
                                 length(harvesting)))
       }
       for (i in 1:nrow(rsim.simul$annual_Biomass)) {
-        adY <- rsim.simul$annual_Biomass[i, adname] *
-          harvesting[1:length(adname)]
-        juvY <- rsim.simul$annual_Biomass[i, juvname] *
-          harvesting[1:length(juvname)] * JuvFProp
+        adY <- as.numeric(rsim.simul$annual_Biomass[i, adname] *
+          harvesting[1:length(adname)])
+        juvY <- as.numeric(rsim.simul$annual_Biomass[i, juvname] *
+          harvesting[1:length(juvname)] * JuvFProp)
         if (root.find) {
           yields[i,] <- c(rbind(juvY, adY))
         } else{
