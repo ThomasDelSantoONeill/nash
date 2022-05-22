@@ -164,7 +164,7 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
         non.aged.yield <- rsim.simul$annual_Biomass[i, non.aged.groups] *
           harvesting[-c(1:n.aged.str)]
         if (root.find) {
-          yields[i,] append(c(rbind(juvY, adY)), non.aged.yield)
+          yields[i,] <- append(c(rbind(juvY, adY)), non.aged.yield)
         } else{
           yield <- adY + juvY
           yields[i,] <- append(yield, non.aged.yield)
@@ -182,7 +182,7 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
         juvY <- rsim.simul$annual_Biomass[i, juvname] *
           harvesting[1:length(juvname)] * JuvFProp
         if (root.find) {
-          yields[i,] c(rbind(juvY, adY))
+          yields[i,] <- c(rbind(juvY, adY))
         } else{
           yields[i,] <- adY + juvY
         }
