@@ -118,12 +118,12 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
   if (aged.str == TRUE) {
     n.aged.str <- rsim.mod$stanzas$Nsplit
     stanza.names <- rpath.params$stanzas$stindiv$Group
-    stanza.names <- IDnames[IDnames%in%stanza.names]
+    stanza.names <- sppname[sppname%in%stanza.names]
     juvname <- stanza.names[seq(1, length(stanza.names), 2)]
     adname <- stanza.names[seq(2, length(stanza.names), 2)]
     JuvFProp <- as.numeric((rsim.mod$fishing$ForcedFRate[data.years,juvname]/
                               rsim.mod$fishing$ForcedFRate[data.years,adname]))
-    if (all.equal(IDnames[IDnames%in%stanza.names], stanza.names) == FALSE) {
+    if (all.equal(sppname[sppname%in%stanza.names], stanza.names) == FALSE) {
       stop("`IDnames` levels for stanza groups must be labeled as in the model
            parameterisation.")
     }
@@ -140,8 +140,8 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
                                  sim.year = (data.years+1):simul.years,
                                  sim.month = 0, value = harvesting[i])
     }
-    if ((length(IDnames) > length(stanza.names)) == TRUE) {
-      non.aged.groups <- IDnames[!IDnames%in%stanza.names]
+    if ((length(sppname) > length(stanza.names)) == TRUE) {
+      non.aged.groups <- sppname[!sppname%in%stanza.names]
       elements <- n.aged.str + (1:length(non.aged.groups))
       for (i in 1:length(elements)) {
         element <- elements[i]
@@ -154,8 +154,13 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
       # Run simulation and compute yields
       rsim.simul <- rsim.run(rsim.mod, method = integration.method,
                              years = 1:simul.years)
-      yields <- array(dim = c(nrow(rsim.simul$annual_Biomass),
-                              length(harvesting)))
+      if (root.find) {
+        yields <- array(dim = c(nrow(rsim.simul$annual_Biomass),
+                                length(sppname)))
+      } else{
+        yields <- array(dim = c(nrow(rsim.simul$annual_Biomass),
+                                length(harvesting)))
+      }
       for (i in 1:nrow(rsim.simul$annual_Biomass)) {
         adY <- rsim.simul$annual_Biomass[i, adname] *
           harvesting[1:n.aged.str]
@@ -170,12 +175,17 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
           yields[i,] <- append(yield, non.aged.yield)
         }
       }
-    } else if ((length(IDnames) > length(stanza.names)) == FALSE) {
+    } else if ((length(sppname) > length(stanza.names)) == FALSE) {
       # Run simulation and compute yields
       rsim.simul <- rsim.run(rsim.mod, method = integration.method,
                              years = 1:simul.years)
-      yields <- array(dim = c(nrow(rsim.simul$annual_Biomass),
-                              length(harvesting)))
+      if (root.find) {
+        yields <- array(dim = c(nrow(rsim.simul$annual_Biomass),
+                                length(sppname)))
+      } else{
+        yields <- array(dim = c(nrow(rsim.simul$annual_Biomass),
+                                length(harvesting)))
+      }
       for (i in 1:nrow(rsim.simul$annual_Biomass)) {
         adY <- rsim.simul$annual_Biomass[i, adname] *
           harvesting[1:length(adname)]
@@ -199,7 +209,7 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
     # Run simulation and compute yields
     rsim.simul <- rsim.run(rsim.mod, method = integration.method,
                            years = 1:simul.years)
-    yields <- array(dim = c(nrow(rsim.simul$annual_Biomass), length(adname)))
+    yields <- array(dim = c(nrow(rsim.simul$annual_Biomass), length(sppname)))
     for (i in 1:nrow(rsim.simul$annual_Biomass)) {
       yields[i,] <- rsim.simul$annual_Biomass[i,sppname] * harvesting
     }
