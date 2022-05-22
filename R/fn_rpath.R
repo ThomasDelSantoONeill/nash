@@ -50,7 +50,8 @@
 #'@export
 fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
                      IDnames, rsim.mod, rpath.params, avg.window = 10,
-                     integration.method = "RK4", verbose = FALSE) {
+                     integration.method = "RK4", verbose = FALSE,
+                     MSE = FALSE) {
   ### VALIDATOR
   if (!is.vector(par)) {
     stop("`par` is not a vector.")
@@ -160,10 +161,14 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
           harvesting[1:n.aged.str]
         juvY <- rsim.simul$annual_Biomass[i, juvname] *
           harvesting[1:n.aged.str] * JuvFProp
-        yield <- adY + juvY
         non.aged.yield <- rsim.simul$annual_Biomass[i, non.aged.groups] *
           harvesting[-c(1:n.aged.str)]
-        yields[i,] <- append(yield, non.aged.yield)
+        if (MSE) {
+          yields[i,] append(c(rbind(juvY, adY)), non.aged.yield)
+        } else{
+          yield <- adY + juvY
+          yields[i,] <- append(yield, non.aged.yield)
+        }
       }
     } else if ((length(IDnames) > length(stanza.names)) == FALSE) {
       # Run simulation and compute yields
@@ -176,7 +181,11 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
           harvesting[1:length(adname)]
         juvY <- rsim.simul$annual_Biomass[i, juvname] *
           harvesting[1:length(juvname)] * JuvFProp
-        yields[i,] <- adY + juvY
+        if (MSE) {
+          yields[i,] c(rbind(juvY, adY))
+        } else{
+          yields[i,] <- adY + juvY
+        }
       }
     }
   } else if (aged.str == FALSE) {
@@ -200,8 +209,9 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
     names <- append(names, paste("Spp",i))
   }
   colnames(yields) <- names
+  ### Method for MSE
   # verbose = TRUE returns the full run time series (default False)
-  # otherwise just return the colmean value
+  # otherwise just return the column mean value
   if (verbose) {
     varires <- tail(yields, n = avg.window)
     return(varires)
