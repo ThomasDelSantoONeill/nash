@@ -51,7 +51,7 @@
 fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
                      IDnames, rsim.mod, rpath.params, avg.window = 10,
                      integration.method = "RK4", verbose = FALSE,
-                     MSE = FALSE) {
+                     root.find = FALSE) {
   ### VALIDATOR
   if (!is.vector(par)) {
     stop("`par` is not a vector.")
@@ -163,7 +163,7 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
           harvesting[1:n.aged.str] * JuvFProp
         non.aged.yield <- rsim.simul$annual_Biomass[i, non.aged.groups] *
           harvesting[-c(1:n.aged.str)]
-        if (MSE) {
+        if (root.find) {
           yields[i,] append(c(rbind(juvY, adY)), non.aged.yield)
         } else{
           yield <- adY + juvY
@@ -181,7 +181,7 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
           harvesting[1:length(adname)]
         juvY <- rsim.simul$annual_Biomass[i, juvname] *
           harvesting[1:length(juvname)] * JuvFProp
-        if (MSE) {
+        if (root.find) {
           yields[i,] c(rbind(juvY, adY))
         } else{
           yields[i,] <- adY + juvY
@@ -209,7 +209,6 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
     names <- append(names, paste("Spp",i))
   }
   colnames(yields) <- names
-  ### Method for MSE
   # verbose = TRUE returns the full run time series (default False)
   # otherwise just return the column mean value
   if (verbose) {
