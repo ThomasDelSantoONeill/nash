@@ -1,4 +1,54 @@
-MSE_Btarget <- function(par,
+#'Computes long-term equilibrium yields for \code{\link{Rpath-package}} models
+#'
+#'Viable \code{fn} to be used as input for \code{\link{nash}} when the
+#' \code{\link{Rpath-package}} is used as operating ecological model
+#' \insertCite{@see Lucey2020 for details}{nash}. \code{fn_rpath} takes the
+#' harvesting rates as the numeric type vector \code{par} returning simulated
+#' yields at equilibrium.
+#'
+#'@param par Numeric vector of harvesting rates of length equal to the number of
+#' harvested species.
+#'@param simul.years Desired simulation time.
+#'@param aged.str Logical TRUE/FALSE if multistanza functional groups are
+#' included in the model.
+#'@param data.years Numeric vector indicating the years worth of data used to
+#' parameterise the \code{Rpath} model.
+#'@param IDnames Character vector with the names of the species for which
+#' Nash Equilibrium harvesting rates are computed. Note that these names must
+#' coincide with the ones used during the construction of the \code{Rpath}
+#' model.
+#'@param rsim.mod \code{Rpath}'s \code{rsim.scenario} object.
+#'@param rpath.params \code{Rpath}'s \code{rpath.parameters} object.
+#'@param avg.window Numeric type vector indicating the time window used to
+#' average equilibrium yields.
+#'@param integration.method Numerical integration routine used to solve the
+#' \code{rsim.mod} object. Character vector with values (i) `\code{RK4}` or
+#' (ii) `\code{AB}`.
+#'
+#'@details The \code{avg.window} argument becomes useful in case the dynamics
+#' of the model reaches a steady state (\emph{e.g.} a limit cycle) rather than
+#' a stable point attractor.
+#'
+#' The numerical integration methods implemented in the
+#' \code{\link{Rpath-package}} are the 4th order Runge-Kutta (\code{RK4}) and
+#' the two-step Adams-Bashforth (\code{AB}) method. The trade-off between both
+#' methods is accuracy and speed, with \code{RK4} being more accurate but
+#' slower than the \code{AB} method
+#' \insertCite{@see Lucey2020 for details}{nash}.
+#'
+#' \code{fn_rpath} works for aged structure models in which multistanza species
+#' are partition into adults and juveniles. Then a fixed harvesting rate ratio
+#' between adults and juveniles is computed and retained when the function
+#' \code{\link{nash}} is called.
+#'
+#'@return The function \code{fn_rpath} returns an atomic vector of real
+#' double-precision long-term yields.
+#'
+#'@references
+#'\insertRef{Lucey2020}{nash}
+#'
+#'@export
+mse_btarget <- function(par,
                         simul.years = 100,
                         aged.str = TRUE,
                         data.years,
