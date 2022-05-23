@@ -50,7 +50,7 @@
 #'@export
 fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
                      IDnames, rsim.mod, rpath.params, avg.window = 10,
-                     integration.method = "RK4", verbose = FALSE) {
+                     integration.method = "RK4") {
   ### VALIDATOR
   if (!is.vector(par)) {
     stop("`par` is not a vector.")
