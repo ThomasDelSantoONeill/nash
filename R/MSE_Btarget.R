@@ -91,7 +91,7 @@ mse_btarget <- function(par,
   if (aged.str == TRUE) {
     n.aged.str <- rsim.mod$stanzas$Nsplit
     stanza.names <- rpath.params$stanzas$stindiv$Group
-    stanza.names <- IDnames[IDnames %in% stanza.names]
+    stanza.names <- sppname[sppname %in% stanza.names]
     juvname <- stanza.names[seq(1, length(stanza.names), 2)]
     adname <- stanza.names[seq(2, length(stanza.names), 2)]
     JuvFProp <-
@@ -117,8 +117,8 @@ mse_btarget <- function(par,
         value = harvesting[i]
       )
     }
-    if ((length(IDnames) > length(stanza.names)) == TRUE) {
-      non.aged.groups <- IDnames[!IDnames %in% stanza.names]
+    if ((length(sppname) > length(stanza.names)) == TRUE) {
+      non.aged.groups <- sppname[!sppname %in% stanza.names]
       elements <- n.aged.str + (1:length(non.aged.groups))
       for (i in 1:length(elements)) {
         element <- elements[i]
@@ -142,9 +142,9 @@ mse_btarget <- function(par,
         juvB <- rsim.simul$annual_Biomass[i, juvname]
         non.aged.B <- rsim.simul$annual_Biomass[i, non.aged.groups]
         biomass[i, ] <-
-          as.numeric(c(c(rbind(juvB, adB)), non.aged.biomass))
+          as.numeric(c(c(rbind(juvB, adB)), non.aged.B))
       }
-    } else if ((length(IDnames) > length(stanza.names)) == FALSE) {
+    } else if ((length(sppname) > length(stanza.names)) == FALSE) {
       # Run simulation and compute biomass
       rsim.simul <- rsim.run(rsim.mod,
                              method = integration.method,
