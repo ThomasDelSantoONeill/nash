@@ -144,7 +144,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       # Loop
       while (any(targeted)) {
         ratios <- Bcons/as.numeric(Bcomplete)
-        if (all(ratios > 1)) {
+        if (any(ratios > 1)) {
           # Which i is in the worst state; max ratio indicates that
           # the new Bnash computed is well below Bcons and therefore
           # in a very bad state.
