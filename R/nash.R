@@ -265,7 +265,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       par <- as.numeric(outlist$par)
     }
     for (i in 1:length(par)) {
-      Fvec <- seq(0,par[i]*2,0.025)
+      Fvec <- seq(0,par[i]*2,length.out = 30)
       Yieldspp <- sapply(X = Fvec, FUN = Yield, Hvec = par, j = i)
       outyield <- cbind(Fvec, Yieldspp)
       Yieldeq[[i]] <- outyield
