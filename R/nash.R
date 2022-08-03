@@ -138,11 +138,9 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       # Bcons <- B0*(Bper/100)
       # B vector if any i is to be conserved
       Bcomplete <- rep(NA, nSpp)
-      rcomplete <- rep(NA, nSpp)
       # Targeted with all TRUE entries
       targeted <- !vector(mode = "logical", length = nSpp)
       Bcomplete[targeted] <- as.numeric(B_new)
-      rcomplete[targeted] <- as.numeric(r)
       # Loop
       while (any(targeted)) {
         ratios <- Bcons/as.numeric(Bcomplete)
@@ -163,8 +161,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
             break
           }
           r_new <- (r[targeted,drop=F] - Gfn %*% Bcons[!targeted,drop=F])
-          rcomplete[targeted] <- r_new
-          rcomplete[!targeted] <- r[!targeted]
+          print(r_new)
           G_hat <- diag(1 / (diag(solve(Gff))))
           # Bnash
           B_new <- solve(Gff + G_hat, r_new)
@@ -175,11 +172,11 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
         }
       }
       # Fnash
-      F_new <- rcomplete - G %*% Bcomplete
+      F_new <- r - G %*% Bcomplete
       # Saving
       Nash_Fs[iter,] <- F_new
       Nash_Bs[iter,] <- Bcomplete
-      Nash_Rs[iter,] <- rcomplete
+      Nash_Rs[iter,] <- r
       # Re-running the model to equilibrium with new Nash Fs
       par <- as.numeric(F_new)
       if (progress == TRUE) {
