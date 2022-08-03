@@ -138,6 +138,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       # Bcons <- B0*(Bper/100)
       # B vector if any i is to be conserved
       Bcomplete <- rep(NA, nSpp)
+      rcomplete <- rep(NA, nSpp)
       # Targeted with all TRUE entries
       targeted <- !vector(mode = "logical", length = nSpp)
       Bcomplete[targeted] <- as.numeric(B_new)
