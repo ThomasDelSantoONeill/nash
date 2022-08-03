@@ -141,6 +141,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       # Targeted with all TRUE entries
       targeted <- !vector(mode = "logical", length = nSpp)
       Bcomplete[targeted] <- as.numeric(B_new)
+      rcomplete[targeted] <- as.numeric(r)
       # Loop
       while (any(targeted)) {
         ratios <- Bcons/as.numeric(Bcomplete)
@@ -162,7 +163,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
           }
           r_new <- (r[targeted,drop=F] - Gfn %*% Bcons[!targeted,drop=F])
           rcomplete[targeted] <- r_new
-          rcomplete[!targeter] <- r[!targeted]
+          rcomplete[!targeted] <- r[!targeted]
           G_hat <- diag(1 / (diag(solve(Gff))))
           # Bnash
           B_new <- solve(Gff + G_hat, r_new)
