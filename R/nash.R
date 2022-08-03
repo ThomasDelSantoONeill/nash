@@ -161,6 +161,8 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
             break
           }
           r_new <- (r[targeted,drop=F] - Gfn %*% Bcons[!targeted,drop=F])
+          rcomplete[targeted] <- r_new
+          rcomplete[!targeter] <- r[!targeted]
           G_hat <- diag(1 / (diag(solve(Gff))))
           # Bnash
           B_new <- solve(Gff + G_hat, r_new)
@@ -171,11 +173,11 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
         }
       }
       # Fnash
-      F_new <- r - G %*% Bcomplete
+      F_new <- rcomplete - G %*% Bcomplete
       # Saving
       Nash_Fs[iter,] <- F_new
       Nash_Bs[iter,] <- Bcomplete
-      Nash_Rs[iter,] <- r
+      Nash_Rs[iter,] <- rcomplete
       # Re-running the model to equilibrium with new Nash Fs
       par <- as.numeric(F_new)
       if (progress == TRUE) {
