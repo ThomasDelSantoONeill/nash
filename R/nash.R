@@ -161,7 +161,6 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
             break
           }
           r_new <- (r[targeted,drop=F] - Gfn %*% Bcons[!targeted,drop=F])
-          r[targeted] <- r_new
           G_hat <- diag(1 / (diag(solve(Gff))))
           # Bnash
           B_new <- solve(Gff + G_hat, r_new)
