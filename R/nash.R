@@ -174,7 +174,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       F_new <- r - G %*% Bcomplete
       # Saving
       Nash_Fs[iter,] <- F_new
-      Nash_Bs[iter,] <- Bcomplete
+      Nash_Bs[iter,] <- B_new
       Nash_Rs[iter,] <- r
       # Re-running the model to equilibrium with new Nash Fs
       par <- as.numeric(F_new)
