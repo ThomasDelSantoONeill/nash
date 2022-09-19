@@ -175,7 +175,7 @@ mse_btarget <- function(par,
     biomass <-
       array(dim = c(nrow(rsim.simul$annual_Biomass), length(sppname)))
     for (i in 1:nrow(rsim.simul$annual_Biomass)) {
-      biomass[i, ] <- rsim.simul$annual_Biomass[i, sppname]
+      biomass[i, ] <- rsim.simul$annual_Biomass[i, sppname]/harvesting
     }
   }
   names <- c()
