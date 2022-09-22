@@ -101,13 +101,9 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
   ### ADJUST SCENARIO if Adams-Bashforth method is used
   if (integration.method == "AB") {
     # Setting integration flags
-    NoIntegrateSpp <- as.vector(rsim.mod$params$spname[
-      rsim.mod$params$PBopt > 24])
-    for (i in 1:length(NoIntegrateSpp)) {
-      name <- NoIntegrateSpp[i]
-      rsim.mod <- adjust.scenario(rsim.mod, parameter = "NoIntegrate",
-                                  group = name, value = 0)
-    }
+    rsim.mod$params$NoIntegrate <-
+      ifelse(rsim.mod$params$MzeroMort*rsim.mod$params$B_BaseRef > 24,
+             0, rsim.mod$params$spnum)
   }
   # NOTE: Ensuring effort = 0 to play only with harvesting rates.
   fleet_name <- as.character(colnames(rsim.mod$fishing$ForcedEffort))
@@ -157,29 +153,24 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
       # Run simulation and compute yields
       rsim.simul <- rsim.run(rsim.mod, method = integration.method,
                              years = 1:simul.years)
-      yields <- array(dim = c(nrow(rsim.simul$annual_Biomass),
+      yields <- array(dim = c(nrow(rsim.simul$annual_Catch),
                               length(harvesting)))
-      for (i in 1:nrow(rsim.simul$annual_Biomass)) {
-        adY <- rsim.simul$annual_Biomass[i, adname] *
-          harvesting[1:n.aged.str]
-        juvY <- rsim.simul$annual_Biomass[i, juvname] *
-          harvesting[1:n.aged.str] * JuvFProp
+      for (i in 1:nrow(rsim.simul$annual_Catch)) {
+        adY <- rsim.simul$annual_Catch[i, adname]
+        juvY <- rsim.simul$annual_Catch[i, juvname] * JuvFProp
         yield <- adY + juvY
-        non.aged.yield <- rsim.simul$annual_Biomass[i, non.aged.groups] *
-          harvesting[-c(1:n.aged.str)]
+        non.aged.yield <- rsim.simul$annual_Catch[i, non.aged.groups]
         yields[i,] <- append(yield, non.aged.yield)
       }
     } else if ((length(IDnames) > length(stanza.names)) == FALSE) {
       # Run simulation and compute yields
       rsim.simul <- rsim.run(rsim.mod, method = integration.method,
                              years = 1:simul.years)
-      yields <- array(dim = c(nrow(rsim.simul$annual_Biomass),
+      yields <- array(dim = c(nrow(rsim.simul$annual_Catch),
                               length(harvesting)))
-      for (i in 1:nrow(rsim.simul$annual_Biomass)) {
-        adY <- rsim.simul$annual_Biomass[i, adname] *
-          harvesting[1:length(adname)]
-        juvY <- rsim.simul$annual_Biomass[i, juvname] *
-          harvesting[1:length(juvname)] * JuvFProp
+      for (i in 1:nrow(rsim.simul$annual_Catch)) {
+        adY <- rsim.simul$annual_Catch[i, adname]
+        juvY <- rsim.simul$annual_Catch[i, juvname] * JuvFProp
         yields[i,] <- adY + juvY
       }
     }
@@ -194,9 +185,9 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
     # Run simulation and compute yields
     rsim.simul <- rsim.run(rsim.mod, method = integration.method,
                            years = 1:simul.years)
-    yields <- array(dim = c(nrow(rsim.simul$annual_Biomass), length(adname)))
-    for (i in 1:nrow(rsim.simul$annual_Biomass)) {
-      yields[i,] <- rsim.simul$annual_Biomass[i,sppname] * harvesting
+    yields <- array(dim = c(nrow(rsim.simul$annual_Catch), length(adname)))
+    for (i in 1:nrow(rsim.simul$annual_Catch)) {
+      yields[i,] <- rsim.simul$annual_Catch[i,sppname]
     }
   }
   names <- c()
@@ -204,7 +195,6 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
     names <- append(names, paste("Spp",i))
   }
   colnames(yields) <- names
-  # outlist <- list(yields = colMeans(tail(yields, n = avg.window)), B0 = B0)
   outlist <- colMeans(tail(yields, n = avg.window))
   return(outlist)
 }
