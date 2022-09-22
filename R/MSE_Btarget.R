@@ -142,7 +142,7 @@ mse_btarget <- function(par,
         juvB <- rsim.simul$annual_Biomass[i, juvname]
         non.aged.B <- rsim.simul$annual_Biomass[i, non.aged.groups]
         biomass[i, ] <-
-          as.numeric(c(c(rbind(juvB, adB)), non.aged.B))/harvesting
+          as.numeric(c(c(rbind(juvB, adB)), non.aged.B))
       }
     } else if ((length(sppname) > length(stanza.names)) == FALSE) {
       # Run simulation and compute biomass
@@ -154,7 +154,7 @@ mse_btarget <- function(par,
       for (i in 1:nrow(rsim.simul$annual_Biomass)) {
         adB <- rsim.simul$annual_Biomass[i, adname]
         juvB <- rsim.simul$annual_Biomass[i, juvname]
-        biomass[i, ] <- c(rbind(juvB, adB))/harvesting
+        biomass[i, ] <- c(rbind(juvB, adB))
       }
     }
   } else if (aged.str == FALSE) {
@@ -175,7 +175,7 @@ mse_btarget <- function(par,
     biomass <-
       array(dim = c(nrow(rsim.simul$annual_Biomass), length(sppname)))
     for (i in 1:nrow(rsim.simul$annual_Biomass)) {
-      biomass[i, ] <- rsim.simul$annual_Biomass[i, sppname]/harvesting
+      biomass[i, ] <- rsim.simul$annual_Biomass[i, sppname]
     }
   }
   names <- c()
