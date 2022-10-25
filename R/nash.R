@@ -73,7 +73,7 @@
 #'@export
 nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
                  conv.criterion = 0.001, Bcons = 0, F.increase = 0.1,
-                 progress = TRUE){
+                 progress = TRUE, track = FALSE){
   ### VALIDATOR
   if (!is.vector(par)) {
     stop("`par` is not a vector.")
@@ -198,13 +198,23 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     ### OUTPUT
     # outlist <- list(Nash_Fs = Nash_Fs[1:iter,], Nash_Bs = Nash_Bs[1:iter,],
     #                 Nash_Rs = Nash_Rs[1:iter,], func.evals = nash_fncalls)
-    outlist <- list(par = tail(na.omit(Nash_Fs), n = 1),
+    if (track==TRUE) {
+      outlist <- list(par = Nash_Fs,
+                      value = fn(as.numeric(tail(na.omit(Nash_Fs),
+                                                 n = 1)), ...),
+                      counts = nash_fncalls,
+                      convergence = paste("Nash equilibrium found after ", iter,
+                                          " iterations."),
+                      Bnash = Nash_Bs)
+    } else {
+      outlist <- list(par = tail(na.omit(Nash_Fs), n = 1),
                     value = fn(as.numeric(tail(na.omit(Nash_Fs),
                                                n = 1)), ...),
                     counts = nash_fncalls,
                     convergence = paste("Nash equilibrium found after ", iter,
                                         " iterations."),
                     Bnash = tail(na.omit(Nash_Bs), n = 1))
+    }
   }
   if (method == "round-robin") {
     ### LOCAL VARIABLES
@@ -246,12 +256,21 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     }
     ### OUTPUT
     # outlist <- list(Nash_Fs = Nash_Hs[1:iter,], func.evals = nash_fncalls)
-    outlist <- list(par = tail(na.omit(Nash_Hs), n = 1),
+    if (track==TRUE) {
+      outlist <- list(par = Nash_Hs,
+                      value = fn(as.numeric(tail(na.omit(Nash_Hs),
+                                                 n = 1)), ...),
+                      counts = nash_fncalls,
+                      convergence = paste("Nash equilibrium found after ", iter,
+                                          " iterations."))
+    } else {
+      outlist <- list(par = tail(na.omit(Nash_Hs), n = 1),
                     value = fn(as.numeric(tail(na.omit(Nash_Hs),
                                                n = 1)), ...),
                     counts = nash_fncalls,
                     convergence = paste("Nash equilibrium found after ", iter,
                                         " iterations."))
+    }
   }
   if (method == "SS") {
     ### LOCAL VARIABLES
