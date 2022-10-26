@@ -234,9 +234,13 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     for (iter in 1:n.iter) {
       for (j in 1:nSpp) {
         output <- optim(par = par[j], fn = Yield, Hvec = par, j = j,
-                        control = list(fnscale = -1,
-                                       factr = 1e12),
-                        method = "BFGS", hessian = TRUE)
+                        method = "L-BFGS-B",
+                        lower = rep(0,length(par))
+                        control = list(
+                          fnscale = -1,
+                          factr = 1e3,
+                          pgtol = 1e-4),
+                        hessian = TRUE)
         par[j] = output$par
         nash_fncalls <- nash_fncalls + output$counts[1]
       }
@@ -272,33 +276,33 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
                                         " iterations."))
     }
   }
-  if (method == "SS") {
-    ### LOCAL VARIABLES
-    nSpp <- length(par)
-    nash_fncalls <- 0
-    SS_Hs <- array(dim = c(2, nSpp))
-    ### COMPUTE YIELDS ONE AT A TIME
-    Yield <- function(par, Hvec, j){
-      Hvec[j] <- par
-      nash_fncalls <- nash_fncalls + 1
-      as.numeric(fn(Hvec, ...))[j]
-    }
-    ### ALGORITHM
-    for (j in 1:nSpp) {
-      output <- optim(par = par[j], fn = Yield, Hvec = par, j = j,
-                      lower = 0,
-                      control = list(fnscale = -1,
-                                     factr = 1e12),
-                      method = "L-BFGS-B")
-      SS_Hs[1,j] <- output$par
-      SS_Hs[2,j] <- output$value
-      nash_fncalls <- nash_fncalls + output$counts[1]
-      print(SS_Hs)
-    }
-    ### OUTPUT
-    outlist <- list(par = SS_Hs[1,],
-                    value = SS_Hs[2,])
-  }
+  # if (method == "SS") {
+  #   ### LOCAL VARIABLES
+  #   nSpp <- length(par)
+  #   nash_fncalls <- 0
+  #   SS_Hs <- array(dim = c(2, nSpp))
+  #   ### COMPUTE YIELDS ONE AT A TIME
+  #   Yield <- function(par, Hvec, j){
+  #     Hvec[j] <- par
+  #     nash_fncalls <- nash_fncalls + 1
+  #     as.numeric(fn(Hvec, ...))[j]
+  #   }
+  #   ### ALGORITHM
+  #   for (j in 1:nSpp) {
+  #     output <- optim(par = par[j], fn = Yield, Hvec = par, j = j,
+  #                     lower = rep(0,length(par)),
+  #                     control = list(fnscale = -1,
+  #                                    factr = 1e12),
+  #                     method = "L-BFGS-B")
+  #     SS_Hs[1,j] <- output$par
+  #     SS_Hs[2,j] <- output$value
+  #     nash_fncalls <- nash_fncalls + output$counts[1]
+  #     print(SS_Hs)
+  #   }
+  #   ### OUTPUT
+  #   outlist <- list(par = SS_Hs[1,],
+  #                   value = SS_Hs[2,])
+  # }
   ### EQUILIBRIUM YIELD CURVES
   if (yield.curves == TRUE) {
     Yield <- function(par, Hvec, j){
