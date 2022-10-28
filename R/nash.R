@@ -303,7 +303,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
   #   outlist <- list(par = SS_Hs[1,],
   #                   value = SS_Hs[2,])
   # }
-  ### EQUILIBRIUM YIELD CURVES
+  ### EQUILIBRIUM YIELD CURVES (test)
   if (yield.curves == TRUE) {
     Yield <- function(par, Hvec, j){
       Hvec[j] <- par
