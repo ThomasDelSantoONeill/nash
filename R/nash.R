@@ -234,12 +234,11 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     for (iter in 1:n.iter) {
       for (j in 1:nSpp) {
         output <- optim(par = par[j], fn = Yield, Hvec = par, j = j,
-                        method = "L-BFGS-B",
-                        lower = rep(0,length(par)),
+                        method = "BFGS",
                         control = list(
                           fnscale = -1,
-                          factr = conv.criterion,
-                          pgtol = conv.criterion*0.1))
+                          abstol = conv.criterion,
+                          reltol = conv.criterion))
         par[j] = output$par
         nash_fncalls <- nash_fncalls + output$counts[1]
       }
