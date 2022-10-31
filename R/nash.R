@@ -234,7 +234,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       for (j in 1:nSpp) {
         output <- optim(par = par[j], fn = Yield, Hvec = par, j = j,
                         method = "L-BFGS-B",
-                        lower = rep(0,4)
+                        lower = rep(0,4),
                         control = list(
                           fnscale = -1))
         par[j] = output$par
