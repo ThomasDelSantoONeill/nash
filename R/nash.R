@@ -238,9 +238,8 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
                         lower = rep(0,length(par))
                         control = list(
                           fnscale = -1,
-                          factr = 1e3,
-                          pgtol = 1e-4),
-                        hessian = TRUE)
+                          factr = conv.criterion,
+                          pgtol = conv.criterion*0.1))
         par[j] = output$par
         nash_fncalls <- nash_fncalls + output$counts[1]
       }
