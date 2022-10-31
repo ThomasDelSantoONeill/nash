@@ -220,7 +220,6 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     ### LOCAL VARIABLES
     nSpp <- length(par)
     nash_fncalls <- 0
-    conv.criterion <- 0.001
     n.iter <- 100
     Nash_Hs <- array(dim = c(n.iter, nSpp))
     F.eq <- par
@@ -234,11 +233,10 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     for (iter in 1:n.iter) {
       for (j in 1:nSpp) {
         output <- optim(par = par[j], fn = Yield, Hvec = par, j = j,
-                        method = "BFGS",
+                        method = "L-BFGS-B",
+                        lower = rep(0,4)
                         control = list(
-                          fnscale = -1,
-                          abstol = conv.criterion,
-                          reltol = conv.criterion))
+                          fnscale = -1))
         par[j] = output$par
         nash_fncalls <- nash_fncalls + output$counts[1]
       }
@@ -248,7 +246,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       }
       F.eq <- par
       if (iter>1) {
-        if (max(abs(Nash_Hs[iter,] / Nash_Hs[(iter-1),] -1)) < 0.001) {
+        if (max(abs(Nash_Hs[iter,] / Nash_Hs[(iter-1),] -1)) < conv.criterion) {
           # print(paste("Nash equilibrium found after ", iter,
           #             " iterations with", nash_fncalls,
           #             " function calls."))
