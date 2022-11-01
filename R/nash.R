@@ -222,10 +222,10 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     ### ALGORITHM
     for (iter in 1:n.iter) {
       for (j in 1:nSpp) {
-        output <- optim(par = par[j], fn = Yield, Hvec = par, j = j,
-                        control = list(fnscale = -1, abstol = 0.001,
-                                       factr = 1e12),
-                        method = "BFGS", hessian = TRUE)
+        output <- output <- optim(par = par[j], fn = Yield, Hvec = par, j = j,
+                                  method = "Nelder-Mead",
+                                  control = list(fnscale = -1))
+        par[j] = output$par
         par[j] = output$par
         nash_fncalls <- nash_fncalls + output$counts[1]
       }
