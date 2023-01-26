@@ -11,9 +11,9 @@
 #' as input and returns simulated yields at equilibrium.
 #'@param ... Further arguments to be passed to \code{fn}.
 #'@param method Method utilised to compute the Nash Equilibrium:
-#' (i) `\code{LV}` or (ii) `\code{round-robin}` method (see
-#' \linkSection{@details} for specifics).
-#'@param yield.cruves Logical TRUE/FALSE if equilibrium yield curves for each of
+#' (i) `\code{LV}` or (ii) `\code{round-robin}` method (see `Details` section
+#' for specifics).
+#'@param yield.curves Logical TRUE/FALSE if equilibrium yield curves for each of
 #' the optimised species are to be computed.
 #'@param conv.criterion Absolute convergence tolerance set by default to
 #' \eqn{< 0.001}.
@@ -21,25 +21,30 @@
 #' vector set to \eqn{0} by default.
 #'@param F.increase Double type numeric vector indicating the step size used
 #' to compute the effective interaction matrix \eqn{M}.
-#'
-#'@details For ecosystem models where there is some interest in keeping some or
-#' all harvested species above a certain biomass state limit, \code{Bcons}
-#' should be populated with non zero biomass values. The length of this vector
-#' must be the same as \code{par} and set to non zero where relevant. In the
-#' literature, is common practice to fixed such \emph{constraint of biodiversity
-#' conservation} \insertCite{Matsuda2006}{nash} to \eqn{10%} of the virgin
-#' biomass; level at which a stock is considered collapsed
-#' \insertCite{Worm2009}{nash}.
+#'@param progress Logical that if TRUE information on the progress of the
+#' optimisation is produced.
 #'
 #'\loadmathjax
+#'@details For ecosystem models where there is some interest in keeping some or
+#' all harvested species above a certain biomass state limit, \code{Bcons}
+#' should be populated with non-zero biomass values. The length of this vector
+#' must be the same as \code{par} and set to non-zero where relevant. In the
+#' literature, is common practice to fixed such \emph{constraints of
+#' biodiversity conservation} \insertCite{Matsuda2006}{nash} as a fraction
+#' (\emph{e.g.} \mjeqn{0.1-0.25}{ascii}) of the unfished biomass
+#' \mjeqn{B_0}{ascii}; biomass threshold at which a stock is considered
+#' collapsed \insertCite{Worm2009}{nash}.
+#'
 #' Equilibrium yield curves are obtained for each \eqn{i} species by applying
 #' different harvesting values to \eqn{i} whilst keeping the other species
-#' \eqn{j} at the optimised \code{par} levels (\emph{i.e.} at the Nash
-#' Equilibrium). These harvesting values applied to \eqn{i} run from \eqn{0}
-#' to \mjeqn{F_{\text{Nash},i}\times 2}{ascii} in increments of \eqn{0.025}.
-#' As raised by \insertCite{Thorpe2017;textual}{nash}, this is
-#' one of the advantages of using the Nash Equilibrium as a representation of
-#' the \emph{Maximum Sustainable Yield} concept.
+#' \eqn{j} at the optimised \code{par} levels (\emph{i.e.} at
+#' \mjeqn{\mathbf{F_\text{Nash}}}{ascii}).
+#' The harvesting values applied to \eqn{i} run from \eqn{0}
+#' to \mjeqn{F_{\text{Nash},i}\times 2}{ascii} with a desired sequence length
+#' of \code{length.out}\eqn{=30} (see \code{\link{seq}} for details).
+#' As raised by \insertCite{Thorpe2017;textual}{nash}, this is one of the
+#' advantages of using the NE as the multispecies extension of the
+#' \emph{Maximum Sustainable Yield} concept.
 #'
 #' To compute the interaction matrix a second order central difference quotient
 #' is used to approximate derivatives. \code{F.increase} is employed during
@@ -47,15 +52,18 @@
 #' truncation and/or rounding errors \insertCite{Pope2019}{nash}.
 #'
 #' The `\code{LV}` method is set by default given its performance advantage
+#' \insertCite{Oneill2023}{nash}
 #' over the `\code{round-robin}` method and is based on the protocol devised by
 #' \insertCite{Farcas2016}{nash}. For each species \eqn{i} in turn,
 #' \code{round-robin} iteratively maximises the yield by adjusting the harvesting
-#' rates whereas \code{LV} does the same for all species at once per iteration.
+#' rates whereas \code{LV} does the same simultaneously for all species per
+#' iteration.
 #'
 #'@return The function \code{nash} returns a list with the following components:
-#'\item{par}{Harvesting rates at the Nash Equilibrium.}
-#'\item{value}{Value of \code{fn} corresponding to the optimised \code{par}.}
-#'\item{counts}{Number of calls to \code{fn}.}
+#'\item{par}{Harvesting rates at the NE.}
+#'\item{value}{Yield values of \code{fn} corresponding to the optimised
+#' \code{par}.}
+#'\item{counts}{Number of \code{fn} evaluations until NE.}
 #'\item{convergence}{Statement indicating the number of iterations for
 #'\code{conv.criterion} to be reached.}
 #'
