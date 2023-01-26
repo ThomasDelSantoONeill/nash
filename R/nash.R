@@ -1,24 +1,26 @@
-#'Computes harvesting rates at the Nash Equilibrium
+#'Computes harvesting rates at the Nash Equilibrium (NE)
 #'
-#'Function that takes a numeric vector `\code{par}` of initial harvesting rates
-#' to be optimised by evaluating the objective function `\code{fn}` that is to
-#' be maximised. Its structure in terms of arguments and outputs is analogous
+#'Takes a numeric vector of initial harvesting rates to be optimised
+#' (`\code{par}`) by evaluating the objective function that is to be maximised
+#' (`\code{fn}`). Its structure in terms of arguments and outputs is similar
 #' to that of \code{\link{optim}}.
 #'
-#'@param par Numeric vector of harvesting rates of length equal to the number of
-#' harvested species.
-#'@param fn Function that runs the ODE model with \code{par} as input and
-#' returns simulated yields at equilibrium.
+#'@param par Double type numeric vector of harvesting rates of length equal to
+#' the number of harvested species for which the NE is desired.
+#'@param fn Function that runs the multispecies/ecosystem model with \code{par}
+#' as input and returns simulated yields at equilibrium.
 #'@param ... Further arguments to be passed to \code{fn}.
 #'@param method Method utilised to compute the Nash Equilibrium:
-#' (i) `\code{LV}` or (ii) `\code{round-robin}` method.
-#'@param yield.cruves Logical TRUE/FALSE if equilibrium yield curves for each
-#' species are desired.
+#' (i) `\code{LV}` or (ii) `\code{round-robin}` method (see
+#' \linkSection{@details} for specifics).
+#'@param yield.cruves Logical TRUE/FALSE if equilibrium yield curves for each of
+#' the optimised species are to be computed.
 #'@param conv.criterion Absolute convergence tolerance set by default to
 #' \eqn{< 0.001}.
-#'@param Bcons Biomass conservation threshold. Default set to \eqn{0}.
+#'@param Bcons Constraints for biodiversity conservation. Double type numeric
+#' vector set to \eqn{0} by default.
 #'@param F.increase Double type numeric vector indicating the step size used
-#' to compute the interaction matrix.
+#' to compute the effective interaction matrix \eqn{M}.
 #'
 #'@details For ecosystem models where there is some interest in keeping some or
 #' all harvested species above a certain biomass state limit, \code{Bcons}
