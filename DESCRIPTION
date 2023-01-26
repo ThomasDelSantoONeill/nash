@@ -1,7 +1,7 @@
 Package: nash
 Type: Package
 Title: An efficient algorithm for Nash equilibria when harvesting interacting
-    natural living resources.
+    living resources.
 Version: 0.1.0
 Authors@R: c(
     person("Thomas Julian", "Del Santo O'Neill", 
@@ -13,12 +13,12 @@ Authors@R: c(
 Maintainer: T.J. Del Santo O'Neill <t.j.delsantooneill@qmul.ac.uk>
 Description: An algorithm that computes harvesting rates at the Nash
     Equilibrium when exploiting natural interdependent resources. The
-    user provides a model describing the system through a function that
-    returns long-term yields and calls the `nash` function that handles
-    the subtleties. Furthermore, the package contains a second function
-    `fn_rpath` that streamlines the aforementioned specifically for 
-    Ecopaht with Ecosim models formulated via its R implementation 
-    `Rpath`.
+    user provides a model describing the ecosystem through a function that
+    returns long-term yields as output. Such function will be then utilise as 
+    input by the `nash` function.
+    The package contains a second function `fn_rpath` that can be specifically 
+    used for Ecopaht with Ecosim (EwE) models, formulated via its R 
+    implementation `Rpath`, so as to streamline its usage.
 License: GPL-3
 Imports:
     Rpath (>= 0.0.1.2),
