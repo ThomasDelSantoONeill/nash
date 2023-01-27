@@ -105,9 +105,9 @@ iteration.
 
 \insertRef{Matsuda2006}{nash}
 
-\insertRef{Thorpe2017}{nash}
-
 \insertRef{Pope2019}{nash}
+
+\insertRef{Thorpe2017}{nash}
 
 \insertRef{Worm2009}{nash}
 }
