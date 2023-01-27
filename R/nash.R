@@ -104,7 +104,6 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     Nash_Rs <- array(dim = c(n.iter, nSpp))
     output <- fn(par, ...)
     yields <- output
-    # B0 <- output$B0 # Initial biomass used for conservation constraints
     # Avoid numerical errors computing M due to par elements being exactly =
     #   to F.increase
     if (any(par==F.increase)==TRUE) {
@@ -144,8 +143,6 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       # Bnash
       B_new <- solve(G + G_hat, r)
       ### CONSERVATION CONSTRAINTS
-      # Define Bcons state
-      # Bcons <- B0*(Bper/100)
       # B vector if any i is to be conserved
       Bcomplete <- rep(NA, nSpp)
       # Targeted with all TRUE entries
@@ -198,16 +195,11 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       # Convergence statement
       if (iter>1) {
         if (max(abs(F_new / Nash_Fs[(iter-1),] -1)) < conv.criterion) {
-          # print(paste("Nash equilibrium found after ", iter,
-          #             " iterations with", nash_fncalls,
-          #             " function calls."))
           break
         }
       }
     }
     ### OUTPUT
-    # outlist <- list(Nash_Fs = Nash_Fs[1:iter,], Nash_Bs = Nash_Bs[1:iter,],
-    #                 Nash_Rs = Nash_Rs[1:iter,], func.evals = nash_fncalls)
     outlist <- list(par = tail(na.omit(Nash_Fs), n = 1),
                     value = fn(as.numeric(tail(na.omit(Nash_Fs),
                                                n = 1)), ...),
@@ -246,15 +238,11 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       F.eq <- par
       if (iter>1) {
         if (max(abs(Nash_Hs[iter,] / Nash_Hs[(iter-1),] -1)) < 0.001) {
-          # print(paste("Nash equilibrium found after ", iter,
-          #             " iterations with", nash_fncalls,
-          #             " function calls."))
           break
         }
       }
     }
     ### OUTPUT
-    # outlist <- list(Nash_Fs = Nash_Hs[1:iter,], func.evals = nash_fncalls)
     outlist <- list(par = tail(na.omit(Nash_Hs), n = 1),
                     value = fn(as.numeric(tail(na.omit(Nash_Hs),
                                                n = 1)), ...),

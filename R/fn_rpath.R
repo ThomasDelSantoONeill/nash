@@ -6,9 +6,9 @@
 #' harvesting rates as the numeric type vector \code{par} returning simulated
 #' yields at equilibrium.
 #'
-#'@param par Numeric vector of harvesting rates of length equal to the number of
-#' harvested species.
-#'@param simul.years Desired simulation time.
+#'@param par Double type numeric vector of harvesting rates of length equal to
+#' the number of harvested species for which the NE is desired.
+#'@param simul.years Forward simulation time in years.
 #'@param aged.str Logical TRUE/FALSE if multistanza functional groups are
 #' included in the model.
 #'@param data.years Numeric vector indicating the years worth of data used to
@@ -56,7 +56,7 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
     stop("`par` is not a vector.")
   }
   if (length(par) < 1) {
-    stop("`par` must be a vector of length >= 1")
+    stop("`par` must be a vector of length >= 1.")
   }
   if (!is.logical(aged.str)) {
     stop("`aged.str` must be a logical TRUE/FALSE argument.")
@@ -97,7 +97,6 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
   sppname <- IDnames
   harvesting <- par
   simul.years <- simul.years
-  # B0 <- rsim.mod$params$B_BaseRef[sppname]
   ### ADJUST SCENARIO if Adams-Bashforth method is used
   if (integration.method == "AB") {
     # Setting integration flags

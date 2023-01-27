@@ -17,10 +17,10 @@ fn_rpath(
 )
 }
 \arguments{
-\item{par}{Numeric vector of harvesting rates of length equal to the number of
-harvested species.}
+\item{par}{Double type numeric vector of harvesting rates of length equal to
+the number of harvested species for which the NE is desired.}
 
-\item{simul.years}{Desired simulation time.}
+\item{simul.years}{Forward simulation time in years.}
 
 \item{aged.str}{Logical TRUE/FALSE if multistanza functional groups are
 included in the model.}
