@@ -21,9 +21,10 @@ Description: An algorithm that computes harvesting rates at the Nash
     implementation `Rpath`, so as to streamline its usage.
 License: GPL-3
 Imports:
-    Rpath (>= 0.0.1.2),
     Rdpack,
     mathjaxr
+Remotes:
+    NOAA-EDAB/Rpath
 RdMacros: 
     Rdpack,
     mathjaxr
