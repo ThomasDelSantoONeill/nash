@@ -29,7 +29,6 @@ RdMacros:
     Rdpack,
     mathjaxr
 Suggests:
-    covr,
     knitr,
     rmarkdown
 VignetteBuilder: knitr

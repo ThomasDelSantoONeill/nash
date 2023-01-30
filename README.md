@@ -6,8 +6,6 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/ThomasDelSantoONeill/nash/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ThomasDelSantoONeill/nash/actions/workflows/R-CMD-check.yaml)
-[![Codecov test
-coverage](https://codecov.io/gh/ThomasDelSantoONeill/nash/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ThomasDelSantoONeill/nash?branch=main)
 <!-- badges: end -->
 
 The goal of nash is to …
