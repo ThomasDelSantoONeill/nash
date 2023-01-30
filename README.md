@@ -6,8 +6,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/ThomasDelSantoONeill/nash/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ThomasDelSantoONeill/nash/actions/workflows/R-CMD-check.yaml)
-[![Coveralls test
-coverage](https://coveralls.io/repos/github/ThomasDelSantoONeill/nash/badge.svg)](https://coveralls.io/r/ThomasDelSantoONeill/nash?branch=main)
+[![Codecov test
+coverage](https://codecov.io/gh/ThomasDelSantoONeill/nash/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ThomasDelSantoONeill/nash?branch=main)
 <!-- badges: end -->
 
 The goal of nash is to …
