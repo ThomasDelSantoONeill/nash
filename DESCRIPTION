@@ -1,7 +1,7 @@
 Package: nash
 Type: Package
 Title: An efficient algorithm for Nash equilibria when harvesting interacting
-    living resources.
+    living resources
 Version: 0.1.0
 Authors@R: c(
     person("Thomas Julian", "Del Santo O'Neill", 
