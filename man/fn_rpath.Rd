@@ -2,7 +2,7 @@
 % Please edit documentation in R/fn_rpath.R
 \name{fn_rpath}
 \alias{fn_rpath}
-\title{Computes long-term equilibrium yields for \code{\link[Rpath-package]{rsim.scenario}} models}
+\title{Computes long-term equilibrium yields for \code{\link[Rpath]{Rpath-package}} models}
 \usage{
 fn_rpath(
   par,
@@ -50,7 +50,7 @@ double-precision long-term yields.
 }
 \description{
 Viable \code{fn} to be used as input for \code{\link{nash}} when the
-\code{\link[Rpath-package]{rsim.scenario}} is used as operating ecological model
+\code{\link[Rpath]{Rpath-package}} is used as operating ecological model
 \insertCite{@see Lucey2020 for details}{nash}. \code{fn_rpath} takes the
 harvesting rates as the numeric type vector \code{par} returning simulated
 yields at equilibrium.
@@ -61,7 +61,7 @@ of the model reaches a steady state (\emph{e.g.} a limit cycle) rather than
 a stable point attractor.
 
 The numerical integration methods implemented in the
-\code{\link[Rpath-package]{rsim.run}} are the 4th order Runge-Kutta (\code{RK4}) and
+\code{\link[Rpath]{rsim.run}} are the 4th order Runge-Kutta (\code{RK4}) and
 the two-step Adams-Bashforth (\code{AB}) method. The trade-off between both
 methods is accuracy and speed, with \code{RK4} being more accurate but
 slower than the \code{AB} method
