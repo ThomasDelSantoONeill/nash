@@ -5,13 +5,6 @@
 
 <!-- badges: start -->
 
-``` r
-usethis::use_github_action_check_standard()
-#> v Setting active project to 'C:/Users/delsa/Documents/PaperDraft/MEEpaper/PaperVerCtrl/nash'
-#> v Saving 'r-lib/actions/examples/check-standard.yaml@v2' to '.github/workflows/R-CMD-check.yaml'
-#> * Learn more at <https://github.com/r-lib/actions/blob/v2/examples/README.md>.
-```
-
 [![R-CMD-check](https://github.com/ThomasDelSantoONeill/nash/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ThomasDelSantoONeill/nash/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 

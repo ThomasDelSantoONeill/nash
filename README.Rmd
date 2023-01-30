@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 # nash <a href='https://github.com/ThomasDelSantoONeill/nash'><img src='man/figures/nashlogo.svg' align="right" height="200" /></a>
 
 <!-- badges: start -->
-```{r}
+```{r, include=FALSE}
 usethis::use_github_action_check_standard()
 ```
 
