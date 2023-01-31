@@ -12,7 +12,7 @@ GPL-3](https://img.shields.io/badge/license-GPL--3-blue.svg)](https://cran.r-pro
 <!-- badges: end -->
 
 The goal of `nash` is to compute Nash equilibrium
-(NE)<sup>[\[1\]](#1)</sup> harvesting rates (**$\mathbf{F}$**; dimensions $1/\text{TIME}$)
+(NE)<sup>[\[1\]](#1)</sup> harvesting rates ($\mathbf{F}$; dimensions $1/\text{TIME}$)
 for ecological models of the form:
 
 $$
@@ -23,23 +23,11 @@ $$
 with $\mathbf{B}$ representing the non-negative biomass state vector (dimensions $\text{MASS}$), $\mathbf{f}(\mathbf{B})$ specifying the population growth (or decay) rate in the absence of exploitation (dimensions $1/\text{TIME}$) and $\circ$ denoting the entry-wise or [Hadamard](https://en.wikipedia.org/wiki/Hadamard_product_(matrices))
 product.
 
-To run `nash`, the user is required to define an `R` function that
-contains the above model alongside an integration routine to solve it;
-that, for given
-![\\mathbf{F}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmathbf%7BF%7D "\mathbf{F}"),
-the user-specified model outputs the yields at the stable equilibrium
-![\\mathbf{Y}=\\mathbf{F}\\circ\\mathbf{B}^\*=\\mathbf{F}\\circ\\mathbf{B}^\*(\\mathbf{F})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmathbf%7BY%7D%3D%5Cmathbf%7BF%7D%5Ccirc%5Cmathbf%7BB%7D%5E%2A%3D%5Cmathbf%7BF%7D%5Ccirc%5Cmathbf%7BB%7D%5E%2A%28%5Cmathbf%7BF%7D%29 "\mathbf{Y}=\mathbf{F}\circ\mathbf{B}^*=\mathbf{F}\circ\mathbf{B}^*(\mathbf{F})").
-The `nash` function will then approximate the model near equilibrium
-dynamics by a multispecies Lotka-Volterra (LV) model, for which the NE
-can be computed analytically and so a first estimation of optimal
-![\\mathbf{F}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmathbf%7BF%7D "\mathbf{F}")
-obtained. Subsequently, an updated LV approximation is calculated near
-the equilibrium given by this new
-![\\mathbf{F}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmathbf%7BF%7D "\mathbf{F}").
-`nash` will then re-compute the NE starting a new iteration until a
-(user-adjustable) convergence threshold for
-![\\mathbf{F}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmathbf%7BF%7D "\mathbf{F}")
-is reached.
+To run `nash`, the user is required to define an `R` function that contains the above model alongside an integration routine to solve it;
+that, for given $\mathbf{F}$, the user-specified model outputs the yields at the stable equilibrium $\mathbf{Y}=\mathbf{F}\circ\mathbf{B}^*=\mathbf{F}\circ\mathbf{B}^*(\mathbf{F})$.
+The `nash` function will then approximate the model near equilibrium dynamics by a multispecies Lotka-Volterra (LV) model, for which the NE
+can be computed analytically and so a first estimation of optimal $\mathbf{F}$ obtained. Subsequently, an updated LV approximation is calculated near
+the equilibrium given by this new $\mathbf{F}$. `nash` will then re-compute the NE starting a new iteration until a (user-adjustable) convergence threshold for $\mathbf{F}$ is reached.
 
 ## Installation
 
