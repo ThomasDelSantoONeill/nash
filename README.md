@@ -24,7 +24,7 @@ with $\mathbf{B}$ representing the non-negative biomass state vector (dimensions
 product.
 
 To run `nash`, the user is required to define an `R` function that contains the above model alongside an integration routine to solve it;
-that, for given $\mathbf{F}$, the user-specified model outputs the yields at the stable equilibrium $\mathbf{Y}=\mathbf{F}\circ\mathbf{B}^=\mathbf{F}\circ\mathbf{B}^(\mathbf{F})$.
+that, for given $\mathbf{F}$, the user-specified model outputs the yields at the stable equilibrium $\mathbf{Y}=\mathbf{F}\circ\mathbf{B}^\*=\mathbf{F}\circ\mathbf{B}^\*(\mathbf{F})$.
 The `nash` function will then approximate the model near equilibrium dynamics by a multispecies Lotka-Volterra (LV) model, for which the NE
 can be computed analytically and so a first estimation of optimal $\mathbf{F}$ obtained. Subsequently, an updated LV approximation is calculated near
 the equilibrium given by this new $\mathbf{F}$. `nash` will then re-compute the NE starting a new iteration until a (user-adjustable) convergence threshold for $\mathbf{F}$ is reached.
