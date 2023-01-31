@@ -20,18 +20,7 @@ $$
 $$
 
 
-with
-![\\mathbf{B}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmathbf%7BB%7D "\mathbf{B}")
-representing the non-negative biomass state vector (dimensions
-![\\text{MASS}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Ctext%7BMASS%7D "\text{MASS}")),
-![\\mathbf{f}(\\mathbf{B})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmathbf%7Bf%7D%28%5Cmathbf%7BB%7D%29 "\mathbf{f}(\mathbf{B})")
-specifying the population growth (or decay) rate in the absence of
-exploitation (dimensions
-![1/\\text{TIME}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;1%2F%5Ctext%7BTIME%7D "1/\text{TIME}"))
-and
-![\\circ](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Ccirc "\circ")
-denoting the entry-wise or
-[Hadamard](https://en.wikipedia.org/wiki/Hadamard_product_(matrices))
+with $\mathbf{B}$ representing the non-negative biomass state vector (dimensions $\text{MASS}$), $\mathbf{f}(\mathbf{B})$ specifying the population growth (or decay) rate in the absence of exploitation (dimensions $1/\text{TIME}$) and $\circ$ denoting the entry-wise or [Hadamard](https://en.wikipedia.org/wiki/Hadamard_product_(matrices))
 product.
 
 To run `nash`, the user is required to define an `R` function that
