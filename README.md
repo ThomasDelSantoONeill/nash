@@ -12,10 +12,7 @@ GPL-3](https://img.shields.io/badge/license-GPL--3-blue.svg)](https://cran.r-pro
 <!-- badges: end -->
 
 The goal of `nash` is to compute Nash equilibrium
-(NE)<sup>[\[1\]](#1)</sup> harvesting rates
-(![\\mathbf{F}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmathbf%7BF%7D "\mathbf{F}");
-dimensions
-![1/\\text{TIME}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;1%2F%5Ctext%7BTIME%7D "1/\text{TIME}"))
+(NE)<sup>[\[1\]](#1)</sup> harvesting rates ($\mathbf{F}$; dimensions $1/\text{TIME}$)
 for ecological models of the form:
 
 ![
