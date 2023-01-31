@@ -12,17 +12,13 @@ GPL-3](https://img.shields.io/badge/license-GPL--3-blue.svg)](https://cran.r-pro
 <!-- badges: end -->
 
 The goal of `nash` is to compute Nash equilibrium
-(NE)<sup>[\[1\]](#1)</sup> harvesting rates ($\mathbf{F}$; dimensions $1/\text{TIME}$)
+(NE)<sup>[\[1\]](#1)</sup> harvesting rates (**$\mathbf{F}$**; dimensions $1/\text{TIME}$)
 for ecological models of the form:
 
 $$
 \frac{d\mathbf{B}}{dt}=\mathbf{f}(\mathbf{B})\circ\mathbf{B}-\mathbf{F}\circ\mathbf{B},
 $$
-![
-\\frac{d\\mathbf{B}}{dt}=\\mathbf{f}(\\mathbf{B})\\circ\\mathbf{B}-\\mathbf{F}\\circ\\mathbf{B},
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0A%5Cfrac%7Bd%5Cmathbf%7BB%7D%7D%7Bdt%7D%3D%5Cmathbf%7Bf%7D%28%5Cmathbf%7BB%7D%29%5Ccirc%5Cmathbf%7BB%7D-%5Cmathbf%7BF%7D%5Ccirc%5Cmathbf%7BB%7D%2C%0A "
-\frac{d\mathbf{B}}{dt}=\mathbf{f}(\mathbf{B})\circ\mathbf{B}-\mathbf{F}\circ\mathbf{B},
-")
+
 
 with
 ![\\mathbf{B}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmathbf%7BB%7D "\mathbf{B}")
