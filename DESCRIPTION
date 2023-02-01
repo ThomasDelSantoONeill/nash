@@ -17,7 +17,7 @@ Description: An algorithm that computes harvesting rates at the Nash
     returns long-term yields as output. Such function will be then utilise as 
     input by the `nash` function.
     The package contains a second function `fn_rpath` that can be specifically 
-    used for Ecopaht with Ecosim (EwE) models, formulated via its R 
+    used for Ecopath with Ecosim (EwE) models, formulated via its R 
     implementation `Rpath`, so as to streamline its usage.
 License: GPL-3
 Imports:
