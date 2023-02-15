@@ -104,6 +104,8 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     B.eq <- as.numeric(yields) / par
     F.eq <- par
     M <- matrix(nrow = nSpp, ncol = nSpp)
+    # Make list of Ms
+    Mlist <- list()
     ### ALGORITHM
     for (iter in 1:n.iter) {
       for (i in 1:nSpp) {
@@ -127,6 +129,8 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
         print("Initial M is singular and hence non invertible")
         print(extinct.name)
       }
+      # Make list of Ms
+      Mlist[[iter]] <- M
       # Interaction Matrix and growth rates
       G <- -1 * solve(M)
       r <- (G %*% B.eq) + F.eq
@@ -205,7 +209,8 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
                       counts = nash_fncalls,
                       convergence = paste("Nash equilibrium found after ", iter,
                                           " iterations."),
-                      Bnash = Nash_Bs)
+                      Bnash = Nash_Bs,
+                      Ms = Mlist)
     } else {
       outlist <- list(par = tail(na.omit(Nash_Fs), n = 1),
                       value = fn(as.numeric(tail(na.omit(Nash_Fs),
@@ -213,7 +218,8 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
                       counts = nash_fncalls,
                       convergence = paste("Nash equilibrium found after ", iter,
                                           " iterations."),
-                      Bnash = tail(na.omit(Nash_Bs), n = 1))
+                      Bnash = tail(na.omit(Nash_Bs), n = 1),
+                      Ms = Mlist)
     }
   }
   if (method == "round-robin") {
