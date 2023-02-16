@@ -126,11 +126,11 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       }
       # Make list of Ms
       Mlist[[iter]] <- M
+      print(M)
       if (det(M)==0){
         extinct.name   <- names(which(colSums(M) == 0))
         print("Initial M is singular and hence non invertible")
         print(extinct.name)
-        return(Mlist)
       }
       # Interaction Matrix and growth rates
       G <- -1 * solve(M)
