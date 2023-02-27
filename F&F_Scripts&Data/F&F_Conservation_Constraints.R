@@ -1,13 +1,13 @@
 ### Bounding the search space for the Nash equilibrium by subjecting the
-###   ecosystem to conservation constraints (Figure 2 in EAP manuscript).
+###   ecosystem to conservation constraints (Figure 2 in F&F manuscript).
 ###   To generate the equilibrium yield curves under a constraint of biodiversity
 ###   conservation the 'rsense' branch of the nash package is required. You can
 ###   install this branch by running the following command:
 ###   remotes::install_github("ThomasDelSantoONeill/nash@rsense")
 library(Rpath)
 library(nash)
-load("ESA_EAP_Scripts&Data/BalticSeaModel.RData")
-nash.eq.LV.BS <- readRDS("ESA_EAP_Scripts&Data/nash.eq.LV.BS.rds")
+load("F&F_Scripts&Data/BalticSeaModel.RData")
+nash.eq.LV.BS <- readRDS("F&F_Scripts&Data/nash.eq.LV.BS.rds")
 spp = c("AdCod", "AdHerring", "AdSprat", "AdFlounder")
 par <- as.numeric(tail(Rsim.model$fishing$ForcedFRate[,spp], n = 1))
 model.area <- 240669
@@ -16,7 +16,7 @@ blim <- c((as.numeric(nash.eq.LV.BS$value/nash.eq.LV.BS$par)[1]+(50000/model.are
 ### Now nash will return a matrix for the 'par' values computed as well as a
 ###   new 'Bnash' matrix (i.e. the biomass state at Fnash). IF you do not whish
 ###   to run this please run
-###   'readRDS("ESA_EAP_Scripts&Data/nash.eq.LV.BS.CC.rds")'
+###   'readRDS("F&F_Scripts&Data/nash.eq.LV.BS.CC.rds")'
 nash.eq.LV.BS.CC <- nash(par = par, fn = fn_rpath, aged.str = TRUE,
                          data.years = 10, rsim.mod = Rsim.model,
                          IDnames = c("JuvCod", "AdCod", "JuvHerring", "AdHerring",
@@ -95,7 +95,7 @@ par <- as.numeric(tail(na.omit(nash.eq.LV.BS.CC$par), n = 1))
 ### NOTE: WHAT FOLLOWS WILL ONLY RUN IN QMUL'S COMPUTER CLUSTER TO RUN IN SERIES
 ###   ON YOUR MACHINE SUBSTITUTE ACCORDINGLY. BE AWARE THAT THE EXECUTION MIGHT
 ###   TAKE A LONG TIME AND THEREFORE THE RESULTING DATA IS INCLUDED IN THE
-###   ESA_EAP_Scripts&Data AS: "CCYield_Spp_<<number>>.rds" WHERE <<number>>
+###   F&F_Scripts&Data AS: "CCYield_Spp_<<number>>.rds" WHERE <<number>>
 ###   TAKES VALUES FROM 2-4.
 for (i in as.integer(Sys.getenv("SGE_TASK_ID"))) {
   print(i)
@@ -169,9 +169,9 @@ for (i in as.integer(Sys.getenv("SGE_TASK_ID"))) {
 }
 saveRDS(Yieldeq, paste("CCYield_Spp_",i,".rds",sep = ""))
 ### Load data for plotting (Figure 2 in EAP manuscript)
-BSCCdataY2 <- readRDS("ESA_EAP_Scripts&Data/CCYield_Spp_2.rds")
-BSCCdataY3 <- readRDS("ESA_EAP_Scripts&Data/CCYield_Spp_3.rds")
-BSCCdataY4 <- readRDS("ESA_EAP_Scripts&Data/CCYield_Spp_4.rds")
+BSCCdataY2 <- readRDS("F&F_Scripts&Data/CCYield_Spp_2.rds")
+BSCCdataY3 <- readRDS("F&F_Scripts&Data/CCYield_Spp_3.rds")
+BSCCdataY4 <- readRDS("F&F_Scripts&Data/CCYield_Spp_4.rds")
 
 # Plotting -----------------------------------------------------------------
 library(ggplot2)

@@ -3,7 +3,7 @@
 ###   'readRDS()' the appropriate data 'nash.eq.<<method>>.<<model>>' where
 ###   method is either LV or RR and BS for Baltic Sea model or NS for the North
 ###   Sea model.
-  # SIMPLE MODEL (Listing 1 in EAP manuscript)
+  # SIMPLE MODEL (Listing 1 in F&F manuscript)
   # Load libraries .
   library(Rpath)
   library (deSolve) # ODE solver library
@@ -37,8 +37,8 @@
   }
   # Execution of nash
   nash(par = c(0.2, 0.3), fn = HQLV)
-  # BALTIC SEA AND NORTH SEA MODELS (Listing 2 in EAP manuscript)
-  load("ESA_EAP_Scripts&Data/BalticSeaModel.RData")
+  # BALTIC SEA AND NORTH SEA MODELS (Listing 2 in F&F manuscript)
+  load("F&F_Scripts&Data/BalticSeaModel.RData")
   spp = c("AdCod", "AdHerring", "AdSprat", "AdFlounder")
   par <- as.numeric(tail(Rsim.model$fishing$ForcedFRate[,spp], n = 1))
   # LV method
@@ -53,7 +53,7 @@
                         track = FALSE, conv.criterion = 0.01)
   saveRDS(nash.eq.LV.BS, "nash.eq.LV.BS.rds")
 
-  load("ESA_EAP_Scripts&Data/NorthSeaModel.RData")
+  load("F&F_Scripts&Data/NorthSeaModel.RData")
   spp = c("AduCod", "AduWhiting", "AduHaddock", "AduSaithe", "AduHerring",
           "NorwayPout", "Sandeels", "Plaice", "Sole")
   par <- Rsim.model$fishing$ForcedFRate[sim.years,spp]
@@ -103,11 +103,11 @@ theme_tjdso <- theme(
   axis.text.x.bottom = element_text(margin = margin(4, 0, 0, 0, "mm")),
   axis.text.y.left = element_text(margin = margin(0, 4, 0, 0, "mm"))
 )
-### Diagnostics plotting routine (Figure_2 in EAP manuscript).
+### Diagnostics plotting routine (Figure_2 in F&F manuscript).
 ###   If the above was not run, load appropriate data
-###   (e.g. 'readRDS("ESA_EAP_Scripts&Data/nash.eq.LV.BS.rds")') and execute
+###   (e.g. 'readRDS("F&F_Scripts&Data/nash.eq.LV.BS.rds")') and execute
 ###   the ggplot2 code.
-nash.eq.LV.BS <- readRDS("ESA_EAP_Scripts&Data/nash.eq.LV.BS.rds")
+nash.eq.LV.BS <- readRDS("F&F_Scripts&Data/nash.eq.LV.BS.rds")
 sppname <- c("Cod", "Herring", "Sprat", "Flounder")
 # Transform data into something ggplot2 reads
 Fvec <- c()
@@ -147,11 +147,11 @@ ggplot(data = Yeq, aes(x = Fval, y = Yield)) +
   labs(y = bquote(paste("Yield (",Kg^3, " x ",Km^-2, ")")),
        x = bquote(paste("Fishing Mortality (",yr^-1,")")))
 
-### Diagnostics plotting routine (Figure_3 in EAP manuscript).
+### Diagnostics plotting routine (Figure_3 in F&F manuscript).
 ###   If the above was not run, load appropriate data
-###   (e.g. 'readRDS("ESA_EAP_Scripts&Data/nash.eq.LV.NS.rds")') and execute
+###   (e.g. 'readRDS("F&F_Scripts&Data/nash.eq.LV.NS.rds")') and execute
 ###   the ggplot2 code.
-nash.eq.LV.NS <- readRDS("ESA_EAP_Scripts&Data/nash.eq.LV.NS.rds")
+nash.eq.LV.NS <- readRDS("F&F_Scripts&Data/nash.eq.LV.NS.rds")
 sppname <- c("Cod", "Whiting", "Haddock", "Saithe", "Herring", "NorwayPout",
              "Sandeels", "Plaice", "Sole")
 # Transform data into something ggplot2 reads

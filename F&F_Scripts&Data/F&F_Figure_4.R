@@ -1,13 +1,13 @@
-### Performance benchmark of LV vs round-robin method (Figure 4 in EAP
+### Performance benchmark of LV vs round-robin method (Figure 4 in F&F
 ###   manuscript). For this particular case we utilised the following
 ###   matrices for each model as input for the 'nash()' function. Because
 ###   of the long computation times of the round-robin method we run the
 ###   following code (EXCEPT THAT FOR THE SIMPLE MODEL) in parallel utilising
 ###   Queen Mary's Apocrita HPC facility, supported by QMUL Research-IT
 ###   (http://doi.org/10.5281/zenodo.438045).
-SMFmat <- readRDS("ESA_EAP_Scripts&Data/SMFmat.rds")
-BSFmat <- readRDS("ESA_EAP_Scripts&Data/BSFmat.rds")
-NSFmat <- readRDS("ESA_EAP_Scripts&Data/NSFmat.rds")
+SMFmat <- readRDS("F&F_Scripts&Data/SMFmat.rds")
+BSFmat <- readRDS("F&F_Scripts&Data/BSFmat.rds")
+NSFmat <- readRDS("F&F_Scripts&Data/NSFmat.rds")
 ### SIMPLE MODEL
   # Load libraries.
   library(deSolve) # ODE solver library
@@ -51,17 +51,17 @@ NSFmat <- readRDS("ESA_EAP_Scripts&Data/NSFmat.rds")
   }
   ### If you do not want to compile the code you can load the data via:
   ###   'SMdata <- readRDS("SM-Fnash-counts.rds")'
-  SMdata <- readRDS("ESA_EAP_Scripts&Data/SM_fn.counts_data.rds")
+  SMdata <- readRDS("F&F_Scripts&Data/SM_fn.counts_data.rds")
 ### BALTIC SEA MODEL
   library(Rpath)
-  load("ESA_EAP_Scripts&Data/BalticSeaModel.RData")
-  parmat <- readRDS("ESA_EAP_Scripts&Data/BSFmat.rds")
+  load("F&F_Scripts&Data/BalticSeaModel.RData")
+  parmat <- readRDS("F&F_Scripts&Data/BSFmat.rds")
   spp = c("AdCod", "AdHerring", "AdSprat", "AdFlounder")
   par <- Rsim.model$fishing$ForcedFRate[sim.years,spp]
   ### NOTE: WHAT FOLLOWS WILL ONLY RUN IN QMUL'S COMPUTER CLUSTER TO RUN IN SERIES
   ###   ON YOUR MACHINE SUBSTITUTE ACCORDINGLY. BE AWARE THAT THE EXECUTION MIGHT
   ###   TAKE A LONG TIME AND THEREFORE THE RESULTING DATA IS INCLUDED IN THE
-  ###   ESA_EAP_Scripts&Data AS: "BS_fn.counts_data.rds".
+  ###   F&F_Scripts&Data AS: "BS_fn.counts_data.rds".
   for(i in as.integer(Sys.getenv("SGE_TASK_ID"))) {
     nash.eq.LV <- nash(par = as.numeric(parmat[i,]), fn = fn_rpath, aged.str = TRUE,
                        data.years = 10, rsim.mod = Rsim.model,
@@ -84,17 +84,17 @@ NSFmat <- readRDS("ESA_EAP_Scripts&Data/NSFmat.rds")
                        track = FALSE, conv.criterion = 0.01)
     saveRDS(nash.eq.RR, paste("BS-NE-Fmsy-RR_",i,".rds",sep = ""))
   }
-  BSdata <- readRDS("ESA_EAP_Scripts&Data/BS_fn.counts_data.rds")
+  BSdata <- readRDS("F&F_Scripts&Data/BS_fn.counts_data.rds")
 ### NORTH SEA MODEL
-  load("ESA_EAP_Scripts&Data/NorthSeaModel.RData")
-  parmat <- readRDS("ESA_EAP_Scripts&Data/NSFmat.rds")
+  load("F&F_Scripts&Data/NorthSeaModel.RData")
+  parmat <- readRDS("F&F_Scripts&Data/NSFmat.rds")
   spp = c("AduCod", "AduWhiting", "AduHaddock", "AduSaithe", "AduHerring",
           "NorwayPout", "Sandeels", "Plaice", "Sole")
   par <- Rsim.model$fishing$ForcedFRate[sim.years,spp]
   ### NOTE: WHAT FOLLOWS WILL ONLY RUN IN QMUL'S COMPUTER CLUSTER TO RUN IN SERIES
   ###   ON YOUR MACHINE SUBSTITUTE ACCORDINGLY. BE AWARE THAT THE EXECUTION MIGHT
   ###   TAKE A LONG TIME AND THEREFORE THE RESULTING DATA IS INCLUDED IN THE
-  ###   ESA_EAP_Scripts&Data AS: "NS_fn.counts_data.rds".
+  ###   F&F_Scripts&Data AS: "NS_fn.counts_data.rds".
   for(i in as.integer(Sys.getenv("SGE_TASK_ID"))) {
     nash.eq.LV <- nash(par = as.numeric(parmat[i,]), fn = fn_rpath, aged.str = TRUE,
                        data.years = 23, rsim.mod = Rsim.model,
@@ -119,7 +119,7 @@ NSFmat <- readRDS("ESA_EAP_Scripts&Data/NSFmat.rds")
                        track = FALSE, conv.criterion = 0.01)
     saveRDS(nash.eq.RR, paste("NS-NE-Fmsy-RR_",i,".rds",sep = ""))
   }
-  NSdata <- readRDS("ESA_EAP_Scripts&Data/NS_fn.counts_data.rds")
+  NSdata <- readRDS("F&F_Scripts&Data/NS_fn.counts_data.rds")
 
 ### Plotting routine
   performance <- data.frame(Simple.Model = c(colMeans(SMdata)),
@@ -212,5 +212,5 @@ NSFmat <- readRDS("ESA_EAP_Scripts&Data/NSFmat.rds")
            lwd = 2)
   box()
   grid()
-  ### Figure 4 in EAP manuscript was later processed to make it nice for
+  ### Figure 4 in F&F manuscript was later processed to make it nice for
   ###   publication.

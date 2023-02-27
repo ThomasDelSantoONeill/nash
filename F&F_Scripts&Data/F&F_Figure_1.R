@@ -1,11 +1,11 @@
 ### Plotting routine for food web visualisation of Rpath models (Figure 1
-###   in EAP manuscript).
+###   in F&F manuscript).
 ###   To visualise the North Sea model uncomment the following line:
-###   load("ESA_EAP_Scripts&Data/NorthSeaModel.RData").
+###   load("F&F_Scripts&Data/NorthSeaModel.RData").
 ###   Figure 1 in EAP manuscript is different as it was further processed to
 ###   improve readability.
-load("ESA_EAP_Scripts&Data/BalticSeaModel.RData")
-# load("ESA_EAP_Scripts&Data/NorthSeaModel.RData")
+load("F&F_Scripts&Data/BalticSeaModel.RData")
+# load("F&F_Scripts&Data/NorthSeaModel.RData")
 ## Libraries
 library(data.table)
 library(igraph)
