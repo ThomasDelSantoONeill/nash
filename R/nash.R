@@ -104,7 +104,6 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     Nash_Rs <- array(dim = c(n.iter, nSpp))
     output <- fn(par, ...)
     yields <- output
-    print(yields)
     # Avoid numerical errors computing M due to par elements being exactly =
     #   to F.increase
     if (any(par==F.increase)==TRUE) {
@@ -116,6 +115,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     M <- matrix(nrow = nSpp, ncol = nSpp)
     ### ALGORITHM
     for (iter in 1:n.iter) {
+      print(yields)
       for (i in 1:nSpp) {
         #Parameters
         par.p <- par
