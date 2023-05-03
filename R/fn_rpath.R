@@ -157,7 +157,7 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
       for (i in 1:nrow(rsim.simul$annual_Catch)) {
         adY <- rsim.simul$annual_Catch[i, adname]
         juvY <- rsim.simul$annual_Catch[i, juvname]
-        yield <- adY + juvY
+        yield <- adY
         non.aged.yield <- rsim.simul$annual_Catch[i, non.aged.groups]
         yields[i,] <- append(yield, non.aged.yield)
       }
@@ -170,7 +170,7 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
       for (i in 1:nrow(rsim.simul$annual_Catch)) {
         adY <- rsim.simul$annual_Catch[i, adname]
         juvY <- rsim.simul$annual_Catch[i, juvname]
-        yields[i,] <- adY + juvY
+        yields[i,] <- adY
       }
     }
   } else if (aged.str == FALSE) {
