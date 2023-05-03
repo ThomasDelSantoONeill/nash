@@ -104,6 +104,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     Nash_Rs <- array(dim = c(n.iter, nSpp))
     output <- fn(par, ...)
     yields <- output
+    print(yields)
     # Avoid numerical errors computing M due to par elements being exactly =
     #   to F.increase
     if (any(par==F.increase)==TRUE) {
@@ -131,6 +132,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
         #Populating M
         M[,i] <- (B.p - B.m) / (F.increase * 2)
       }
+      print(M)
       if (det(M)==0){
         extinct.name   <- names(which(colSums(M) == 0))
         print("Initial M is singular and hence non invertible")
