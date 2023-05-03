@@ -115,8 +115,6 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     M <- matrix(nrow = nSpp, ncol = nSpp)
     ### ALGORITHM
     for (iter in 1:n.iter) {
-      print(paste("These are the yields", yields))
-      print(paste("These are the harvesting rates", par))
       for (i in 1:nSpp) {
         #Parameters
         par.p <- par
@@ -188,15 +186,17 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       Nash_Rs[iter,] <- r
       # Re-running the model to equilibrium with new Nash Fs
       par <- as.numeric(F_new)
+      print(paste("these are the Nash Fs ", par))
       if (progress == TRUE) {
         print(max(abs(F.eq / Nash_Fs[(iter),] -1)))
       }
       yields <- fn(par, ...)
+      print(paste("these are the Nash MSYs ", yields))
       B.eq <- as.numeric(yields) / par
+      print(paste("these Nash MSYs / Nash Fs ", B.eq,
+                  " should be equal to ", Bcomplete))
       F.eq <- par
       nash_fncalls <- nash_fncalls + 1
-      print(paste("These is the Bnash", Bcomplete))
-      print(paste("These should be equal to Bnash = Y/F", B.eq))
       # Convergence statement
       if (iter>1) {
         if (max(abs(F_new / Nash_Fs[(iter-1),] -1)) < conv.criterion) {
