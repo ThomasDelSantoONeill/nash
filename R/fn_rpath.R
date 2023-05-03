@@ -157,7 +157,7 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
       for (i in 1:nrow(rsim.simul$annual_Catch)) {
         adY <- rsim.simul$annual_Catch[i, adname]
         juvY <- rsim.simul$annual_Catch[i, juvname]
-        yield <- adY # + juvY
+        yield <- adY + juvY
         non.aged.yield <- rsim.simul$annual_Catch[i, non.aged.groups]
         yields[i,] <- append(yield, non.aged.yield)
       }
@@ -170,7 +170,7 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
       for (i in 1:nrow(rsim.simul$annual_Catch)) {
         adY <- rsim.simul$annual_Catch[i, adname]
         juvY <- rsim.simul$annual_Catch[i, juvname]
-        yields[i,] <- adY # + juvY
+        yields[i,] <- adY + juvY
       }
     }
   } else if (aged.str == FALSE) {
@@ -195,5 +195,9 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
   }
   colnames(yields) <- names
   outlist <- colMeans(tail(yields, n = avg.window))
+  print(colMeans((rsim.simul$annual_Biomass[, adname] *
+                   harvesting[c(2,4,6,8)]) +
+                 (rsim.simul$annual_Biomass[, juvname] *
+                   harvesting[c(1,3,5,7)] * JuvFProp)))
   return(outlist)
 }
