@@ -196,7 +196,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       F.eq <- par
       nash_fncalls <- nash_fncalls + 1
       print(paste("These is the Bnash", Bcomplete))
-      print(paste("These should be equal to Bnash = Y/F", B.eq)
+      print(paste("These should be equal to Bnash = Y/F", B.eq))
       # Convergence statement
       if (iter>1) {
         if (max(abs(F_new / Nash_Fs[(iter-1),] -1)) < conv.criterion) {
