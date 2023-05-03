@@ -115,7 +115,8 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     M <- matrix(nrow = nSpp, ncol = nSpp)
     ### ALGORITHM
     for (iter in 1:n.iter) {
-      print(yields)
+      print(paste("These are the yields", yields))
+      print(paste("These are the harvesting rates", par))
       for (i in 1:nSpp) {
         #Parameters
         par.p <- par
@@ -134,7 +135,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       }
       print(M)
       if (det(M)==0){
-        extinct.name   <- names(which(colSums(M) == 0))
+        extinct.name   <- which(colSums(M) == 0)
         print("Initial M is singular and hence non invertible")
         print(extinct.name)
       }
@@ -194,6 +195,8 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       B.eq <- as.numeric(yields) / par
       F.eq <- par
       nash_fncalls <- nash_fncalls + 1
+      print(paste("These is the Bnash", Bcomplete))
+      print(paste("These should be equal to Bnash = Y/F", B.eq)
       # Convergence statement
       if (iter>1) {
         if (max(abs(F_new / Nash_Fs[(iter-1),] -1)) < conv.criterion) {
