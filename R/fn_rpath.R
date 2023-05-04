@@ -159,7 +159,7 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
           harvesting[1:n.aged.str]
         juvY <- rsim.simul$annual_Biomass[i, juvname] *
           harvesting[1:n.aged.str] * JuvFProp
-        yield <- adY + juvY
+        yield <- adY # + juvY What do we do with the juv bycatch at sea?
         non.aged.yield <- rsim.simul$annual_Biomass[i, non.aged.groups] *
           harvesting[-c(1:n.aged.str)]
         yields[i,] <- append(yield, non.aged.yield)
@@ -175,7 +175,7 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
           harvesting[1:length(adname)]
         juvY <- rsim.simul$annual_Biomass[i, juvname] *
           harvesting[1:length(juvname)] * JuvFProp
-        yields[i,] <- adY + juvY
+        yields[i,] <- adY # + juvY What do we do with the juv bycatch at sea?
       }
     }
   } else if (aged.str == FALSE) {
