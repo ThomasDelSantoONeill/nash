@@ -152,25 +152,30 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
       # Run simulation and compute yields
       rsim.simul <- rsim.run(rsim.mod, method = integration.method,
                              years = 1:simul.years)
-      yields <- array(dim = c(nrow(rsim.simul$annual_Catch),
+      yields <- array(dim = c(nrow(rsim.simul$annual_Biomass),
                               length(harvesting)))
-      for (i in 1:nrow(rsim.simul$annual_Catch)) {
-        adY <- rsim.simul$annual_Catch[i, adname]
-        juvY <- rsim.simul$annual_Catch[i, juvname]
-        yield <- adY
-        non.aged.yield <- rsim.simul$annual_Catch[i, non.aged.groups]
+      for (i in 1:nrow(rsim.simul$annual_Biomass)) {
+        adY <- rsim.simul$annual_Biomass[i, adname] *
+          harvesting[1:n.aged.str]
+        juvY <- rsim.simul$annual_Biomass[i, juvname] *
+          harvesting[1:n.aged.str] * JuvFProp
+        yield <- adY + juvY
+        non.aged.yield <- rsim.simul$annual_Biomass[i, non.aged.groups] *
+          harvesting[-c(1:n.aged.str)]
         yields[i,] <- append(yield, non.aged.yield)
       }
     } else if ((length(IDnames) > length(stanza.names)) == FALSE) {
       # Run simulation and compute yields
       rsim.simul <- rsim.run(rsim.mod, method = integration.method,
                              years = 1:simul.years)
-      yields <- array(dim = c(nrow(rsim.simul$annual_Catch),
+      yields <- array(dim = c(nrow(rsim.simul$annual_Biomass),
                               length(harvesting)))
-      for (i in 1:nrow(rsim.simul$annual_Catch)) {
-        adY <- rsim.simul$annual_Catch[i, adname]
-        juvY <- rsim.simul$annual_Catch[i, juvname]
-        yields[i,] <- adY
+      for (i in 1:nrow(rsim.simul$annual_Biomass)) {
+        adY <- rsim.simul$annual_Biomass[i, adname] *
+          harvesting[1:length(adname)]
+        juvY <- rsim.simul$annual_Biomass[i, juvname] *
+          harvesting[1:length(juvname)] * JuvFProp
+        yields[i,] <- adY + juvY
       }
     }
   } else if (aged.str == FALSE) {
@@ -184,9 +189,9 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
     # Run simulation and compute yields
     rsim.simul <- rsim.run(rsim.mod, method = integration.method,
                            years = 1:simul.years)
-    yields <- array(dim = c(nrow(rsim.simul$annual_Catch), length(adname)))
-    for (i in 1:nrow(rsim.simul$annual_Catch)) {
-      yields[i,] <- rsim.simul$annual_Catch[i,sppname]
+    yields <- array(dim = c(nrow(rsim.simul$annual_Biomass), length(adname)))
+    for (i in 1:nrow(rsim.simul$annual_Biomass)) {
+      yields[i,] <- rsim.simul$annual_Biomass[i,sppname] * harvesting
     }
   }
   names <- c()

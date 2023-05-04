@@ -131,9 +131,8 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
         #Populating M
         M[,i] <- (B.p - B.m) / (F.increase * 2)
       }
-      print(M)
       if (det(M)==0){
-        extinct.name   <- which(colSums(M) == 0)
+        extinct.name   <- names(which(colSums(M) == 0))
         print("Initial M is singular and hence non invertible")
         print(extinct.name)
       }
@@ -186,15 +185,11 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       Nash_Rs[iter,] <- r
       # Re-running the model to equilibrium with new Nash Fs
       par <- as.numeric(F_new)
-      print(paste("these are the Nash Fs ", par))
       if (progress == TRUE) {
         print(max(abs(F.eq / Nash_Fs[(iter),] -1)))
       }
       yields <- fn(par, ...)
-      print(paste("these are the Nash MSYs ", yields))
       B.eq <- as.numeric(yields) / par
-      print(paste("these Nash MSYs / Nash Fs ", B.eq,
-                  " should be equal to ", Bcomplete))
       F.eq <- par
       nash_fncalls <- nash_fncalls + 1
       # Convergence statement
