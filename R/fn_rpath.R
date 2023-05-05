@@ -152,31 +152,12 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
       # Run simulation and compute yields
       rsim.simul <- rsim.run(rsim.mod, method = integration.method,
                              years = 1:simul.years)
-      yields <- array(dim = c(nrow(rsim.simul$annual_Biomass),
-                              length(harvesting)))
-      for (i in 1:nrow(rsim.simul$annual_Biomass)) {
-        adY <- rsim.simul$annual_Biomass[i, adname] *
-          harvesting[1:n.aged.str]
-        juvY <- rsim.simul$annual_Biomass[i, juvname] *
-          harvesting[1:n.aged.str] * JuvFProp
-        yield <- adY # + juvY What do we do with the juv bycatch at sea?
-        non.aged.yield <- rsim.simul$annual_Biomass[i, non.aged.groups] *
-          harvesting[-c(1:n.aged.str)]
-        yields[i,] <- append(yield, non.aged.yield)
-      }
+      yields <- rsim.simul$annual_Catch[,sppname]
     } else if ((length(IDnames) > length(stanza.names)) == FALSE) {
       # Run simulation and compute yields
       rsim.simul <- rsim.run(rsim.mod, method = integration.method,
                              years = 1:simul.years)
-      yields <- array(dim = c(nrow(rsim.simul$annual_Biomass),
-                              length(harvesting)))
-      for (i in 1:nrow(rsim.simul$annual_Biomass)) {
-        adY <- rsim.simul$annual_Biomass[i, adname] *
-          harvesting[1:length(adname)]
-        juvY <- rsim.simul$annual_Biomass[i, juvname] *
-          harvesting[1:length(juvname)] * JuvFProp
-        yields[i,] <- adY # + juvY What do we do with the juv bycatch at sea?
-      }
+      yields <- rsim.simul$annual_Catch[,sppname]
     }
   } else if (aged.str == FALSE) {
     for (i in 1:length(sppname)) {
@@ -189,16 +170,8 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
     # Run simulation and compute yields
     rsim.simul <- rsim.run(rsim.mod, method = integration.method,
                            years = 1:simul.years)
-    yields <- array(dim = c(nrow(rsim.simul$annual_Biomass), length(adname)))
-    for (i in 1:nrow(rsim.simul$annual_Biomass)) {
-      yields[i,] <- rsim.simul$annual_Biomass[i,sppname] * harvesting
-    }
+    yields <- rsim.simul$annual_Catch[,sppname]
   }
-  names <- c()
-  for (i in 1:ncol(yields)) {
-    names <- append(names, paste("Spp",i))
-  }
-  colnames(yields) <- names
   outlist <- colMeans(tail(yields, n = avg.window))
   return(outlist)
 }
