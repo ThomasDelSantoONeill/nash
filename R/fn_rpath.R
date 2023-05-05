@@ -150,6 +150,7 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
                                    sim.month = 0, value = harvesting[element])
       }
       # Run simulation and compute yields
+      print(rsim.mod$fishing$ForcedFRate[20:25,sppname])
       rsim.simul <- rsim.run(rsim.mod, method = integration.method,
                              years = 1:simul.years)
       yields <- rsim.simul$annual_Biomass[, sppname] * harvesting

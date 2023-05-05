@@ -254,7 +254,6 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
   if (yield.curves == TRUE) {
     Yield <- function(par, Hvec, j){
       Hvec[j] <- par
-      nash_fncalls <- nash_fncalls + 1
       as.numeric(fn(Hvec, ...))[j]
     }
     Yieldeq <- list()
