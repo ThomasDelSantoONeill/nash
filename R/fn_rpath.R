@@ -97,13 +97,13 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
   sppname <- IDnames
   harvesting <- par
   simul.years <- simul.years
-  ### ADJUST SCENARIO if Adams-Bashforth method is used
-  if (integration.method == "AB") {
-    # Setting integration flags
-    rsim.mod$params$NoIntegrate <-
-      ifelse(rsim.mod$params$MzeroMort*rsim.mod$params$B_BaseRef > 24,
-             0, rsim.mod$params$spnum)
-  }
+  # ### ADJUST SCENARIO if Adams-Bashforth method is used
+  # if (integration.method == "AB") {
+  #   # Setting integration flags
+  #   rsim.mod$params$NoIntegrate <-
+  #     ifelse(rsim.mod$params$MzeroMort*rsim.mod$params$B_BaseRef > 24,
+  #            0, rsim.mod$params$spnum)
+  # }
   # NOTE: Ensuring effort = 0 to play only with harvesting rates.
   fleet_name <- as.character(colnames(rsim.mod$fishing$ForcedEffort))
   for (i in 1:length(fleet_name)) {
