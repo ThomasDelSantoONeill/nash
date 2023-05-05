@@ -152,12 +152,12 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
       # Run simulation and compute yields
       rsim.simul <- rsim.run(rsim.mod, method = integration.method,
                              years = 1:simul.years)
-      yields <- rsim.simul$annual_Catch[, c(adname, non.aged.groups)] * harvesting
+      yields <- rsim.simul$annual_Catch[, c(adname, non.aged.groups)]
     } else if ((length(IDnames) > length(stanza.names)) == FALSE) {
       # Run simulation and compute yields
       rsim.simul <- rsim.run(rsim.mod, method = integration.method,
                              years = 1:simul.years)
-      yields <- rsim.simul$annual_Catch[, adname] * harvesting
+      yields <- rsim.simul$annual_Catch[, adname]
     }
   } else if (aged.str == FALSE) {
     for (i in 1:length(sppname)) {
@@ -170,7 +170,7 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
     # Run simulation and compute yields
     rsim.simul <- rsim.run(rsim.mod, method = integration.method,
                            years = 1:simul.years)
-    yields <- rsim.simul$annual_Catch[, sppname] * harvesting
+    yields <- rsim.simul$annual_Catch[, sppname]
   }
   outlist <- colMeans(tail(yields, n = avg.window))
   return(outlist)
