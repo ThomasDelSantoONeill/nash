@@ -150,15 +150,14 @@ fn_rpath <- function(par, simul.years = 100, aged.str = TRUE, data.years,
                                    sim.month = 0, value = harvesting[element])
       }
       # Run simulation and compute yields
-      print(rsim.mod$fishing$ForcedFRate[20:25,sppname])
       rsim.simul <- rsim.run(rsim.mod, method = integration.method,
                              years = 1:simul.years)
-      yields <- rsim.simul$annual_Biomass[, sppname] * harvesting
+      yields <- rsim.simul$annual_Biomass[, c(adname, non.aged.groups)] * harvesting
     } else if ((length(IDnames) > length(stanza.names)) == FALSE) {
       # Run simulation and compute yields
       rsim.simul <- rsim.run(rsim.mod, method = integration.method,
                              years = 1:simul.years)
-      yields <- rsim.simul$annual_Biomass[, sppname] * harvesting
+      yields <- rsim.simul$annual_Biomass[, adname] * harvesting
     }
   } else if (aged.str == FALSE) {
     for (i in 1:length(sppname)) {
