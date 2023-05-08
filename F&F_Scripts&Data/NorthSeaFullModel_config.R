@@ -1667,9 +1667,9 @@ Rsim.model$forcing$ForcedPrey[,67] <- c(1.030349, 1.030342, 1.030321, 1.030285,
                                         0.9465237, 0.9463598, 0.946231,
                                         0.9461382, 0.9460819,
                                         rep(0.946063, (sim.years*12)-(23*12)+1))
-# Setting integration flags
-Rsim.model$params$NoIntegrate <-
-  ifelse(Rsim.model$params$MzeroMort*Rsim.model$params$B_BaseRef > 24,
-         0, Rsim.model$params$spnum)
+# # Setting integration flags
+# Rsim.model$params$NoIntegrate <-
+#   ifelse(Rsim.model$params$MzeroMort*Rsim.model$params$B_BaseRef > 24,
+#          0, Rsim.model$params$spnum)
 #Running Rsim
 Rsim.run <- rsim.run(Rsim.model, method = 'AB', years = 1:sim.years)
