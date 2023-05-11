@@ -25,7 +25,7 @@ Rpath.parameters$model[, Biomass := biomass]
 Rpath.parameters$model[, PB := pb]
 Rpath.parameters$model[, QB := qb]
 Rpath.parameters$model[Group %in% "Mysids", EE := 0.7499999]
-Rpath.parameters$model[, BioAcc := c(0.06, rep(0, 21), rep(NA, 10))]
+Rpath.parameters$model[, BioAcc := c(0.00036, rep(0, 21), rep(NA, 10))]
 Rpath.parameters$model[, Unassim := c(0.15, rep(0.2, 2), 0.17, rep(0.2, 16),
                                       rep(0, 2), rep(NA, 10))]
 Rpath.parameters$model$DetInput <- c(rep(NA, 21), 0, rep(NA, 10))
@@ -444,6 +444,9 @@ Rsim.model <- adjust.forcing(Rsim.model, parameter = "ForcedPrey",
                              value = c(1, 0.9074827, 0.9369552, 1.107766,
                                        1.04327, 1.052554, 0.8505842, 0.9891393,
                                        1.037044, rep(0.9645875, sim.years)))
-
+# # Setting integration flags
+# Rsim.model$params$NoIntegrate <-
+#   ifelse(Rsim.model$params$MzeroMort*Rsim.model$params$B_BaseRef > 24,
+#          0, Rsim.model$params$spnum)
 # Running the model
-Rsim.run <- rsim.run(Rsim.model, method = "RK4", years = 1:sim.years)
+Rsim.run <- rsim.run(Rsim.model, method = "AB", years = 1:sim.years)
