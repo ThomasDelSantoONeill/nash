@@ -14,43 +14,43 @@ stgroups <- c(rep(NA, 2), rep("Cod", 2), rep("Herring", 2), rep("Sprat", 2),
               rep("Flatfish", 2), rep(NA, 22))
 Rpath.parameters <- create.rpath.params(group = groups, type = types,
                                         stgroup = stgroups)
-biomass <- c(0.006, 0.002, 0.3424508, 0.33, 1.003478, 2.32929, 3.724431,
-             2.390462, 0.4216416, 0.463, 2, 10, 45, 11.385, 6.8, NA, 4.006379,
-             1.930314, 3.026768, 2.270881, 7.05, 1644.81, rep(NA, 10))
-pb <- c(0.1, 0.1, 1.062, 0.885, 1.175847, 0.7838983, 1.8645, 1.243, 1.184425,
-        0.7896167, 1.3, 1.75, 0.4, 2, 6.17, 5, 20, 7, 20, 20, 200, rep(NA, 11))
-qb <- c(16.28, 130, 7.594003, 3.81, 5.810652, 3, 8.901528, 4.63, 9.106646, 4.21,
+biomass <- c(0.006, 0.002, 0.3537279, 0.33, 1.021176, 2.72, 4.691991, 4.48,
+             0.3816071, 0.463, 2, 10, 45, 11.385, 6.8, NA, 4.006379, 1.930314,
+             3.026768, 2.270881, 7.05, 1644.81, rep(NA, 10))
+pb <- c(0.1, 0.1, 1.092, 0.885, 0.948, 0.79, 1.605, 1.07, 1.143, 0.762, 1.3,
+        1.75, 0.4, 2, 6.17, 5, 30, 7, 25, 25, 200, rep(NA, 11))
+qb <- c(16.28, 130, 7.649284, 3.81, 5.627138, 3, 8.705635, 4.63, 9.07962, 4.21,
         5, 8.73, 2, 10, 31.17, 15, 100, 27, 83, 83, rep(NA, 12))
 Rpath.parameters$model[, Biomass := biomass]
 Rpath.parameters$model[, PB := pb]
 Rpath.parameters$model[, QB := qb]
 Rpath.parameters$model[Group %in% "Mysids", EE := 0.7499999]
-Rpath.parameters$model[, BioAcc := c(0.00036, rep(0, 21), rep(NA, 10))]
-Rpath.parameters$model[, Unassim := c(rep(0.2, 3), 0.17, rep(0.2, 16),
+Rpath.parameters$model[, BioAcc := c(0.06, rep(0, 21), rep(NA, 10))]
+Rpath.parameters$model[, Unassim := c(0.15, rep(0.2, 2), 0.17, rep(0.2, 16),
                                       rep(0, 2), rep(NA, 10))]
 Rpath.parameters$model$DetInput <- c(rep(NA, 21), 0, rep(NA, 10))
 Rpath.parameters$model[, Detritus := c(rep(1, 21), 0, rep(1, 10))]
 # Fishery
-ACT0018.l <- c(rep(0, 3), 0.04591162, 0.00082648, 0.01712203, 0.01854215,
-               0.02033977, 0.000439406, 0.03830102, rep(0, 12), rep(NA, 10))
-ACT1824.l <- c(rep(0, 3), 0.04033527, 0.000591882, 0.01226191, 0.01937044,
-               0.02124836, 0.000151976, 0.01324718, rep(0, 12), rep(NA, 10))
-ACT2440.l <- c(rep(0, 3), 0.04254267, 0.000637071, 0.01319807, 0.01510973,
-               0.01657458, 0.000713593, 0.06220077, rep(0, 12), rep(NA, 10))
-PAS0012.l <- c(rep(0, 3), 0.05036297, 0.000383378, 0.01153847, rep(0, 3),
+ACT0018.l <- c(rep(0, 3), 0.04655146, 0.000964227, 0.01997571, 0.02041084,
+               0.02239085, 0.000439406, 0.03830102, rep(0, 12), rep(NA,10))
+ACT1824.l <- c(rep(0, 3), 0.0408974, 0.000690529, 0.01430556, 0.02132261,
+               0.02339106, 0.000151976, 0.01324718, rep(0, 12), rep(NA, 10))
+ACT2440.l <- c(rep(0, 3), 0.04313556, 0.000743249, 0.01539775, 0.0166325,
+               0.01824598, 0.000713593, 0.06220077, rep(0, 12), rep(NA, 10))
+PAS0012.l <- c(rep(0, 3), 0.05106486, 0.000447274, 0.01346155, rep(0, 3),
                0.04880729, rep(0, 12), rep(NA, 10))
-PAS1218.l <- c(rep(0, 3), 0.031545810, 0, 5.81237E-07, rep(0, 3), 0.01100713,
+PAS1218.l <- c(rep(0, 3), 0.03198545, 0, 6.7811e-07, rep(0, 3), 0.01100713,
                rep(0, 12), rep(NA, 10))
-PAS1840.l <- c(rep(0, 3), 0.03291944, rep(0, 5), 0.004351989, rep(0, 12),
+PAS1840.l <- c(rep(0, 3), 0.03337823, rep(0, 5), 0.004351989, rep(0, 12),
                rep(NA, 10))
-PEL0018.l <- c(rep(0, 2), 0.003049315, 0.002927426, 1.57661E-05, 0.000714338,
-               0.002930345, 0.01397149, 0, 9.76619E-06, rep(0, 12), rep(NA, 10))
-PEL1824.l <- c(rep(0, 2), 0.004125458, 0.005016762, 7.01156E-05, 0.003176858,
-               0.003109472, 0.01437957, 0, 0.000312952, rep(0, 12), rep(NA, 10))
-PEL2440.l <- c(rep(0, 2), 0.007138357, 0.02310606, 0.004415651, 0.2000691,
-               0.2045425, 0.7728292, 0, 0.002712224, rep(0, 12), rep(NA, 10))
-PEL40OO.l <- c(rep(0, 2), 2.78722E-06, 0.00030014, 0.01322758, 0.05380669,
-               0.02146581, 0.1035574, rep(0, 14), rep(NA, 10))
+PEL0018.l <- c(rep(0, 2), 6.74852e-05, 0.002968224, 1.83938e-05, 0.000833394,
+               0.003225667, 0.01538038, 0, 9.76619e-06, rep(0, 12), rep(NA, 10))
+PEL1824.l <- c(rep(0, 2), 9.13016e-05, 0.005086678, 8.18015e-05, 0.003706335,
+               0.003422847, 0.01582962, 0, 0.000312952, rep(0, 12), rep(NA, 10))
+PEL2440.l <- c(rep(0, 2), 0.000157981, 0.02342807, 0.005151592, 0.2334139,
+               0.2251564, 0.8507619, 0, 0.002712224, rep(0, 12), rep(NA, 10))
+PEL40OO.l <- c(rep(0, 2), 6.16847e-08, 0.000304323, 0.01543218, 0.06277447,
+               0.02362915, 0.1140002, rep(0, 14), rep(NA, 10))
 Rpath.parameters$model[, ACT0018 := ACT0018.l]
 Rpath.parameters$model[, ACT1824 := ACT1824.l]
 Rpath.parameters$model[, ACT2440 := ACT2440.l]
@@ -62,23 +62,23 @@ Rpath.parameters$model[, PEL1824 := PEL1824.l]
 Rpath.parameters$model[, PEL2440 := PEL2440.l]
 Rpath.parameters$model[, PEL40OO := PEL40OO.l]
 # Discards
-ACT0018.d <- c(rep(0, 2), 0.000952843, 0.000507916, rep(0, 4), 0.00260477,
+ACT0018.d <- c(rep(0, 2), 0.000424188, 0.001106558, rep(0, 4), 0.00260477,
                0.02900947, rep(0, 12), rep(NA, 10))
-ACT1824.d <- c(rep(0, 2), 0.000846075, 0.000494278, rep(0, 4), 0.00078248,
+ACT1824.d <- c(rep(0, 2), 0.000376657, 0.001076847, rep(0, 4), 0.00078248,
                0.008714528, rep(0, 12), rep(NA, 10))
-ACT2440.d <- c(rep(0, 2), 0.000558817, 0.000513587, rep(0, 4), 0.003622325,
+ACT2440.d <- c(rep(0, 2), 0.000248775, 0.001118913, rep(0, 4), 0.003622325,
                0.04034203, rep(0, 12), rep(NA, 10))
-PAS0012.d <- c(rep(0, 2), 0.00012469, 0.000228288, rep(0, 5), 0.01116253,
+PAS0012.d <- c(rep(0, 2), 5.55097E-05, 0.000497353, rep(0, 5), 0.01116253,
                rep(0, 12), rep(NA, 10))
-PAS1218.d <- c(rep(0, 2), 0.000104051, 0.000190533, rep(0, 5), 0.002194796,
+PAS1218.d <- c(rep(0, 2), 4.63214E-05, 0.000415099, rep(0, 5), 0.002194796,
                rep(0, 12), rep(NA, 10))
-PAS1840.d <- c(rep(0, 2), 0.000172401, 0.000315677, rep(0, 5), 0.000615467,
+PAS1840.d <- c(rep(0, 2), 7.67498E-05, 0.000687742, rep(0, 5), 0.000615467,
                rep(0, 12), rep(NA, 10))
-PEL0018.d <- c(rep(0, 2), 8.6279E-05, 1.53435E-05, rep(0, 18), rep(NA, 10))
-PEL1824.d <- c(rep(0, 2), 0.000139224, 3.3815E-05, rep(0, 18), rep(NA, 10))
-PEL2440.d <- c(rep(0, 2), 0.000155743, 8.96341E-05, rep(0, 5), 3.4375E-06,
+PEL0018.d <- c(rep(0, 2), 3.84098E-05, 3.34277E-05, rep(0, 18), rep(NA, 10))
+PEL1824.d <- c(rep(0, 2), 6.19798E-05, 7.36702E-05, rep(0, 18), rep(NA, 10))
+PEL2440.d <- c(rep(0, 2), 6.93338E-05, 0.000195279, rep(0, 5), 3.4375E-06,
                rep(0, 12), rep(NA, 10))
-PEL40OO.d <- c(rep(0, 2), 2.4315E-06, 3.78911E-06, rep(0, 18), rep(NA, 10))
+PEL40OO.d <- c(rep(0, 2), 1.08246E-06, 8.25504E-06, rep(0, 18), rep(NA, 10))
 Rpath.parameters$model[, ACT0018.disc := ACT0018.d]
 Rpath.parameters$model[, ACT1824.disc := ACT1824.d]
 Rpath.parameters$model[, ACT2440.disc := ACT2440.d]
@@ -90,36 +90,39 @@ Rpath.parameters$model[, PEL1824.disc := PEL1824.d]
 Rpath.parameters$model[, PEL2440.disc := PEL2440.d]
 Rpath.parameters$model[, PEL40OO.disc := PEL40OO.d]
 # Stanzas
-Rpath.parameters$stanzas$stgroups[, VBGF_Ksp := c((0.230), (0.430), (0.510),
-                                                  (0.200))]
-Rpath.parameters$stanzas$stgroups[, Wmat := c(0.130, 0.380, 0.260, 0.100)]
+Rpath.parameters$stanzas$stgroups[, VBGF_Ksp := c(0.230000004172325,
+                                                  0.430000007152557,
+                                                  0.509999990463257,
+                                                  0.200000002980232)]
+Rpath.parameters$stanzas$stgroups[, Wmat := c(0.129999995231628,
+                                              0.379999995231628,
+                                              0.259999990463257,
+                                              0.100000001490116)]
 Rpath.parameters$stanzas$stindiv[, First := c(0, 36, 0, 24, 0, 24, 0, 36)]
 Rpath.parameters$stanzas$stindiv[, Last := c(35, 400, 23, 400, 23, 400, 35,
                                              400)]
-Rpath.parameters$stanzas$stindiv[, Z := c(1.062, 0.885, 1.175847, 0.7838983,
-                                          1.8645, 1.243, 1.184425, 0.7896167)]
+Rpath.parameters$stanzas$stindiv[, Z := c(1.092, 0.885, 0.948, 0.79,
+                                          1.605, 1.07, 1.143, 0.762)]
 Rpath.parameters$stanzas$stindiv[, Leading := c(rep(c(F, T), 4))]
 Rpath.parameters <- rpath.stanzas(Rpath.parameters)
 # Diet
 GreySeal.diet <- c(rep(0, 2), 0.07827354, 0.03178926, 0.002591124, 0.375759, 0,
                    0.2067591, 0, 0.03093355, rep(0, 12), 0.2738944)
 FishFeedingBirds.diet <- c(rep(0, 6), 0.02, 0.93, rep(0, 14), 0.05)
-JuvCod.diet <- c(rep(0, 4), 0.07206677, 0.05935177, 0.2998774, 0.1259485,
-                 rep(0, 2), 0.1188794, rep(0, 2), 0.009366813, 0, 0.1705682,
-                 0, 0.009995912, rep(0, 4), 0.1339452)
-AdCod.diet <- c(rep(0, 2), 0.01499608, 0, 0.04502488, 0.4198902, 0.1199686,
-                0.2779273, 0.02999822, 0, 0.05098667, 0, 0.0002131353,
-                0.001266966, 0, 0.0397279, rep(0, 7))
+JuvCod.diet <- c(rep(0, 4), 0.05209047, 0.07938787, 0.1764397, 0.2520024,
+                 rep(0, 2), 0.2036188, rep(0, 2), 0.01193309, 0, 0.2145273,
+                 0, 0.01000043, rep(0, 5))
+AdCod.diet <- c(rep(0, 2), 0.01580723, 0, 0.04505872, 0.4874896, 0.1508785,
+                0.1815, 0.03000606, 0, 0.0565, 0, 0.0002534152, 0.002240333,
+                0, 0.03045089, rep(0, 7))
 JuvHerring.diet <- c(rep(0, 15), 0.1, 0.2, 0.1, 0.1, 0.5, rep(0, 3))
-AdHerring.diet <- c(rep(0, 6), 0.01, 0, rep(0, 5), 0.1, 0, 0.25, 0.15, 0.1,
-                    0.02, 0.37, rep(0, 3))
-JuvSprat.diet <- c(rep(0, 15), 0.0005, 0.389875, 0.149875, 0.209875, 0.249875,
-                   rep(0, 3))
-AdSprat.diet <- c(rep(0, 15), 0.001, 0.32975, 0.16975, 0.08975, 0.40975,
-                  rep(0, 3))
+AdHerring.diet <- c(rep(0, 6), 0.01, rep(0, 6), 0.1, 0, 0.25, 0.15, 0.1, 0.02,
+                    0.37, rep(0, 3))
+JuvSprat.diet <- c(rep(0, 16), 0.39, 0.15, 0.21, 0.25, rep(0, 3))
+AdSprat.diet <- c(rep(0, 16), 0.33, 0.17, 0.09, 0.41, rep(0, 3))
 JuvFlounder.diet <- c(rep(0, 13), 0.6, 0.1, 0.3, rep(0, 7))
-AdFlounder.diet <- c(rep(0, 10), 0.08255491, 0.4532953, 0.3394456,
-                     0.1247042, rep(0, 9))
+AdFlounder.diet <- c(rep(0, 10), 0.08255491, 0.4532953, 0.3394456, 0.1247042,
+                     rep(0, 9))
 SaduriaEntemon.diet <- c(rep(0, 13), 0.59761, 0.003984, 0.398406, rep(0, 7))
 MytilusSp.diet <- c(rep(0, 20), 0.8, 0.2, 0)
 MacomaBalthica.diet <- c(rep(0, 20), 0.4, 0.6, 0)
@@ -160,77 +163,97 @@ sim.years <- 500
 Rsim.model <- rsim.scenario(Rpath.model, Rpath.parameters, years = 1:sim.years)
 # VVs
 Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
-                              group = "JuvSprat", groupto = "JuvCod",
+                              group = "JuvHerring", groupto = "JuvCod",
+                              value = 1)
+Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
+                              group = "AdHerring", groupto = "JuvCod",
+                              value = 1)
+Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
+                              group = "AdSprat", groupto = "JuvCod",
+                              value = 1.015069)
+Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
+                              group = "SaduriaEntemon", groupto = "JuvCod",
                               value = 1E+10)
+Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
+                              group = "JuvHerring", groupto = "AdCod",
+                              value = 1)
 Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
                               group = "AdHerring", groupto = "AdCod",
-                              value = 1+1e-6)
+                              value = 1)
 Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
                               group = "JuvSprat", groupto = "AdCod",
-                              value = 2.054679E+08)
-Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
-                              group = "AdSprat", groupto = "AdCod",
-                              value = 17.36081)
-Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
-                              group = "TemoraSp", groupto = "JuvHerring",
-                              value = 7.870935E+07)
-Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
-                              group = "TemoraSp", groupto = "AdHerring",
-                              value = 16127.11)
-Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
-                              group = "Mysids", groupto = "JuvSprat",
-                              value = 40)
-Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
-                              group = "OtherZooplankton", groupto = "JuvSprat",
-                              value = 40)
-Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
-                              group = "PseudocalanusSp", groupto = "JuvSprat",
-                              value = 40)
-Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
-                              group = "AcartiaSp", groupto = "JuvSprat",
-                              value = 40)
-Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
-                              group = "TemoraSp", groupto = "JuvSprat",
-                              value = 40)
-Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
-                              group = "Mysids", groupto = "AdSprat",
-                              value = 5)
-Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
-                              group = "OtherZooplankton", groupto = "AdSprat",
-                              value = 5)
-Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
-                              group = "PseudocalanusSp", groupto = "AdSprat",
-                              value = 5)
-Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
-                              group = "AcartiaSp", groupto = "AdSprat",
-                              value = 5)
-Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
-                              group = "TemoraSp", groupto = "AdSprat",
-                              value = 5)
-Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
-                              group = "OtherMacrozoobenthos",
-                              groupto = "SaduriaEntemon", value = 22508.95)
-Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
-                              group = "Mysids", groupto = "SaduriaEntemon",
-                              value = 22791.77)
-Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
-                              group = "AcartiaSp", groupto = "Mysids",
-                              value = 1+1e-6)
-Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
-                              group = "TemoraSp", groupto = "Mysids",
                               value = 1E+10)
 Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
-                              group = "Phytoplankton", groupto = "Mysids",
-                              value = 1+1e-6)
+                              group = "AdSprat", groupto = "AdCod",
+                              value = 454847.7)
 Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
-                              group = "Detritus", groupto = "Mysids",
-                              value = 1+1e-6)
+                              group = "OtherZooplankton",
+                              groupto = "JuvHerring",
+                              value = 1603350)
 Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
-                              group = "Phytoplankton", groupto = "AcartiaSp",
-                              value = 2.300091)
+                              group = "PseudocalanusSp",
+                              groupto = "JuvHerring",
+                              value = 1.000007)
 Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
-                              group = "Phytoplankton", groupto = "TemoraSp",
-                              value = 1+1e-6)
+                              group = "TemoraSp",
+                              groupto = "JuvHerring",
+                              value = 159664.6)
+Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
+                              group = "Mysids",
+                              groupto = "AdHerring",
+                              value = 1E+10)
+Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
+                              group = "PseudocalanusSp",
+                              groupto = "AdHerring",
+                              value = 608776.8)
+Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
+                              group = "TemoraSp",
+                              groupto = "AdHerring",
+                              value = 3.465625E+07)
+Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
+                              group = "TemoraSp",
+                              groupto = "JuvSprat",
+                              value = 1)
+Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
+                              group = "OtherMacrozoobenthos",
+                              groupto = "SaduriaEntemon",
+                              value = 1E+10)
+Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
+                              group = "Mysids",
+                              groupto = "SaduriaEntemon",
+                              value = 1E+10)
+Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
+                              group = "OtherZooplankton",
+                              groupto = "Mysids",
+                              value = 1)
+Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
+                              group = "AcartiaSp",
+                              groupto = "Mysids",
+                              value = 1)
+Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
+                              group = "Phytoplankton",
+                              groupto = "Mysids",
+                              value = 1)
+Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
+                              group = "Detritus",
+                              groupto = "Mysids",
+                              value = 1)
+Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
+                              group = "Phytoplankton",
+                              groupto = "OtherZooplankton",
+                              value = 1E+10)
+Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
+                              group = "Phytoplankton",
+                              groupto = "PseudocalanusSp",
+                              value = 20.51294)
+Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
+                              group = "Phytoplankton",
+                              groupto = "AcartiaSp",
+                              value = 2.105472)
+Rsim.model <- adjust.scenario(Rsim.model, parameter = "VV",
+                              group = "Phytoplankton",
+                              groupto = "TemoraSp",
+                              value = 1)
 # # Effort
 # Rsim.model <- adjust.fishing(Rsim.model, parameter = "ForcedEffort",
 #                              group = "ACT0018", sim.year = 1:sim.years,
@@ -313,52 +336,52 @@ for (i in 1:length(gearname)) {
 Rsim.model <- adjust.fishing(Rsim.model, parameter = "ForcedFRate",
                              group = "JuvCod", sim.year = 1:sim.years,
                              sim.month = 0,
-                             value = c(0.05098097, 0.04536942, 0.04135337,
-                                       0.0369213, 0.02670299, 0.0382447,
-                                       0.03498893, 0.04256835, 0.04975314,
-                                       rep(0.05955861,sim.years)))
+                             value = c(0.004850723, 0.00401009, 0.004006988,
+                                       0.002912952, 0.002372227, 0.002672406,
+                                       0.002734797, 0.003128057, 0.00360948,
+                                       rep(0.00374565, sim.years)))
 Rsim.model <- adjust.fishing(Rsim.model, parameter = "ForcedFRate",
                              group = "AdCod", sim.year = 1:sim.years,
                              sim.month = 0,
-                             value = c(0.840488, 0.6556228, 0.6403595,
-                                       0.4668901, 0.3951078, 0.3900644,
-                                       0.3934016, 0.4135607, 0.4543019,
-                                       rep(0.4240381, sim.years)))
+                             value = c(0.8606467, 0.6712403, 0.6557999,
+                                       0.4778628, 0.4044484, 0.399199,
+                                       0.4027945, 0.4235261, 0.465305,
+                                       rep(0.4342084, sim.years)))
 Rsim.model <- adjust.fishing(Rsim.model, parameter = "ForcedFRate",
                              group = "JuvHerring", sim.year = 1:sim.years,
                              sim.month = 0,
-                             value = c(0.02009802, 0.01880615, 0.01862025,
-                                       0.01909326, 0.01874207, 0.01941464,
-                                       0.01722815, 0.01614371, 0.01179936,
-                                       rep(0.01243951, sim.years)))
+                             value = c(0.02304128, 0.02156023, 0.0213471,
+                                       0.02188938, 0.02148676, 0.02225782,
+                                       0.01975114, 0.01850788, 0.01352732,
+                                       rep(0.01426122, sim.years)))
 Rsim.model <- adjust.fishing(Rsim.model, parameter = "ForcedFRate",
                              group = "AdHerring", sim.year = 1:sim.years,
                              sim.month = 0,
-                             value = c(0.1338983, 0.1147509, 0.1072243,
-                                       0.1034847, 0.08790248, 0.08977338,
-                                       0.08019711, 0.07803628, 0.06492407,
-                                       rep(0.0666916, sim.years)))
+                             value = c(0.1337755, 0.1146456, 0.107126,
+                                       0.1033898, 0.08782185, 0.08969103,
+                                       0.08012354, 0.0779647, 0.06486452,
+                                       rep(0.06663042, sim.years)))
 Rsim.model <- adjust.fishing(Rsim.model, parameter = "ForcedFRate",
                              group = "JuvSprat", sim.year = 1:sim.years,
                              sim.month = 0,
-                             value = c(0.07654068, 0.06412552, 0.05959143,
-                                       0.05571426, 0.04533393, 0.04612591,
-                                       0.04170437, 0.04136612, 0.03626544,
-                                       rep(0.03691136, sim.years)))
+                             value = c(0.06687993, 0.05603178, 0.05206996,
+                                       0.04868216, 0.039612, 0.04030403,
+                                       0.03644056, 0.036145, 0.03168812,
+                                       rep(0.03225251, sim.years)))
 Rsim.model <- adjust.fishing(Rsim.model, parameter = "ForcedFRate",
                              group = "AdSprat", sim.year = 1:sim.years,
                              sim.month = 0,
-                             value = c(0.4028093, 0.3407367, 0.3101864,
-                                       0.3073691, 0.2498638, 0.2582679,
-                                       0.226814, 0.2215359, 0.1846235,
-                                       rep(0.1940051, sim.years)))
+                             value = c(0.2366071, 0.2001461, 0.1822011,
+                                       0.1805462, 0.1467681, 0.1517046,
+                                       0.1332288, 0.1301285, 0.1084464,
+                                       rep(0.1139571, sim.years)))
 Rsim.model <- adjust.fishing(Rsim.model, parameter = "ForcedFRate",
                              group = "JuvFlounder", sim.year = 1:sim.years,
                              sim.month = 0,
-                             value = c(0.01971947, 0.01551622, 0.01639611,
-                                       0.01012923, 0.009182973, 0.008570299,
-                                       0.009580513, 0.01094392, 0.01208425,
-                                       rep(0.01031303, sim.years)))
+                             value = c(0.02178824, 0.01714403, 0.01811623,
+                                       0.01119189, 0.01014636, 0.009469409,
+                                       0.01058561, 0.01209205, 0.01335201,
+                                       rep(0.01139497, sim.years)))
 Rsim.model <- adjust.fishing(Rsim.model, parameter = "ForcedFRate",
                              group = "AdFlounder", sim.year = 1:sim.years,
                              sim.month = 0,
@@ -366,6 +389,7 @@ Rsim.model <- adjust.fishing(Rsim.model, parameter = "ForcedFRate",
                                        0.3273892, 0.2923977, 0.2778762,
                                        0.2891278, 0.3145123, 0.344834,
                                        rep(0.3030173, sim.years)))
+
 # Egg production
 Rsim.model <- adjust.forcing(Rsim.model, parameter = "ForcedRecs",
                              group = "AdHerring", sim.year = 1:sim.years,
@@ -386,19 +410,22 @@ Rsim.model <- adjust.forcing(Rsim.model, parameter = "ForcedRecs",
                                        1.727612, 0.9067164, 1.278358, 0.7835821,
                                        0.9004478, 0.8977277,
                                        rep(0.9011803, sim.years)))
+
 # Forcing functions
 Rsim.model <- adjust.forcing(Rsim.model, parameter = "ForcedSearch",
                              group = "OtherMacrozoobenthos",
                              sim.year = 1:sim.years, sim.month = 0,
                              value = c(1, 0.5258236, 0.7198213, 0.561654,
                                        0.5543391, 0.8611185, 0.6287283,
-                                       0.3989885, rep(0.8400382, sim.years)))
+                                       0.3989885, 0.8400382,
+                                       rep(0.8400382, sim.years)))
 Rsim.model <- adjust.forcing(Rsim.model, parameter = "ForcedSearch",
-                             group = "Mysids", sim.year = 1:sim.years,
-                             sim.month = 0,
+                             group = "Mysids",
+                             sim.year = 1:sim.years, sim.month = 0,
                              value = c(1, 0.5258236, 0.7198213, 0.561654,
                                        0.5543391, 0.8611185, 0.6287283,
-                                       0.3989885, rep(0.8400382, sim.years)))
+                                       0.3989885, 0.8400382,
+                                       rep(0.8400382, sim.years)))
 Rsim.model <- adjust.forcing(Rsim.model, parameter = "ForcedSearch",
                              group = "AcartiaSp", sim.year = 1:sim.years,
                              sim.month = 0,
@@ -417,5 +444,6 @@ Rsim.model <- adjust.forcing(Rsim.model, parameter = "ForcedPrey",
                              value = c(1, 0.9074827, 0.9369552, 1.107766,
                                        1.04327, 1.052554, 0.8505842, 0.9891393,
                                        1.037044, rep(0.9645875, sim.years)))
+
 # Running the model
 Rsim.run <- rsim.run(Rsim.model, method = "RK4", years = 1:sim.years)
