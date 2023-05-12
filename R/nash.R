@@ -132,9 +132,9 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
         M[,i] <- (B.p - B.m) / (F.increase * 2)
       }
       if (det(M)==0){
-        extinct.name   <- names(which(colSums(M) == 0))
+        spp   <- which(colSums(M) == 0)
         print("Initial M is singular and hence non invertible")
-        print(extinct.name)
+        print(paste("Spp. ", spp, " went extinct."))
       }
       # Interaction Matrix and growth rates
       G <- -1 * solve(M)
