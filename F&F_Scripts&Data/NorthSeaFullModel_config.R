@@ -1,5 +1,4 @@
 library(Rpath)
-library(nash)
 #### RPATH ####
 # Parameters
 groups <- c("BaleenWhales", "ToothedWhales", "Seals", "SurfaceFeedingSeabirds",
