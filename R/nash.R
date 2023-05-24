@@ -203,7 +203,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     outlist <- list(par = tail(na.omit(Nash_Fs), n = 1),
                     value = fn(as.numeric(tail(na.omit(Nash_Fs),
                                                n = 1)), ...),
-                    counts = nash_fncalls, M = M,
+                    counts = nash_fncalls,
                     convergence = paste("Nash equilibrium found after ", iter,
                                         " iterations."))
   }
