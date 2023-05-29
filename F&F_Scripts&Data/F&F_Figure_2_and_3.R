@@ -126,11 +126,11 @@ Yeq <- data.frame("Spp"=sppvec,
 Fnash <- data.frame("Spp"=sppname,
                     "Fnash"=as.numeric(nash.eq.LV.BS$par))
 lab <- round(Fnash$Fnash, digits = 3)
-round(Fnash$Fnash, digits = 3)
-lab <- c(expression(paste("F"["Nash"], " = ", 0.391)),
-         expression(paste("F"["Nash"], " = ", 0.318)),
-         expression(paste("F"["Nash"], " = ", 0.774)),
-         expression(paste("F"["Nash"], " = ", 0.343)))
+round(Fnash$Fnash, digits = 2)
+lab <- c(expression(paste("F"["Nash"], " = ", 0.21)),
+         expression(paste("F"["Nash"], " = ", 0.27)),
+         expression(paste("F"["Nash"], " = ", 0.59)),
+         expression(paste("F"["Nash"], " = ", 0.31)))
 Fnash$Labs <- as.character(lab)
 # Plot
 ggplot(data = Yeq, aes(x = Fval, y = Yield)) +

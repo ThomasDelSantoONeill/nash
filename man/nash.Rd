@@ -97,17 +97,15 @@ rates whereas \code{LV} does the same simultaneously for all species per
 iteration.
 }
 \references{
-\insertRef{Oneill2023}{nash}
+\insertRef{Matsuda2006}{nash}
+
+\insertRef{Worm2009}{nash}
+
+\insertRef{Thorpe2017}{nash}
+
+\insertRef{Pope2019}{nash}
 
 \insertRef{Farcas2016}{nash}
 
 \insertRef{Lucey2020}{nash}
-
-\insertRef{Matsuda2006}{nash}
-
-\insertRef{Pope2019}{nash}
-
-\insertRef{Thorpe2017}{nash}
-
-\insertRef{Worm2009}{nash}
 }
