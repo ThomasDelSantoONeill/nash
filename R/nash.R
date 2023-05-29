@@ -201,12 +201,12 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     }
     ### OUTPUT
     outlist <- list(par = tail(na.omit(Nash_Fs), n = 1),
+                    Bnash = tail(na.omit(Nash_Bs), n = 1),
                     value = fn(as.numeric(tail(na.omit(Nash_Fs),
                                                n = 1)), ...),
                     counts = nash_fncalls,
                     convergence = paste("Nash equilibrium found after ", iter,
-                                        " iterations."),
-                    Bnash = tail(na.omit(Nash_Bs), n = 1))
+                                        " iterations."))
   }
   if (method == "round-robin") {
     ### LOCAL VARIABLES
