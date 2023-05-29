@@ -1,4 +1,5 @@
-### Computing Nash equilibria for the three benchmark models. NOTE to reviewers:
+### Computing Nash equilibria for the three benchmark models.
+### NOTE to reviewers:
 ###   For both Rpath models the NE computation might take a long time. Please
 ###   'readRDS()' the appropriate data 'nash.eq.<<method>>.<<model>>' where
 ###   method is either LV or RR and BS for Baltic Sea model or NS for the North
@@ -49,8 +50,9 @@
                                     "JuvFlounder", "AdFlounder"),
                         method = "LV", yield.curves = TRUE,
                         rpath.params = Rpath.parameters, avg.window = 250,
-                        simul.years = 500, integration.method = "RK4",
-                        track = FALSE, conv.criterion = 0.01)
+                        simul.years = 500, integration.method = "AB",
+                        conv.criterion = 0.01,
+                        F.increase = 0.01)
   saveRDS(nash.eq.LV.BS, "nash.eq.LV.BS.rds")
 
   load("F&F_Scripts&Data/NorthSeaModel.RData")
@@ -67,7 +69,7 @@
                         method = "LV", yield.curves = TRUE,
                         rpath.params = Rpath.parameters, avg.window = 500,
                         simul.years = 1000, integration.method = "AB",
-                        track = FALSE, conv.criterion = 0.01)
+                        conv.criterion = 0.01)
   saveRDS(nash.eq.LV.NS, "nash.eq.LV.NS.rds")
 
 ### Plotting libraries
