@@ -211,7 +211,6 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     ### LOCAL VARIABLES
     nSpp <- length(par)
     nash_fncalls <- 0
-    conv.criterion <- 0.001
     n.iter <- 200
     Nash_Hs <- array(dim = c(n.iter, nSpp))
     F.eq <- par
@@ -224,9 +223,9 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     ### ALGORITHM
     for (iter in 1:n.iter) {
       for (j in 1:nSpp) {
-        output <- output <- optim(par = par[j], fn = Yield, Hvec = par, j = j,
-                                  method = "Nelder-Mead",
-                                  control = list(fnscale = -1))
+        output <- optim(par = par[j], fn = Yield, Hvec = par, j = j,
+                        method = "Nelder-Mead",
+                        control = list(fnscale = -1))
         par[j] = output$par
         par[j] = output$par
         nash_fncalls <- nash_fncalls + output$counts[1]
@@ -237,7 +236,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       }
       F.eq <- par
       if (iter>1) {
-        if (max(abs(Nash_Hs[iter,] / Nash_Hs[(iter-1),] -1)) < 0.001) {
+        if (max(abs(Nash_Hs[iter,] / Nash_Hs[(iter-1),] -1)) < conv.criterion){
           break
         }
       }
