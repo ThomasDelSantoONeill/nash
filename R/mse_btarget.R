@@ -115,12 +115,12 @@ mse_btarget <- function(par, simul.years = 100, aged.str = TRUE, data.years,
       # Run simulation and compute yields
       rsim.simul <- rsim.run(rsim.mod, method = integration.method,
                              years = 1:simul.years)
-      biomass <- rsim.simul$annual_Biomass[, c(adname, non.aged.groups)]
+      biomass <- rsim.simul$annual_Biomass[, c(sppname, non.aged.groups)]
     } else if ((length(sppname) > length(stanza.names)) == FALSE) {
       # Run simulation and compute yields
       rsim.simul <- rsim.run(rsim.mod, method = integration.method,
                              years = 1:simul.years)
-      biomass <- rsim.simul$annual_Biomass[, adname]
+      biomass <- rsim.simul$annual_Biomass[, sppname]
     }
   } else if (aged.str == FALSE) {
     for (i in 1:length(sppname)) {
