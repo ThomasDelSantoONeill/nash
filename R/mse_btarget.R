@@ -1,14 +1,14 @@
-#'Computes long-term equilibrium yields for \code{\link{Rpath-package}} models
+#'Computes long-term equilibrium yields for \code{\link[Rpath]{Rpath-package}} models
 #'
 #'Viable \code{fn} to be used as input for \code{\link{nash}} when the
-#' \code{\link{Rpath-package}} is used as operating ecological model
+#' \code{\link[Rpath]{Rpath-package}} is used as operating ecological model
 #' \insertCite{@see Lucey2020 for details}{nash}. \code{fn_rpath} takes the
 #' harvesting rates as the numeric type vector \code{par} returning simulated
 #' yields at equilibrium.
 #'
-#'@param par Numeric vector of harvesting rates of length equal to the number of
-#' harvested species.
-#'@param simul.years Desired simulation time.
+#'@param par Double type numeric vector of harvesting rates of length equal to
+#' the number of harvested species for which the NE is desired.
+#'@param simul.years Forward simulation time in years.
 #'@param aged.str Logical TRUE/FALSE if multistanza functional groups are
 #' included in the model.
 #'@param data.years Numeric vector indicating the years worth of data used to
@@ -24,13 +24,14 @@
 #'@param integration.method Numerical integration routine used to solve the
 #' \code{rsim.mod} object. Character vector with values (i) `\code{RK4}` or
 #' (ii) `\code{AB}`.
+#'@param verbose Returns biomass time series.
 #'
 #'@details The \code{avg.window} argument becomes useful in case the dynamics
 #' of the model reaches a steady state (\emph{e.g.} a limit cycle) rather than
 #' a stable point attractor.
 #'
 #' The numerical integration methods implemented in the
-#' \code{\link{Rpath-package}} are the 4th order Runge-Kutta (\code{RK4}) and
+#' \code{\link[Rpath]{rsim.run}} are the 4th order Runge-Kutta (\code{RK4}) and
 #' the two-step Adams-Bashforth (\code{AB}) method. The trade-off between both
 #' methods is accuracy and speed, with \code{RK4} being more accurate but
 #' slower than the \code{AB} method
