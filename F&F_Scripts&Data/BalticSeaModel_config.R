@@ -448,4 +448,4 @@ Rsim.model <- adjust.forcing(Rsim.model, parameter = "ForcedPrey",
 #   ifelse(Rsim.model$params$MzeroMort*Rsim.model$params$B_BaseRef > 24,
 #          0, Rsim.model$params$spnum)
 # Running the model
-Rsim.run <- rsim.run(Rsim.model, method = "AB", years = 1:sim.years)
+Rsim.run <- rsim.run(Rsim.model, method = "RK4", years = 1:sim.years)
