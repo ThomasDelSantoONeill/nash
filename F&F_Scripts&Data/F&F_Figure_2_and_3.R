@@ -109,7 +109,7 @@ theme_tjdso <- theme(
 ###   If the above was not run, load appropriate data
 ###   (e.g. 'readRDS("F&F_Scripts&Data/nash.eq.LV.BS.rds")') and execute
 ###   the ggplot2 code.
-nash.eq.LV.BS <- readRDS("F&F_Scripts&Data/nash.eq.LV.BS.rds")
+nash.eq.LV.BS <- readRDS("F&F_Scripts&Data/BS-NE-Fmsy-LV.rds")
 sppname <- c("Cod", "Herring", "Sprat", "Flounder")
 # Transform data into something ggplot2 reads
 Fvec <- c()
@@ -126,12 +126,13 @@ Yeq <- data.frame("Spp"=sppvec,
 Fnash <- data.frame("Spp"=sppname,
                     "Fnash"=as.numeric(nash.eq.LV.BS$par))
 lab <- round(Fnash$Fnash, digits = 3)
-round(Fnash$Fnash, digits = 2)
-lab <- c(expression(paste("F"["Nash"], " = ", 0.21)),
-         expression(paste("F"["Nash"], " = ", 0.27)),
-         expression(paste("F"["Nash"], " = ", 0.59)),
-         expression(paste("F"["Nash"], " = ", 0.31)))
+round(Fnash$Fnash, digits = 3)
+lab <- c(expression(paste("F"["Nash"], " = ", 0.205)),
+         expression(paste("F"["Nash"], " = ", 0.277)),
+         expression(paste("F"["Nash"], " = ", 0.606)),
+         expression(paste("F"["Nash"], " = ", 0.309)))
 Fnash$Labs <- as.character(lab)
+Fnash$MSYnash <- nash.eq.LV.BS$value
 # Plot
 ggplot(data = Yeq, aes(x = Fval, y = Yield)) +
   geom_line(size = 1.5) +
@@ -153,7 +154,7 @@ ggplot(data = Yeq, aes(x = Fval, y = Yield)) +
 ###   If the above was not run, load appropriate data
 ###   (e.g. 'readRDS("F&F_Scripts&Data/nash.eq.LV.NS.rds")') and execute
 ###   the ggplot2 code.
-nash.eq.LV.NS <- readRDS("F&F_Scripts&Data/nash.eq.LV.NS.rds")
+nash.eq.LV.NS <- readRDS("F&F_Scripts&Data/NS-NE-Fmsy-LV.rds")
 sppname <- c("Cod", "Whiting", "Haddock", "Saithe", "Herring", "NorwayPout",
              "Sandeels", "Plaice", "Sole")
 # Transform data into something ggplot2 reads
@@ -171,15 +172,15 @@ Yeq <- data.frame("Spp"=sppvec,
 Fnash <- data.frame("Spp"=sppname,
                     "Fnash"=as.numeric(nash.eq.LV.NS$par))
 lab <- round(Fnash$Fnash, digits = 3)
-lab <- c(expression(paste("F"["Nash"], " = ", 0.418)),
-         expression(paste("F"["Nash"], " = ", 0.337)),
-         expression(paste("F"["Nash"], " = ", 0.335)),
-         expression(paste("F"["Nash"], " = ", 0.188)),
-         expression(paste("F"["Nash"], " = ", 0.217)),
-         expression(paste("F"["Nash"], " = ", 0.388)),
-         expression(paste("F"["Nash"], " = ", 0.184)),
-         expression(paste("F"["Nash"], " = ", 0.526)),
-         expression(paste("F"["Nash"], " = ", 0.118)))
+lab <- c(expression(paste("F"["Nash"], " = ", 0.332)),
+         expression(paste("F"["Nash"], " = ", 0.310)),
+         expression(paste("F"["Nash"], " = ", 0.203)),
+         expression(paste("F"["Nash"], " = ", 0.175)),
+         expression(paste("F"["Nash"], " = ", 0.246)),
+         expression(paste("F"["Nash"], " = ", 0.663)),
+         expression(paste("F"["Nash"], " = ", 0.606)),
+         expression(paste("F"["Nash"], " = ", 0.283)),
+         expression(paste("F"["Nash"], " = ", 0.171)))
 Fnash$Labs <- as.character(lab)
 # Plot
 ggplot(data = Yeq, aes(x = Fval, y = Yield)) +

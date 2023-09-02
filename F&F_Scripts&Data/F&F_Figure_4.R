@@ -129,13 +129,14 @@ NSFmat <- readRDS("F&F_Scripts&Data/NSFmat.rds")
                              "North Sea Model")
   rownames(performance) <- c("LV", "round-robin")
   performance <- as.matrix(performance)
-  barplot(performance, beside = TRUE, ylim = c(0,10000),
+  par(family="Consolas")
+  barplot(performance, beside = TRUE, ylim = c(0,1800),
           legend = rownames(performance),
           args.legend = list(x = "topright", bty = "n",
                              title = "Method",
                              title.adj = 0.1),
-          ylab = "Function Evaluations (no.)", cex.lab = 1, cex.names = 1,
-          cex.axis = 1, border = TRUE, col = c("gray45","gray85"))
+          ylab = "Function Evaluations (no.)", cex.lab = 2, cex.names = 2,
+          cex.axis = 2, border = TRUE, col = c("gray45","gray85"))
   # width.error <- 0.025
   segments(x0 = 1.5, y0 = mean(na.omit(SMdata[,1]))-sd(na.omit(SMdata[,1])),
            x1 = 1.5, y1 = mean(na.omit(SMdata[,1]))+sd(na.omit(SMdata[,1])), lwd = 2)
@@ -196,10 +197,10 @@ NSFmat <- readRDS("F&F_Scripts&Data/NSFmat.rds")
   sd(apply(ratioperf,1,mean))
 
   ### Plot for inset
-  barplot(performance[,-3], beside = TRUE, ylim = c(0,400),
+  barplot(performance[,-3], beside = TRUE, ylim = c(0,450),
           legend = FALSE,
-          ylab = "Function Evaluations (no.)", cex.lab = 1, cex.names = 1,
-          cex.axis = 1, border = TRUE, col = c("gray45","gray85"))
+          ylab = "Function Evaluations (no.)", cex.lab = 2, cex.names = 2,
+          cex.axis = 2, border = TRUE, col = c("gray45","gray85"))
   segments(x0 = 1.5, y0 = mean(na.omit(SMdata[,1]))-sd(na.omit(SMdata[,1])),
            x1 = 1.5, y1 = mean(na.omit(SMdata[,1]))+sd(na.omit(SMdata[,1])), lwd = 2)
   segments(x0 = 2.5, y0 = mean(na.omit(SMdata[,2]))-sd(na.omit(SMdata[,2])),

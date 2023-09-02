@@ -7,12 +7,12 @@
 library(Rpath)
 library(nash)
 load("F&F_Scripts&Data/BalticSeaModel.RData")
-nash.eq.LV.BS <- readRDS("F&F_Scripts&Data/nash.eq.LV.BS.rds")
+nash.eq.LV.BS <- readRDS("F&F_Scripts&Data/BS-NE-Fmsy-LV.rds")
 spp = c("AdCod", "AdHerring", "AdSprat", "AdFlounder")
 par <- as.numeric(tail(Rsim.model$fishing$ForcedFRate[,spp], n = 1))
 model.area <- 240669
 ### Target for Cod biomass = 5e4 (kg^3)
-blim <- c((as.numeric(nash.eq.LV.BS$value/nash.eq.LV.BS$par)[1]+(50000/model.area)), 0, 0, 0)
+blim <- c((as.numeric(nash.eq.LV.BS$value/nash.eq.LV.BS$par)[1]+(100000/model.area)), 0, 0, 0)
 ### Now nash will return a matrix for the 'par' values computed as well as a
 ###   new 'Bnash' matrix (i.e. the biomass state at Fnash). IF you do not whish
 ###   to run this please run
@@ -172,7 +172,7 @@ saveRDS(Yieldeq, paste("CCYield_Spp_",i,".rds",sep = ""))
 BSCCdataY2 <- readRDS("F&F_Scripts&Data/CCYield_Spp_2.rds")
 BSCCdataY3 <- readRDS("F&F_Scripts&Data/CCYield_Spp_3.rds")
 BSCCdataY4 <- readRDS("F&F_Scripts&Data/CCYield_Spp_4.rds")
-
+nash.eq.LV.BS.CC <- readRDS("F&F_Scripts&Data/BS-CCNE-Fmsy.rds")
 # Plotting -----------------------------------------------------------------
 library(ggplot2)
 library(extrafont)
@@ -213,14 +213,23 @@ Yeq.cons5 <- data.frame("Spp"=sppvec.cons5,
                         "Yield"=Yvec.cons5)
 Fnash.cons5 <- data.frame("Spp"=sppname,
                           "Fnash.cons5"=as.numeric(t(tail(na.omit(nash.eq.LV.BS.CC$par), n = 1))))
+Fnash.cons5$Yield <- c(nash.eq.LV.BS.CC$value[1], rep(NA,3))
+lab <- round(Fnash.cons5$Fnash, digits = 3)
+round(Fnash.cons5$Fnash, digits = 3)
+lab <- c(expression(paste("CC-F"["Nash"], " = ", 0.150)),
+         expression(paste("CC-F"["Nash"], " = ", 0.392)),
+         expression(paste("CC-F"["Nash"], " = ", 0.660)),
+         expression(paste("CC-F"["Nash"], " = ", 0.309)))
+Fnash.cons5$Labs <- as.character(lab)
 
 lab <- round(Fnash$Fnash, digits = 3)
 round(Fnash$Fnash, digits = 3)
-lab <- c(expression(paste("F"["Nash"], " = ", 0.391)),
-         expression(paste("F"["Nash"], " = ", 0.318)),
-         expression(paste("F"["Nash"], " = ", 0.774)),
-         expression(paste("F"["Nash"], " = ", 0.343)))
+lab <- c(expression(paste("F"["Nash"], " = ", 0.205)),
+         expression(paste("F"["Nash"], " = ", 0.277)),
+         expression(paste("F"["Nash"], " = ", 0.606)),
+         expression(paste("F"["Nash"], " = ", 0.309)))
 Fnash$Labs <- as.character(lab)
+
 
 # Personalised theme
 theme_tjdso <- theme(text = element_text(family = "Consolas", size = 20),
@@ -253,7 +262,7 @@ ggplot(data = Yeq, aes(x = Fval, y = Yield)) +
   geom_line(size = 1.5) +
   geom_vline(data = Fnash, aes(xintercept = Fnash),
              linetype = "dashed", size = 1.25) +
-  geom_text(data = Fnash, aes(x = 0.2, y =0,
+  geom_text(data = Fnash, aes(x = 0.3, y =0,
                               label = Labs),
             family = "Consolas", parse = TRUE, size = 5) +
   facet_wrap(~Spp, scales = "free") +
@@ -270,8 +279,11 @@ ggplot(data = Yeq, aes(x = Fval, y = Yield)) +
   #            linetype = "dashed", size = 1.25, col = "blue") +
   geom_vline(data = Fnash.cons5, aes(xintercept = Fnash.cons5),
              linetype = "dashed", size = 1.25, col = "red") +
-  geom_point(aes(x = Fnash.cons5$Fnash.cons5[1],
-                 y = as.numeric(nash.eq.LV.BS$value[1])), col = 2, size = 4)
+  geom_point(data = Fnash.cons5, aes(x = Fnash.cons5, y = Yield),
+             col = 2, size = 4) +
+  geom_text(data = Fnash.cons5, aes(x = 0.3, y =0.2,
+                              label = Labs),
+            family = "Consolas", parse = TRUE, size = 5)
 ### As you can see there are points in all 4 frames. This is a ggplot2 issue
 ###   and as a result we further processed this figure by erasing these points
 ###   for Flounder, Herring ans Sprat (making it nicer for publication).
