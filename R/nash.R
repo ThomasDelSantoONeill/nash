@@ -83,7 +83,7 @@
 #'@export
 nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
                  conv.criterion = 0.001, Bcons = 0, F.increase = 0.1,
-                 progress = TRUE){
+                 progress = TRUE, track = FALSE){
   ### VALIDATOR
   if (!is.vector(par)) {
     stop("`par` is not a vector.")
@@ -200,13 +200,24 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       }
     }
     ### OUTPUT
-    outlist <- list(par = tail(na.omit(Nash_Fs), n = 1),
-                    Bnash = tail(na.omit(Nash_Bs), n = 1),
-                    value = fn(as.numeric(tail(na.omit(Nash_Fs),
-                                               n = 1)), ...),
-                    counts = nash_fncalls,
-                    convergence = paste("Nash equilibrium found after ", iter,
-                                        " iterations."))
+    if (track==TRUE) {
+      outlist <- list(par = Nash_Fs,
+                      value = fn(as.numeric(tail(na.omit(Nash_Fs),
+                                                 n = 1)), ...),
+                      counts = nash_fncalls,
+                      convergence = paste("Nash equilibrium found after ", iter,
+                                          " iterations."),
+                      Bnash = Nash_Bs,
+                      Ms = Mlist)
+    } else {
+      outlist <- list(par = tail(na.omit(Nash_Fs), n = 1),
+                      Bnash = tail(na.omit(Nash_Bs), n = 1),
+                      value = fn(as.numeric(tail(na.omit(Nash_Fs),
+                                                 n = 1)), ...),
+                      counts = nash_fncalls,
+                      convergence = paste("Nash equilibrium found after ", iter,
+                                          " iterations."))
+    }
   }
   if (method == "round-robin") {
     ### LOCAL VARIABLES
