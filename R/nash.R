@@ -113,6 +113,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
     B.eq <- as.numeric(yields) / par
     F.eq <- par
     M <- matrix(nrow = nSpp, ncol = nSpp)
+    Mlist <- list()
     ### ALGORITHM
     for (iter in 1:n.iter) {
       for (i in 1:nSpp) {
@@ -131,6 +132,8 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
         #Populating M
         M[,i] <- (B.p - B.m) / (F.increase * 2)
       }
+      # Make list of Ms
+      Mlist[[iter]] <- M
       if (det(M)==0){
         spp   <- which(colSums(M) == 0)
         print("Initial M is singular and hence non invertible")
