@@ -1,10 +1,10 @@
-#'Computes long-term equilibrium yields for \code{\link[Rpath]{Rpath-package}} models
+#'Computes long-term equilibrium biomasses for \code{\link[Rpath]{Rpath-package}} models
 #'
 #'Viable \code{fn} to be used as input for \code{\link{nash}} when the
 #' \code{\link[Rpath]{Rpath-package}} is used as operating ecological model
 #' \insertCite{@see Lucey2020 for details}{nash}. \code{fn_rpath} takes the
 #' harvesting rates as the numeric type vector \code{par} returning simulated
-#' yields at equilibrium.
+#' biomasses at equilibrium.
 #'
 #'@param par Double type numeric vector of harvesting rates of length equal to
 #' the number of harvested species for which the NE is desired.
@@ -24,7 +24,7 @@
 #'@param integration.method Numerical integration routine used to solve the
 #' \code{rsim.mod} object. Character vector with values (i) `\code{RK4}` or
 #' (ii) `\code{AB}`.
-#'@param verbose Returns biomass time series.
+#'@param verbose Logical that if TRUE returns time series of biomasses.
 #'
 #'@details The \code{avg.window} argument becomes useful in case the dynamics
 #' of the model reaches a steady state (\emph{e.g.} a limit cycle) rather than

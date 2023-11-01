@@ -23,6 +23,8 @@
 #' to compute the effective interaction matrix \eqn{M}.
 #'@param progress Logical that if TRUE information on the progress of the
 #' optimisation is produced.
+#'@param track Logical that if TRUE will return all fishing mortality rates that
+#' where iteratively computed during the search.
 #'
 #'\loadmathjax
 #'@details For ecosystem models where there is some interest in keeping some or
@@ -66,6 +68,10 @@
 #'\item{counts}{Number of \code{fn} evaluations until NE.}
 #'\item{convergence}{Statement indicating the number of iterations for
 #'\code{conv.criterion} to be reached.}
+#'
+#'@importFrom stats na.omit
+#'@importFrom stats optim
+#'@importFrom utils tail
 #'
 #'@references
 #'\insertRef{Matsuda2006}{nash}

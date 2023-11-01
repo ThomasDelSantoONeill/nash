@@ -44,6 +44,9 @@
 #'@return The function \code{fn_rpath} returns an atomic vector of real
 #' double-precision long-term yields.
 #'
+#'@importFrom Rpath rsim.run
+#'@importFrom Rpath adjust.fishing
+#'
 #'@references
 #'\insertRef{Lucey2020}{nash}
 #'

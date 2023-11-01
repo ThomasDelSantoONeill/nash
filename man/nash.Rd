@@ -13,7 +13,8 @@ nash(
   conv.criterion = 0.001,
   Bcons = 0,
   F.increase = 0.1,
-  progress = TRUE
+  progress = TRUE,
+  track = FALSE
 )
 }
 \arguments{
@@ -42,7 +43,10 @@ vector set to \eqn{0} by default.}
 to compute the effective interaction matrix \eqn{M}.}
 
 \item{progress}{Logical that if TRUE information on the progress of the
-optimisation is produced.
+optimisation is produced.}
+
+\item{track}{Logical that if TRUE will return all fishing mortality rates that
+where iteratively computed during the search.
 
 \loadmathjax}
 }
@@ -97,15 +101,17 @@ rates whereas \code{LV} does the same simultaneously for all species per
 iteration.
 }
 \references{
-\insertRef{Matsuda2006}{nash}
-
-\insertRef{Worm2009}{nash}
-
-\insertRef{Thorpe2017}{nash}
-
-\insertRef{Pope2019}{nash}
-
 \insertRef{Farcas2016}{nash}
 
 \insertRef{Lucey2020}{nash}
+
+\insertRef{Matsuda2006}{nash}
+
+\insertRef{Oneill2023}{nash}
+
+\insertRef{Pope2019}{nash}
+
+\insertRef{Thorpe2017}{nash}
+
+\insertRef{Worm2009}{nash}
 }

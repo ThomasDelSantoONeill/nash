@@ -3,3 +3,8 @@
 export(fn_rpath)
 export(mse_btarget)
 export(nash)
+importFrom(Rpath,adjust.fishing)
+importFrom(Rpath,rsim.run)
+importFrom(stats,na.omit)
+importFrom(stats,optim)
+importFrom(utils,tail)

@@ -1,7 +1,7 @@
 Package: nash
 Type: Package
-Title: An efficient algorithm for Nash equilibria when harvesting interacting
-    living resources
+Title: An Efficient Algorithm for Nash Equilibria when Harvesting Interacting
+    Living Resources
 Version: 0.1.0
 Authors@R: c(
     person("Thomas Julian", "Del Santo O'Neill", 
@@ -10,9 +10,9 @@ Authors@R: c(
     person("Axel Gerhard", "Rossberg",
            email = "a.rossberg@qmul.ac.uk",
            role = "aut"))
-Maintainer: T.J. Del Santo O'Neill <t.j.delsantooneill@qmul.ac.uk>
+Maintainer: Thomas Julian Del Santo O'Neill <t.j.delsantooneill@qmul.ac.uk>
 Description: An algorithm that computes harvesting rates at the Nash
-    Equilibrium when exploiting natural interdependent resources. The
+    equilibrium when exploiting natural interdependent resources. The
     user provides a model describing the ecosystem through a function that
     returns long-term yields as output. Such function will be then utilise as 
     input by the `nash` function.
@@ -22,9 +22,8 @@ Description: An algorithm that computes harvesting rates at the Nash
 License: GPL-3
 Imports:
     Rdpack,
-    mathjaxr
-Remotes:
-    github::NOAA-EDAB/Rpath
+    mathjaxr,
+    Rpath
 RdMacros: 
     Rdpack,
     mathjaxr
@@ -32,7 +31,7 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 URL: https://github.com/ThomasDelSantoONeill/nash
 BugReports: https://github.com/ThomasDelSantoONeill/nash/issues
 Encoding: UTF-8

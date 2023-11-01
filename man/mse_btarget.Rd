@@ -2,7 +2,7 @@
 % Please edit documentation in R/mse_btarget.R
 \name{mse_btarget}
 \alias{mse_btarget}
-\title{Computes long-term equilibrium yields for \code{\link[Rpath]{Rpath-package}} models}
+\title{Computes long-term equilibrium biomasses for \code{\link[Rpath]{Rpath-package}} models}
 \usage{
 mse_btarget(
   par,
@@ -45,7 +45,7 @@ average equilibrium yields.}
 \code{rsim.mod} object. Character vector with values (i) `\code{RK4}` or
 (ii) `\code{AB}`.}
 
-\item{verbose}{Returns biomass time series.}
+\item{verbose}{Logical that if TRUE returns time series of biomasses.}
 }
 \value{
 The function \code{fn_rpath} returns an atomic vector of real
@@ -56,7 +56,7 @@ Viable \code{fn} to be used as input for \code{\link{nash}} when the
 \code{\link[Rpath]{Rpath-package}} is used as operating ecological model
 \insertCite{@see Lucey2020 for details}{nash}. \code{fn_rpath} takes the
 harvesting rates as the numeric type vector \code{par} returning simulated
-yields at equilibrium.
+biomasses at equilibrium.
 }
 \details{
 The \code{avg.window} argument becomes useful in case the dynamics
