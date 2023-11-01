@@ -24,6 +24,8 @@ Imports:
     Rdpack,
     mathjaxr,
     Rpath
+Remotes:
+    NOAA-EDAB/Rpath
 RdMacros: 
     Rdpack,
     mathjaxr
