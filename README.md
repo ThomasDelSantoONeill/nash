@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# nash <a href='https://github.com/ThomasDelSantoONeill/nash'><img src='man/figures/nashlogo.svg' align="right" height="120" />
+# nash
 
 <!-- badges: start -->
 
@@ -12,45 +12,32 @@ GPL-3](https://img.shields.io/badge/license-GPL--3-blue.svg)](https://cran.r-pro
 <!-- badges: end -->
 
 The goal of `nash` is to compute Nash equilibrium
-(NE)<sup>[\[1\]](#1)</sup> harvesting rates
-(![\mathbf{F}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmathbf%7BF%7D "\mathbf{F}");
-dimensions
-![1/\textup{TIME}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;1%2F%5Ctextup%7BTIME%7D "1/\textup{TIME}"))
-for ecological models of the form:
+(NE)<sup>[\[1\]](#1)</sup> harvesting rates ($\mathbf{F}$; dimensions
+$1/\text{TIME}$) for ecological models of the form:
 
-![\frac{d\mathbf{B}}{dt}=\mathbf{f}(\mathbf{B})\circ\mathbf{B}-\mathbf{F}\circ\mathbf{B},](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cfrac%7Bd%5Cmathbf%7BB%7D%7D%7Bdt%7D%3D%5Cmathbf%7Bf%7D%28%5Cmathbf%7BB%7D%29%5Ccirc%5Cmathbf%7BB%7D-%5Cmathbf%7BF%7D%5Ccirc%5Cmathbf%7BB%7D%2C "\frac{d\mathbf{B}}{dt}=\mathbf{f}(\mathbf{B})\circ\mathbf{B}-\mathbf{F}\circ\mathbf{B},")
+$$
+\frac{d\mathbf{B}}{dt}=\mathbf{f}(\mathbf{B})\circ\mathbf{B}-\mathbf{F}\circ\mathbf{B},
+$$
 
-with
-![\mathbf{B}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmathbf%7BB%7D "\mathbf{B}")
-representing the non-negative biomass state vector (dimensions
-![\textup{MASS}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Ctextup%7BMASS%7D "\textup{MASS}")),
-![\mathbf{f}(\mathbf{B})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmathbf%7Bf%7D%28%5Cmathbf%7BB%7D%29 "\mathbf{f}(\mathbf{B})")
-specifying the population growth (or decay) rate in the absence of
-exploitation (dimensions
-![1/\textup{TIME}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;1%2F%5Ctextup%7BTIME%7D "1/\textup{TIME}"))
-and
-![\circ](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Ccirc "\circ")
-denoting the entry-wise or
+with $\mathbf{B}$ representing the non-negative biomass state vector
+(dimensions $\text{MASS}$), $\mathbf{f}(\mathbf{B})$ specifying the
+population growth (or decay) rate in the absence of exploitation
+(dimensions $1/\text{TIME}$) and $\circ$ denoting the entry-wise or
 [Hadamard](https://en.wikipedia.org/wiki/Hadamard_product_(matrices))
 product.
 
 To run `nash`, the user is required to define an `R` function that
 contains the above model alongside an integration routine to solve it;
-that, for given
-![\mathbf{F}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmathbf%7BF%7D "\mathbf{F}"),
-the user-specified model outputs the yields at the stable equilibrium
-![\mathbf{Y}=\mathbf{F}\circ\mathbf{B}^\*=\mathbf{F}\circ\mathbf{B}^\*(\mathbf{F})](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmathbf%7BY%7D%3D%5Cmathbf%7BF%7D%5Ccirc%5Cmathbf%7BB%7D%5E%2A%3D%5Cmathbf%7BF%7D%5Ccirc%5Cmathbf%7BB%7D%5E%2A%28%5Cmathbf%7BF%7D%29 "\mathbf{Y}=\mathbf{F}\circ\mathbf{B}^*=\mathbf{F}\circ\mathbf{B}^*(\mathbf{F})").
+that, for given $\mathbf{F}$, the user-specified model outputs the
+yields at the stable equilibrium
+$\mathbf{Y}=\mathbf{F}\circ\mathbf{B}^*=\mathbf{F}\circ\mathbf{B}^*(\mathbf{F})$.
 The `nash` function will then approximate the model near equilibrium
 dynamics by a multispecies Lotka-Volterra (LV) model, for which the NE
 can be computed analytically and so a first estimation of optimal
-![\mathbf{F}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmathbf%7BF%7D "\mathbf{F}")
-obtained. Subsequently, an updated LV approximation is calculated near
-the equilibrium given by this new
-![\mathbf{F}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmathbf%7BF%7D "\mathbf{F}").
-`nash` will then re-compute the NE starting a new iteration until a
-(user-adjustable) convergence threshold for
-![\mathbf{F}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmathbf%7BF%7D "\mathbf{F}")
-is reached.
+$\mathbf{F}$ obtained. Subsequently, an updated LV approximation is
+calculated near the equilibrium given by this new $\mathbf{F}$. `nash`
+will then re-compute the NE starting a new iteration until a
+(user-adjustable) convergence threshold for $\mathbf{F}$ is reached.
 
 ## Installation
 
