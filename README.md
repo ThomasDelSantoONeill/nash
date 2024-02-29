@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# nash <a href='https://github.com/ThomasDelSantoONeill/nash'><img src='man/figures/nashlogo.svg' align="right" height="300" /></a>
+# nash <a href='https://github.com/ThomasDelSantoONeill/nash'><img src='man/figures/nashlogo.svg' align="right" height="100" /></a>
 
 <!-- badges: start -->
 
