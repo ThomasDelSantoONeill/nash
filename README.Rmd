@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# nash <a href='https://github.com/ThomasDelSantoONeill/nash'><img src='man/figures/nashlogo.svg' align="right" height="150" /></a>
+# nash <a href='https://github.com/ThomasDelSantoONeill/nash'><img src='man/figures/nashlogo.svg' align="right" height="120" />
 
 <!-- badges: start -->
 ```{r, include=FALSE}
