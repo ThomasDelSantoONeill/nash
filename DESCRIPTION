@@ -6,7 +6,7 @@ Version: 0.1.0
 Authors@R: c(
     person("Thomas Julian", "Del Santo O'Neill", 
            email = "t.j.delsantooneill@qmul.ac.uk", 
-           role = c("aut", "cre")),
+           role = c("cre", "aut")),
     person("Axel Gerhard", "Rossberg",
            email = "a.rossberg@qmul.ac.uk",
            role = "aut"))
@@ -34,7 +34,7 @@ Suggests:
     rmarkdown
 VignetteBuilder: knitr
 RoxygenNote: 7.3.0
-URL: https://github.com/ThomasDelSantoONeill/nash
+URL: https://github.com/ThomasDelSantoONeill/nash, https://thomasdelsantooneill.github.io/nash/
 BugReports: https://github.com/ThomasDelSantoONeill/nash/issues
 Encoding: UTF-8
 LazyData: true
