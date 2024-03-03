@@ -15,43 +15,31 @@ The goal of `nash` is to compute Nash equilibrium
 (NE)<sup>[\[1\]](#1)</sup> harvesting rates for ecological models of the
 form:
 
+$$\frac{d\mathbf{B}}{dt}=\mathbf{f}(\mathbf{B})\circ\mathbf{B}-\mathbf{F}\circ\mathbf{B},$$
 
-with
-![\mathbf{B}](https://latex.codecogs.com/png.latex?%5Cmathbf%7BB%7D "\mathbf{B}")
-representing the non-negative biomass state vector (dimensions
-![\text{MASS}](https://latex.codecogs.com/png.latex?%5Ctext%7BMASS%7D "\text{MASS}")),
-![\mathbf{f}(\mathbf{B})](https://latex.codecogs.com/png.latex?%5Cmathbf%7Bf%7D%28%5Cmathbf%7BB%7D%29 "\mathbf{f}(\mathbf{B})")
-specifying the population growth (or decay) rate in the absence of
-exploitation (dimensions
-![1/\text{TIME}](https://latex.codecogs.com/png.latex?1%2F%5Ctext%7BTIME%7D "1/\text{TIME}"))
-and ![\circ](https://latex.codecogs.com/png.latex?%5Ccirc "\circ")
-denoting the entry-wise or
+with $\mathbf{B}$ representing the non-negative biomass state vector
+(dimensions $\text{MASS}$), $\mathbf{f}(\mathbf{B})$ specifying the
+population growth (or decay) rate in the absence of exploitation
+(dimensions $1/\text{TIME}$) and $\circ$ denoting the entry-wise or
 [Hadamard](https://en.wikipedia.org/wiki/Hadamard_product_(matrices))
 product.
 
-- (![\mathbf{F}](https://latex.codecogs.com/png.latex?%5Cmathbf%7BF%7D "\mathbf{F}");
-  dimensions
-  ![1/\text{TIME}](https://latex.codecogs.com/png.latex?1%2F%5Ctext%7BTIME%7D "1/\text{TIME}"))
+- ($\mathbf{F}$; dimensions $1/\text{TIME}$)
 - Add Gustav’s comments and aknowledge him.
 - Add nash logo
 
 To run `nash`, the user is required to define an `R` function that
 contains the above model alongside an integration routine to solve it;
-that, for given
-![\mathbf{F}](https://latex.codecogs.com/png.latex?%5Cmathbf%7BF%7D "\mathbf{F}"),
-the user-specified model outputs the yields at the stable equilibrium
-![\mathbf{Y}=\mathbf{F}\circ\mathbf{B}^\*=\mathbf{F}\circ\mathbf{B}^\*(\mathbf{F})](https://latex.codecogs.com/png.latex?%5Cmathbf%7BY%7D%3D%5Cmathbf%7BF%7D%5Ccirc%5Cmathbf%7BB%7D%5E%2A%3D%5Cmathbf%7BF%7D%5Ccirc%5Cmathbf%7BB%7D%5E%2A%28%5Cmathbf%7BF%7D%29 "\mathbf{Y}=\mathbf{F}\circ\mathbf{B}^*=\mathbf{F}\circ\mathbf{B}^*(\mathbf{F})").
+that, for given $\mathbf{F}$, the user-specified model outputs the
+yields at the stable equilibrium
+$\mathbf{Y}=\mathbf{F}\circ\mathbf{B}^*=\mathbf{F}\circ\mathbf{B}^*(\mathbf{F})$.
 The `nash` function will then approximate the model near equilibrium
 dynamics by a multispecies Lotka-Volterra (LV) model, for which the NE
 can be computed analytically and so a first estimation of optimal
-![\mathbf{F}](https://latex.codecogs.com/png.latex?%5Cmathbf%7BF%7D "\mathbf{F}")
-obtained. Subsequently, an updated LV approximation is calculated near
-the equilibrium given by this new
-![\mathbf{F}](https://latex.codecogs.com/png.latex?%5Cmathbf%7BF%7D "\mathbf{F}").
-`nash` will then re-compute the NE starting a new iteration until a
-(user-adjustable) convergence threshold for
-![\mathbf{F}](https://latex.codecogs.com/png.latex?%5Cmathbf%7BF%7D "\mathbf{F}")
-is reached.
+$\mathbf{F}$ obtained. Subsequently, an updated LV approximation is
+calculated near the equilibrium given by this new $\mathbf{F}$. `nash`
+will then re-compute the NE starting a new iteration until a
+(user-adjustable) convergence threshold for $\mathbf{F}$ is reached.
 
 ## Installation
 
