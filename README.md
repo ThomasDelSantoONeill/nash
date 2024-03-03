@@ -15,7 +15,6 @@ The goal of `nash` is to compute Nash equilibrium
 (NE)<sup>[\[1\]](#1)</sup> harvesting rates for ecological models of the
 form:
 
-![\frac{d\mathbf{B}}{dt}=\mathbf{f}(\mathbf{B})\circ\mathbf{B}-\mathbf{F}\circ\mathbf{B},](https://latex.codecogs.com/png.latex?%5Cfrac%7Bd%5Cmathbf%7BB%7D%7D%7Bdt%7D%3D%5Cmathbf%7Bf%7D%28%5Cmathbf%7BB%7D%29%5Ccirc%5Cmathbf%7BB%7D-%5Cmathbf%7BF%7D%5Ccirc%5Cmathbf%7BB%7D%2C "\frac{d\mathbf{B}}{dt}=\mathbf{f}(\mathbf{B})\circ\mathbf{B}-\mathbf{F}\circ\mathbf{B},")
 
 with
 ![\mathbf{B}](https://latex.codecogs.com/png.latex?%5Cmathbf%7BB%7D "\mathbf{B}")
