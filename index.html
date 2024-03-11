@@ -70,7 +70,7 @@
   <a class="nav-link" href="articles/publications.html">Publications</a>
 </li>
 <li class="nav-item">
-  <a class="nav-link" href="news/index.html">News</a>
+  <a class="nav-link" href="news/index.html">ToDo</a>
 </li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
@@ -105,27 +105,78 @@
 <p>The algorithms implemented in <code>nash</code> assume that <strong>users have developed an ecosystem model</strong> with <span class="math inline"><em>S</em></span> harvested compartments, typically represented by population biomass variables. In the <strong>simplest case</strong>, population dynamics are given by a system of autonomous ordinary differential equations of the general form:</p>
 <p><span class="math display">$$\frac{d\mathbf{B}}{dt}=\mathbf{f}(\mathbf{B})\circ\mathbf{B}-\mathbf{F}\circ\mathbf{B},$$</span></p>
 <p>with <span class="math inline"><strong>B</strong></span> representing the non-negative biomass or state vector (dimensions <span class="math inline">MASS</span>), <span class="math inline"><strong>f</strong>(<strong>B</strong>)</span> specifying the population growth (or decay) rate in the absence of exploitation (dimensions <span class="math inline">1/TIME</span>) and the last term describing removal (<em>e.g.</em> harvesting and/or culling) at a rate <span class="math inline"><strong>F</strong></span> (dimensions <span class="math inline">1/TIME</span>). In addition, <span class="math inline">∘</span> denotes the entry-wise or <a href="https://en.wikipedia.org/wiki/Hadamard_product_(matrices)" class="external-link">Hadamard</a> product.</p>
-<ul>
-<li>Add Gustav’s comments and aknowledge him.</li>
-</ul>
-<p>To run <code>nash</code>, the user is required to define an <code>R</code> function that contains the above model alongside an integration routine to solve it; that, for given <span class="math inline"><strong>F</strong></span>, the user-specified model outputs the yields at the stable equilibrium <span class="math inline"><strong>Y</strong> = <strong>F</strong> ∘ <strong>B</strong><sup>*</sup> = <strong>F</strong> ∘ <strong>B</strong><sup>*</sup>(<strong>F</strong>)</span>. The <code>nash</code> function will then approximate the model near equilibrium dynamics by a multispecies Lotka-Volterra (LV) model, for which the NE can be computed analytically and so a first estimation of optimal <span class="math inline"><strong>F</strong></span> obtained. Subsequently, an updated LV approximation is calculated near the equilibrium given by this new <span class="math inline"><strong>F</strong></span>. <code>nash</code> will then re-compute the NE starting a new iteration until a (user-adjustable) convergence threshold for <span class="math inline"><strong>F</strong></span> is reached.</p>
-<div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h2>
+<p>To run <code>nash</code>, the user is required to define an <code>R</code> function that runs the above model for given <span class="math inline"><strong>F</strong></span> values and returns yields at the stable equilibrium <span class="math inline"><strong>Y</strong> = <strong>F</strong> ∘ <strong>B</strong><sup>*</sup> = <strong>F</strong> ∘ <strong>B</strong><sup>*</sup>(<strong>F</strong>)</span>. The <code>nash</code> function will then approximate the model near equilibrium via a multispecies Lotka-Volterra (LV) model, for which the NE can be computed analytically and so a first estimation of optimal <span class="math inline"><strong>F</strong></span> obtained. Subsequently, an updated LV approximation is calculated near the equilibrium given by this new <span class="math inline"><strong>F</strong></span>. <code>nash</code> will then re-compute the NE starting a new iteration until a (user-adjustable) convergence threshold for <span class="math inline"><strong>F</strong></span> is reached.</p>
+</div>
+<div class="section level1">
+<h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h1>
 <p>You can install the development version of <code>nash</code> either through the <code>devtools</code> (<a href="#ref-devtools2022">Wickham et al. 2022</a>) or <code>remotes</code> (<a href="#ref-remotes2023">Csárdi et al. 2023</a>) packages:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ThomasDelSantoONeill/nash"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ThomasDelSantoONeill/nash"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="minimal-example">Minimal Example<a class="anchor" aria-label="anchor" href="#minimal-example"></a>
-</h2>
+<div class="section level1">
+<h1 id="minimal-example">Minimal Example<a class="anchor" aria-label="anchor" href="#minimal-example"></a>
+</h1>
+<p>The following chunk of code implements a modified two-species competitive LV model as <code>HQLV</code> and showcases the execution of <code>nash</code>. For this example, the <code>HQLV</code> function also includes a numerical integration solver via the <code>deSolve</code> package of Soetaert, Petzoldt, and Setzer (<a href="#ref-deSolve2010">2010</a>) that returns long-term yields for given harvesting rates.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Load libraries .</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span> <span class="op">(</span><span class="va"><a href="http://desolve.r-forge.r-project.org/" class="external-link">deSolve</a></span><span class="op">)</span> <span class="co"># ODE solver library</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span> <span class="op">(</span><span class="va"><a href="https://github.com/ThomasDelSantoONeill/nash" class="external-link">nash</a></span><span class="op">)</span></span>
+<span><span class="co"># Initial conditions and parameters .</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>b1 <span class="op">=</span> <span class="fl">0.02</span>, b2 <span class="op">=</span> <span class="fl">0.001</span><span class="op">)</span></span>
+<span><span class="va">parameters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>r1 <span class="op">=</span> <span class="fl">1</span>, r2 <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                a11 <span class="op">=</span> <span class="fl">1</span>, a12 <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>                a21 <span class="op">=</span> <span class="fl">0.25</span>, a22 <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">time</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span></span>
+<span><span class="co"># Numerical fudge to avoid biomasses becoming negative .</span></span>
+<span><span class="va">inv</span> <span class="op">&lt;-</span> <span class="fl">1e-5</span></span>
+<span><span class="co"># Model formulation .</span></span>
+<span><span class="va">HQLV</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">par</span>, <span class="va">avg.window</span> <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">derivs</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">time</span>, <span class="va">y</span>, <span class="va">parameters</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">parameters</span><span class="op">)</span><span class="op">)</span>, <span class="op">{</span></span>
+<span>      <span class="va">db1.dt</span> <span class="op">=</span> <span class="va">b1</span><span class="op">*</span><span class="op">(</span><span class="va">r1</span><span class="op">-</span><span class="va">a11</span><span class="op">*</span><span class="va">b1</span><span class="op">-</span><span class="va">a12</span><span class="op">*</span><span class="va">b2</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span> <span class="op">-</span> <span class="va">par</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">*</span><span class="va">b1</span> <span class="op">+</span> <span class="va">inv</span></span>
+<span>      <span class="va">db2.dt</span> <span class="op">=</span> <span class="va">b2</span><span class="op">*</span><span class="op">(</span><span class="va">r2</span><span class="op">-</span><span class="va">a22</span><span class="op">*</span><span class="va">b2</span><span class="op">-</span><span class="va">a21</span><span class="op">*</span><span class="va">b1</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span> <span class="op">-</span> <span class="va">par</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">*</span><span class="va">b2</span> <span class="op">+</span> <span class="va">inv</span></span>
+<span>      <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">db1.dt</span>, <span class="va">db2.dt</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>      <span class="op">}</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="co"># Default integrator in deSolve</span></span>
+<span>  <span class="va">simulation</span> <span class="op">&lt;-</span> <span class="fu">ode</span><span class="op">(</span>y <span class="op">=</span> <span class="va">y</span>, times <span class="op">=</span> <span class="va">time</span>, func <span class="op">=</span> <span class="va">derivs</span>,</span>
+<span>                    parms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">parameters</span>, <span class="va">par</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="co"># Yield computation</span></span>
+<span>  <span class="va">yields</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html" class="external-link">array</a></span><span class="op">(</span>dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">simulation</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">par</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">simulation</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">yields</span><span class="op">[</span><span class="va">i</span>,<span class="op">]</span> <span class="op">&lt;-</span> <span class="va">simulation</span><span class="op">[</span><span class="va">i</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span> <span class="op">*</span> <span class="va">par</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colMeans</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">yields</span>, n <span class="op">=</span> <span class="va">avg.window</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span><span class="co"># Execution of nash</span></span>
+<span><span class="va">NE</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nash.html">nash</a></span><span class="op">(</span>par <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.3</span><span class="op">)</span>, fn <span class="op">=</span> <span class="va">HQLV</span>, progress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co"># Results</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">NE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $par</span></span>
+<span><span class="co">#&gt;           [,1]     [,2]</span></span>
+<span><span class="co">#&gt; [4,] 0.4101201 0.444264</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $Bnash</span></span>
+<span><span class="co">#&gt;           [,1]      [,2]</span></span>
+<span><span class="co">#&gt; [4,] 0.4639249 0.5019498</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $value</span></span>
+<span><span class="co">#&gt; [1] 0.1902649 0.2229980</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $counts</span></span>
+<span><span class="co">#&gt; [1] 20</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $convergence</span></span>
+<span><span class="co">#&gt; [1] "Nash equilibrium found after  4  iterations."</span></span></code></pre></div>
+<p>By setting the <code>yield.curves</code> argument within the <code>nash</code> call equal to <code>TRUE</code>, it is possible to graphically verify that “<em>no fleet can attain higher yields by changing their corresponding harvesting rates</em>”.</p>
+<p><img src="reference/figures/README-unnamed-chunk-4-1.png" width="100%"></p>
 </div>
-<div class="section level2">
-<h2 id="assistance">Assistance<a class="anchor" aria-label="anchor" href="#assistance"></a>
-</h2>
-<p>If you encounter a clear bug, please file an issue with a minimal reproducible example on <a href="https://github.com/ThomasDelSantoONeill/nash/issues" class="external-link">GitHub</a>. For questions and other discussions/enhancements please email me at <a href="t.j.delsantooneill@qmul.ac.uk">t.j.delsantooneill@qmul.ac.uk</a>.</p>
-</div>
+<div class="section level1">
+<h1 id="assistance">Assistance<a class="anchor" aria-label="anchor" href="#assistance"></a>
+</h1>
+<p>If you encounter a bug, please file an issue with a minimal reproducible example on <a href="https://github.com/ThomasDelSantoONeill/nash/issues" class="external-link">GitHub</a>. For questions and other discussions/enhancements please email me at <a href="t.j.delsantooneill@qmul.ac.uk">t.j.delsantooneill@qmul.ac.uk</a>.</p>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
@@ -134,10 +185,13 @@
 Csárdi, Gábor, Jim Hester, Hadley Wickham, Winston Chang, Martin Morgan, and Dan Tenenbaum. 2023. <em>Remotes: R Package Installation from Remote Repositories, Including “GitHub”</em>. <a href="https://CRAN.R-project.org/package=remotes" class="external-link uri">https://CRAN.R-project.org/package=remotes</a>.
 </div>
 <div id="ref-Farcas2016" class="csl-entry">
-Farcas, Adrian, and Axel G. Rossberg. 2016. “Maximum Sustainable Yield from Interacting Fish Stocks in an Uncertain World: Two Policy Choices and Underlying Trade-Offs.” <em>ICES Journal of Marine Science</em> 73 (10): 2499–2508. <a href="https://doi.org/10.1093/icesjms/fsw113" class="external-link uri">https://doi.org/10.1093/icesjms/fsw113</a>.
+Farcas, Adrian, and Axel G. Rossberg. 2016. “Maximum Sustainable Yield from Interacting Fish Stocks in an Uncertain World: Two Policy Choices and Underlying Trade-Offs.” <em>ICES J Mar Sci</em> 73 (10): 2499–2508. <a href="https://doi.org/10.1093/icesjms/fsw113" class="external-link uri">https://doi.org/10.1093/icesjms/fsw113</a>.
 </div>
 <div id="ref-Nash1951" class="csl-entry">
 Nash, John. 1951. “Non-Cooperative Games.” <em>Annals of Mathematics</em> 54 (2): 286–95. <a href="https://doi.org/10.2307/1969529" class="external-link uri">https://doi.org/10.2307/1969529</a>.
+</div>
+<div id="ref-deSolve2010" class="csl-entry">
+Soetaert, Karline, Thomas Petzoldt, and R. Woodrow Setzer. 2010. “Solving Differential Equations in R: Package deSolve.” <em>Journal of Statistical Software</em> 33 (9): 1–25. <a href="https://doi.org/10.18637/jss.v033.i09" class="external-link uri">https://doi.org/10.18637/jss.v033.i09</a>.
 </div>
 <div id="ref-devtools2022" class="csl-entry">
 Wickham, Hadley, Jim Hester, Winston Chang, and Jennifer Bryan. 2022. <em>Devtools: Tools to Make Developing r Packages Easier</em>. <a href="https://CRAN.R-project.org/package=devtools" class="external-link uri">https://CRAN.R-project.org/package=devtools</a>.
