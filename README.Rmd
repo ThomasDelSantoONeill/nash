@@ -40,24 +40,76 @@ $$\frac{d\mathbf{B}}{dt}=\mathbf{f}(\mathbf{B})\circ\mathbf{B}-\mathbf{F}\circ\m
 
 with $\mathbf{B}$ representing the non-negative biomass or state vector (dimensions $\text{MASS}$), $\mathbf{f}(\mathbf{B})$ specifying the population growth (or decay) rate in the absence of exploitation (dimensions $1/\text{TIME}$) and the last term describing removal (*e.g.* harvesting and/or culling) at a rate $\mathbf{F}$ (dimensions $1/\text{TIME}$). In addition, $\circ$ denotes the entry-wise or [Hadamard](https://en.wikipedia.org/wiki/Hadamard_product_(matrices)) product.
 
-- Add Gustav's comments and aknowledge him.
+To run `nash`, the user is required to define an `R` function that runs the above model for given $\mathbf{F}$ values and returns yields at the stable equilibrium $\mathbf{Y}=\mathbf{F}\circ\mathbf{B}^*=\mathbf{F}\circ\mathbf{B}^*(\mathbf{F})$. The `nash` function will then approximate the model near equilibrium via a multispecies Lotka-Volterra (LV) model, for which the NE can be computed analytically and so a first estimation of optimal $\mathbf{F}$ obtained. Subsequently, an updated LV approximation is calculated near the equilibrium given by this new $\mathbf{F}$. `nash` will then re-compute the NE starting a new iteration until a (user-adjustable) convergence threshold for $\mathbf{F}$ is reached.
 
-To run `nash`, the user is required to define an `R` function that contains the above model alongside an integration routine to solve it; that, for given $\mathbf{F}$, the user-specified model outputs the yields at the stable equilibrium $\mathbf{Y}=\mathbf{F}\circ\mathbf{B}^*=\mathbf{F}\circ\mathbf{B}^*(\mathbf{F})$. The `nash` function will then approximate the model near equilibrium dynamics by a multispecies Lotka-Volterra (LV) model, for which the NE can be computed analytically and so a first estimation of optimal $\mathbf{F}$ obtained. Subsequently, an updated LV approximation is calculated near the equilibrium given by this new $\mathbf{F}$. `nash` will then re-compute the NE starting a new iteration until a (user-adjustable) convergence threshold for $\mathbf{F}$ is reached.
-
-## Installation
+# Installation
 
 You can install the development version of `nash` either through the `devtools` [@devtools2022] or `remotes` [@remotes2023] packages: 
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("ThomasDelSantoONeill/nash")
+remotes::install_github("ThomasDelSantoONeill/nash")
 ```
 
-## Minimal Example
+# Minimal Example
 
-## Assistance
+The following chunk of code implements a modified two-species competitive LV model as `HQLV` and showcases the execution of `nash`. For this example, the `HQLV` function also includes a numerical integration solver via the `deSolve` package of @deSolve2010 that returns long-term yields for given harvesting rates.
 
-If you encounter a clear bug, please file an issue with a minimal reproducible example on [GitHub](https://github.com/ThomasDelSantoONeill/nash/issues). For questions and other discussions/enhancements please email me at [t.j.delsantooneill@qmul.ac.uk](t.j.delsantooneill@qmul.ac.uk).
+``` {r}
+# Load libraries .
+library (deSolve) # ODE solver library
+library (nash)
+# Initial conditions and parameters .
+y <- c(b1 = 0.02, b2 = 0.001)
+parameters <- c(r1 = 1, r2 = 1,
+                a11 = 1, a12 = 0.5,
+                a21 = 0.25, a22 = 1)
+time <- 1:100
+# Numerical fudge to avoid biomasses becoming negative .
+inv <- 1e-5
+# Model formulation .
+HQLV <- function(par, avg.window = 10) {
+  derivs <- function(time, y, parameters) {
+    with (as.list(c(y, parameters)), {
+      db1.dt = b1*(r1-a11*b1-a12*b2^2) - par[1]*b1 + inv
+      db2.dt = b2*(r2-a22*b2-a21*b1^2) - par[2]*b2 + inv
+      return(list(c(db1.dt, db2.dt)))
+      })
+  }
+  # Default integrator in deSolve
+  simulation <- ode(y = y, times = time, func = derivs,
+                    parms = c(parameters, par))
+  # Yield computation
+  yields <- array(dim = c(nrow(simulation), length(par)))
+  for(i in 1:nrow(simulation)) {
+    yields[i,] <- simulation[i, -1] * par
+  }
+  return(colMeans(tail(yields, n = avg.window)))
+}
+# Execution of nash
+NE <- nash(par = c(0.2, 0.3), fn = HQLV, progress = FALSE)
+# Results
+print(NE)
+```
+
+By setting the `yield.curves` argument within the `nash` call equal to `TRUE`, it is possible to compute the yield curves at the NE to verify that, indeed, "*no fleet can attain higher yields by changing their corresponding harvesting rates*".
+
+``` {r, echo = FALSE}
+NE <- nash(par = c(0.2, 0.3), fn = HQLV, progress = FALSE, yield.curves = TRUE)
+par(mfrow = c(1,2))
+plot(NE$YieldEQ[[1]][,1],NE$YieldEQ[[1]][,2], type = "l",
+     xlab = "",
+     ylab = "")
+plot(NE$YieldEQ[[2]][,1],NE$YieldEQ[[2]][,2], type = "l",
+     xlab = "",
+     ylab = "")
+mtext(text = "Yield (MASS/TIME)", side = 2, line = -0.25)
+mtext(text = "Harvesting Rate (1/TIME)", side = 1, line = 2, adj = 0)
+
+```
+# Assistance
+
+If you encounter a bug, please file an issue with a minimal reproducible example on [GitHub](https://github.com/ThomasDelSantoONeill/nash/issues). For questions and other discussions/enhancements please email me at [t.j.delsantooneill@qmul.ac.uk](t.j.delsantooneill@qmul.ac.uk).
 
 ## References
 
