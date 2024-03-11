@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# nash
+# <img src="man/figures/nashlogo.svg" style='width: 100%; object-fit: contain'/>
 
 <!-- badges: start -->
 
@@ -11,22 +11,34 @@ GPL-3](https://img.shields.io/badge/license-GPL--3-blue.svg)](https://cran.r-pro
 [![](https://img.shields.io/github/languages/code-size/ThomasDelSantoONeill/nash.svg)](https://github.com/ThomasDelSantoONeill/nash)
 <!-- badges: end -->
 
-The goal of `nash` is to compute Nash equilibrium
-(NE)<sup>[\[1\]](#1)</sup> harvesting rates for ecological models of the
-form:
+# Quick Start
+
+The goal of `nash` is to compute Nash ([1951](#ref-Nash1951))
+Equilibrium (NE) harvesting rates for naturally occurring species that
+**biologically interact** through *e.g.* predation and/or competition.
+[NE](https://en.wikipedia.org/wiki/Nash_equilibrium) harvesting rates
+mean *to exploit each species in a wild mixture at such rates that no
+deviation from this rate can increase the long-term yield from that
+species* ([Farcas and Rossberg 2016](#ref-Farcas2016)).
+
+The algorithms implemented in `nash` assume that **users have developed
+an ecosystem model** with $S$ harvested compartments, typically
+represented by population biomass variables. In the **simplest case**,
+population dynamics are given by a system of autonomous ordinary
+differential equations of the general form:
 
 $$\frac{d\mathbf{B}}{dt}=\mathbf{f}(\mathbf{B})\circ\mathbf{B}-\mathbf{F}\circ\mathbf{B},$$
 
-with $\mathbf{B}$ representing the non-negative biomass state vector
+with $\mathbf{B}$ representing the non-negative biomass or state vector
 (dimensions $\text{MASS}$), $\mathbf{f}(\mathbf{B})$ specifying the
 population growth (or decay) rate in the absence of exploitation
-(dimensions $1/\text{TIME}$) and $\circ$ denoting the entry-wise or
+(dimensions $1/\text{TIME}$) and the last term describing removal
+(*e.g.* harvesting and/or culling) at a rate $\mathbf{F}$ (dimensions
+$1/\text{TIME}$). In addition, $\circ$ denotes the entry-wise or
 [Hadamard](https://en.wikipedia.org/wiki/Hadamard_product_(matrices))
 product.
 
-- ($\mathbf{F}$; dimensions $1/\text{TIME}$)
 - Add Gustav’s comments and aknowledge him.
-- Add nash logo
 
 To run `nash`, the user is required to define an `R` function that
 contains the above model alongside an integration routine to solve it;
@@ -44,13 +56,15 @@ will then re-compute the NE starting a new iteration until a
 ## Installation
 
 You can install the development version of `nash` either through the
-`devtools`<sup>[\[2\]](#2)</sup> or `remotes`<sup>[\[3\]](#3)</sup>
-packages:
+`devtools` ([Wickham et al. 2022](#ref-devtools2022)) or `remotes`
+([Csárdi et al. 2023](#ref-remotes2023)) packages:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("ThomasDelSantoONeill/nash")
 ```
+
+## Minimal Example
 
 ## Assistance
 
@@ -60,18 +74,41 @@ reproducible example on
 questions and other discussions/enhancements please email me at
 [t.j.delsantooneill@qmul.ac.uk](t.j.delsantooneill@qmul.ac.uk).
 
-## Minimal Example
-
 ## References
 
-<a id="1">\[1\]</a> Nash, J. (1951). Non-cooperative games. <i>Annals of
-Mathematics</i>, 54(2), 286–295 (<https://doi.org/10.2307/1969529>).
+<div id="refs" class="references csl-bib-body hanging-indent">
 
-<a id="2">\[2\]</a> Wickham, H., Hester, J. and Chang, W. (2020).
-<i>devtools: Tools to Make Developing R Packages Easier</i>. R package
-version 2.3.1. (<https://github.com/r-lib/devtools>).
+<div id="ref-remotes2023" class="csl-entry">
 
-<a id="3">\[3\]</a> Hester, J., Csárdi, G., Wickham, H., Chang, W.,
-Morgan, M. and Tenenbaum, D. (2020). <i>remotes: R Package Installation
-from Remote Repositories, Including “GitHub”</i>. R package version
-2.2.0. (<https://github.com/r-lib/remotes>).
+Csárdi, Gábor, Jim Hester, Hadley Wickham, Winston Chang, Martin Morgan,
+and Dan Tenenbaum. 2023. *Remotes: R Package Installation from Remote
+Repositories, Including “GitHub”*.
+<https://CRAN.R-project.org/package=remotes>.
+
+</div>
+
+<div id="ref-Farcas2016" class="csl-entry">
+
+Farcas, Adrian, and Axel G. Rossberg. 2016. “Maximum Sustainable Yield
+from Interacting Fish Stocks in an Uncertain World: Two Policy Choices
+and Underlying Trade-Offs.” *ICES Journal of Marine Science* 73 (10):
+2499–2508. <https://doi.org/10.1093/icesjms/fsw113>.
+
+</div>
+
+<div id="ref-Nash1951" class="csl-entry">
+
+Nash, John. 1951. “Non-Cooperative Games.” *Annals of Mathematics* 54
+(2): 286–95. <https://doi.org/10.2307/1969529>.
+
+</div>
+
+<div id="ref-devtools2022" class="csl-entry">
+
+Wickham, Hadley, Jim Hester, Winston Chang, and Jennifer Bryan. 2022.
+*Devtools: Tools to Make Developing r Packages Easier*.
+<https://CRAN.R-project.org/package=devtools>.
+
+</div>
+
+</div>
