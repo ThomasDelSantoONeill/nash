@@ -124,12 +124,12 @@ print(NE)
 ```
 
 By setting the `yield.curves` argument within the `nash` call equal to
-`TRUE`, it is possible to compute the yield curves at the NE to verify
-that, indeed, “*no fleet can attain higher yields by changing their
-corresponding harvesting rates*”.
+`TRUE`, it is possible to graphically verify that “*no fleet can attain
+higher yields by changing their corresponding harvesting rates*”.
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" /> \#
-Assistance
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+
+# Assistance
 
 If you encounter a bug, please file an issue with a minimal reproducible
 example on

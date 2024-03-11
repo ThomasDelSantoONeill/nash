@@ -25,7 +25,7 @@ navbar:
     href: reference/index.html
   - text: Publications
     href: articles/publications.html
-  - text: News
+  - text: ToDo
     href: news/index.html
   right:
   - icon: fa-github fa-lg

@@ -92,21 +92,32 @@ NE <- nash(par = c(0.2, 0.3), fn = HQLV, progress = FALSE)
 print(NE)
 ```
 
-By setting the `yield.curves` argument within the `nash` call equal to `TRUE`, it is possible to compute the yield curves at the NE to verify that, indeed, "*no fleet can attain higher yields by changing their corresponding harvesting rates*".
+By setting the `yield.curves` argument within the `nash` call equal to `TRUE`, it is possible to graphically verify that "*no fleet can attain higher yields by changing their corresponding harvesting rates*".
 
 ``` {r, echo = FALSE}
 NE <- nash(par = c(0.2, 0.3), fn = HQLV, progress = FALSE, yield.curves = TRUE)
 par(mfrow = c(1,2))
-plot(NE$YieldEQ[[1]][,1],NE$YieldEQ[[1]][,2], type = "l",
+plot(NE$YieldEQ[[1]][,1],NE$YieldEQ[[1]][,2], type = "n",
      xlab = "",
      ylab = "")
-plot(NE$YieldEQ[[2]][,1],NE$YieldEQ[[2]][,2], type = "l",
+grid()
+lines(NE$YieldEQ[[1]][,1],NE$YieldEQ[[1]][,2], lwd = 3)
+segments(x0 = NE$par[,1], y0 = 0, x1 = NE$par[,1], y1 = NE$value[1], lty = 2,
+         lwd = 3)
+mtext(text = expression("F"[Nash]==0.41), side = 3, adj = 0, cex = 1.5)
+plot(NE$YieldEQ[[2]][,1],NE$YieldEQ[[2]][,2], type = "n",
      xlab = "",
      ylab = "")
-mtext(text = "Yield (MASS/TIME)", side = 2, line = -0.25)
-mtext(text = "Harvesting Rate (1/TIME)", side = 1, line = 2, adj = 0)
+grid()
+segments(x0 = NE$par[,2], y0 = 0, x1 = NE$par[,2], y1 = NE$value[2], lty = 2,
+         lwd = 3)
+lines(NE$YieldEQ[[2]][,1],NE$YieldEQ[[2]][,2], lwd = 3)
+mtext(text = expression("F"[Nash]==0.44), side = 3, adj = 0, cex = 1.5)
+mtext(text = "Yield (MASS/TIME)", side = 2, line = 20)
+mtext(text = "Harvesting Rate (1/TIME)", side = 1, line = 2.5, adj = -4)
 
 ```
+
 # Assistance
 
 If you encounter a bug, please file an issue with a minimal reproducible example on [GitHub](https://github.com/ThomasDelSantoONeill/nash/issues). For questions and other discussions/enhancements please email me at [t.j.delsantooneill@qmul.ac.uk](t.j.delsantooneill@qmul.ac.uk).
