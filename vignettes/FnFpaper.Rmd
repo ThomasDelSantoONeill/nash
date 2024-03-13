@@ -1,5 +1,5 @@
 ---
-title: "FnFpaper"
+title: "An efficient tool to find multispecies MSY for interacting fish stocks"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{FnFpaper}
