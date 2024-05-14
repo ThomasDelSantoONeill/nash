@@ -39,7 +39,7 @@
   # Execution of nash
   nash(par = c(0.2, 0.3), fn = HQLV)
   # BALTIC SEA AND NORTH SEA MODELS (Listing 2 in F&F manuscript)
-  load("F&F_Scripts&Data/BalticSeaModel.RData")
+  load("data/BalticSeaModel.RData")
   spp = c("AdCod", "AdHerring", "AdSprat", "AdFlounder")
   par <- as.numeric(tail(Rsim.model$fishing$ForcedFRate[,spp], n = 1))
   # LV method
@@ -55,7 +55,7 @@
                         F.increase = 0.01)
   saveRDS(nash.eq.LV.BS, "nash.eq.LV.BS.rds")
 
-  load("F&F_Scripts&Data/NorthSeaModel.RData")
+  load("data/NorthSeaModel.RData")
   spp = c("AduCod", "AduWhiting", "AduHaddock", "AduSaithe", "AduHerring",
           "NorwayPout", "Sandeels", "Plaice", "Sole")
   par <- Rsim.model$fishing$ForcedFRate[sim.years,spp]
@@ -107,9 +107,9 @@ theme_tjdso <- theme(
 )
 ### Diagnostics plotting routine (Figure_2 in F&F manuscript).
 ###   If the above was not run, load appropriate data
-###   (e.g. 'readRDS("F&F_Scripts&Data/nash.eq.LV.BS.rds")') and execute
+###   (e.g. 'readRDS("data/nash.eq.LV.BS.rds")') and execute
 ###   the ggplot2 code.
-nash.eq.LV.BS <- readRDS("F&F_Scripts&Data/BS-NE-Fmsy-LV.rds")
+nash.eq.LV.BS <- readRDS("F&F_Scripts&Data//BS-NE-Fmsy-LV.rds")
 sppname <- c("Cod", "Herring", "Sprat", "Flounder")
 # Transform data into something ggplot2 reads
 Fvec <- c()
@@ -152,9 +152,9 @@ ggplot(data = Yeq, aes(x = Fval, y = Yield)) +
 
 ### Diagnostics plotting routine (Figure_3 in F&F manuscript).
 ###   If the above was not run, load appropriate data
-###   (e.g. 'readRDS("F&F_Scripts&Data/nash.eq.LV.NS.rds")') and execute
+###   (e.g. 'readRDS("data/nash.eq.LV.NS.rds")') and execute
 ###   the ggplot2 code.
-nash.eq.LV.NS <- readRDS("F&F_Scripts&Data/NS-NE-Fmsy-LV.rds")
+nash.eq.LV.NS <- readRDS("data/NS-NE-Fmsy-LV.rds")
 sppname <- c("Cod", "Whiting", "Haddock", "Saithe", "Herring", "NorwayPout",
              "Sandeels", "Plaice", "Sole")
 # Transform data into something ggplot2 reads

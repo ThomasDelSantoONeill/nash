@@ -198,6 +198,9 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
         print(max(abs(F.eq / Nash_Fs[(iter),] -1)))
       }
       yields <- fn(par, ...)
+      ### Ensemble exercise
+      print(as.numeric(yields))
+      print(par)
       B.eq <- as.numeric(yields) / par
       F.eq <- par
       nash_fncalls <- nash_fncalls + 1
