@@ -188,6 +188,7 @@ nash <- function(par, fn, ..., method = "LV", yield.curves = FALSE,
       }
       # Fnash
       F_new <- r - G %*% Bcomplete
+      print(F_new)
       # Saving
       Nash_Fs[iter,] <- F_new
       Nash_Bs[iter,] <- Bcomplete
