@@ -81,6 +81,12 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>An efficient tool to find multispecies MSY for interacting fish stocks</h1>
+                        <h4 data-toc-skip class="author"></h4>
+<p>T. J. Del
+Santo O’Neill<sup>1,*</sup>, Axel G. Rossberg<sup>1</sup> and Robert B.
+Thorpe<sup>2</sup><br><strong style="font-weight:normal"><sup>1</sup>School of Biological and
+Behavioural Sciences, Queen Mary University of London, London, UK;<br><sup>2</sup>Fisheries and Ecosystem Management Advice, Cefas Laboratory,
+Lowestoft, Suffolk, UK.<br></strong></p>
             
       
       <small class="dont-index">Source: <a href="https://github.com/ThomasDelSantoONeill/nash/blob/HEAD/vignettes/FnFpaper.Rmd" class="external-link"><code>vignettes/FnFpaper.Rmd</code></a></small>
@@ -89,9 +95,302 @@
 
     
     
+<div class="section level2">
+<h2 id="disclaimer">Disclaimer<a class="anchor" aria-label="anchor" href="#disclaimer"></a>
+</h2>
+<p>The following vignette serves two main purposes. It is (i) a
+<em>step-by-step introduction</em> to the <code>nash</code> package, and
+(ii) a <em>reproducible script</em> where the code for the original
+article <a href="https://doi.org/10.1111/faf.12817" class="external-link">https://doi.org/10.1111/faf.12817</a>
+is archived.</p>
+</div>
+<div class="section level2">
+<h2 id="benchmark-models">Benchmark Models<a class="anchor" aria-label="anchor" href="#benchmark-models"></a>
+</h2>
+<p>In the original <em>Fish and Fisheries</em> article, the
+<code>nash</code> package was applied to three models of distinct
+<em>complexity</em> with regards to the <em>number of species</em>
+(<span class="math inline">\(S\)</span>) <em>within the
+stock-complex</em> for which <span class="math inline">\(\mathbf{F}_\textbf{Nash}\)</span> is computed.
+These are, (i) <span class="citation">Taylor and Crizer (<a href="#ref-Taylor2005">2005</a>)</span> modified two-species competitive
+Lotka-Volterra (LV) model; and (ii) <span class="citation">ICES (<a href="#ref-ICES2017">2017</a>)</span> Baltic Sea and (iii) <span class="citation">ICES (<a href="#ref-ICES2016">2016</a>)</span> North
+Sea <code>Ecopath with Ecosim</code> <span class="citation">(<a href="#ref-Christensen2004">Christensen and Walters 2004</a>; <a href="#ref-Steenbeek2016">Steenbeek et al. 2016</a>)</span> models, both
+of which were ported into <code>R</code> using the <code>Rpath</code> <a href="package">https://github.com/NOAA-EDAB/Rpath</a> <span class="citation">(<a href="#ref-Rpath2016">Aydin, Lucey, and Gaichas
+2016</a>; <a href="#ref-Lucey2020">Lucey, Gaichas, and Aydin
+2020</a>)</span>.</p>
+<p>Complexity increases with respect to the number of interacting
+species and trophic links modelled; from <span class="math inline">\(2\)</span> species and <span class="math inline">\(2\)</span> links for the modified LV model to
+<span class="math inline">\(22\)</span> and <span class="math inline">\(69\)</span> compartments and <span class="math inline">\(82\)</span> and <span class="math inline">\(968\)</span> links for the Baltic Sea and North
+Sea models, respectively. The following snapshots represent these latter
+two <code>EwE</code> models showcasing as non-grey nodes the <span class="math inline">\(S\)</span> species with commercial value whose
+harvesting rates we optimised, whilst capturing its effect on the entire
+food web.</p>
+<p><img src="FnFpaper_files/figure-html/unnamed-chunk-2-1.png" width="100%"></p>
+<p><img src="FnFpaper_files/figure-html/unnamed-chunk-3-1.png" width="100%"></p>
+<p>It is important to note that <em>both the Baltic and North Sea models
+are used as ‘key-run’ parameterisations</em> peer-reviewed by the <a href="https://www.ices.dk/community/groups/pages/wgsam.aspx" class="external-link">Working
+Group on Multispecies Assessment Methods</a> (WGSAM) to inform
+management advice provided by the <a href="https://www.ices.dk/Pages/default.aspx" class="external-link">International Council for
+the Exploration of the Sea</a> (ICES).</p>
+</div>
+<div class="section level2">
+<h2 id="running-nash-with-rpath-models">Running <code>nash</code> with <code>Rpath</code> models<a class="anchor" aria-label="anchor" href="#running-nash-with-rpath-models"></a>
+</h2>
+<p>To support users employing <code>Rpath</code> as their operating
+model, a built-in function <code>fn_rpath</code> has been included
+within the <code>nash</code> package to provide the input function
+<code>fn</code>. The function is capable of transparently handling
+models in which <em>all or some of the exploited compartments are stage
+structured</em> (<em>e.g.</em> all species in the Baltic Sea model and
+Cod, Whiting, Haddock, Saithe and Herring in the North Sea model).</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ThomasDelSantoONeill/nash" class="external-link">nash</a></span><span class="op">)</span></span></code></pre></div>
-  </main>
+<code class="sourceCode R"><span><span class="co">### NOT EVALUATING THIS CHUNK GIVEN THE RUNNING TIME NEEDED TO FIND NE FOR  ###</span></span>
+<span><span class="co">###   COMPLEX ECOLOGICAL MODELS. IT IS POSSIBLE TO REPRODUCE THE RESULTS BY ###</span></span>
+<span><span class="co">###   COPY/PASTING IN YOUR LOCAL MACHINE.                                   ###</span></span>
+<span><span class="co"># Load libraries</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ThomasDelSantoONeill/nash" class="external-link">nash</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/NOAA-EDAB/Rpath" class="external-link">Rpath</a></span><span class="op">)</span></span>
+<span><span class="co"># Load the BS model</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"F&amp;F_Scripts&amp;Data/BalticSeaModel.RData"</span><span class="op">)</span></span>
+<span><span class="co"># Commercial stock-complex</span></span>
+<span><span class="va">spp</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AdCod"</span>, <span class="st">"AdHerring"</span>, <span class="st">"AdSprat"</span>, <span class="st">"AdFlounder"</span><span class="op">)</span></span>
+<span><span class="co"># Initialising search with last year of data Fs</span></span>
+<span><span class="va">par</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">Rsim.model</span><span class="op">$</span><span class="va">fishing</span><span class="op">$</span><span class="va">ForcedFRate</span><span class="op">[</span>, <span class="va">spp</span><span class="op">]</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># Running nash via LV</span></span>
+<span><span class="va">nash.eq.LV.BS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nash.html">nash</a></span><span class="op">(</span></span>
+<span>  par <span class="op">=</span> <span class="va">par</span>,</span>
+<span>  fn <span class="op">=</span> <span class="va">fn_rpath</span>,</span>
+<span>  aged.str <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  data.years <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  rsim.mod <span class="op">=</span> <span class="va">Rsim.model</span>,</span>
+<span>  IDnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"JuvCod"</span>,</span>
+<span>    <span class="st">"AdCod"</span>,</span>
+<span>    <span class="st">"JuvHerring"</span>,</span>
+<span>    <span class="st">"AdHerring"</span>,</span>
+<span>    <span class="st">"JuvSprat"</span>,</span>
+<span>    <span class="st">"AdSprat"</span>,</span>
+<span>    <span class="st">"JuvFlounder"</span>,</span>
+<span>    <span class="st">"AdFlounder"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"LV"</span>,</span>
+<span>  yield.curves <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  rpath.params <span class="op">=</span> <span class="va">Rpath.parameters</span>,</span>
+<span>  avg.window <span class="op">=</span> <span class="fl">250</span>,</span>
+<span>  simul.years <span class="op">=</span> <span class="fl">500</span>,</span>
+<span>  integration.method <span class="op">=</span> <span class="st">"AB"</span>,</span>
+<span>  conv.criterion <span class="op">=</span> <span class="fl">0.01</span>,</span>
+<span>  F.increase <span class="op">=</span> <span class="fl">0.01</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co"># Load the NS model</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"F&amp;F_Scripts&amp;Data/NorthSeaModel.RData"</span><span class="op">)</span></span>
+<span><span class="co"># Commercial stock-complex</span></span>
+<span><span class="va">spp</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"AduCod"</span>,</span>
+<span>  <span class="st">"AduWhiting"</span>,</span>
+<span>  <span class="st">"AduHaddock"</span>,</span>
+<span>  <span class="st">"AduSaithe"</span>,</span>
+<span>  <span class="st">"AduHerring"</span>,</span>
+<span>  <span class="st">"NorwayPout"</span>,</span>
+<span>  <span class="st">"Sandeels"</span>,</span>
+<span>  <span class="st">"Plaice"</span>,</span>
+<span>  <span class="st">"Sole"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co"># Initialising search with last year of data Fs</span></span>
+<span><span class="va">par</span> <span class="op">&lt;-</span> <span class="va">Rsim.model</span><span class="op">$</span><span class="va">fishing</span><span class="op">$</span><span class="va">ForcedFRate</span><span class="op">[</span><span class="va">sim.years</span>, <span class="va">spp</span><span class="op">]</span></span>
+<span><span class="co"># Running nash via LV</span></span>
+<span><span class="va">nash.eq.LV.NS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nash.html">nash</a></span><span class="op">(</span></span>
+<span>  par <span class="op">=</span> <span class="va">par</span>,</span>
+<span>  fn <span class="op">=</span> <span class="va">fn_rpath</span>,</span>
+<span>  aged.str <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  data.years <span class="op">=</span> <span class="fl">23</span>,</span>
+<span>  rsim.mod <span class="op">=</span> <span class="va">Rsim.model</span>,</span>
+<span>  IDnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"JuvCod"</span>,</span>
+<span>    <span class="st">"AduCod"</span>,</span>
+<span>    <span class="st">"JuvWhiting"</span>,</span>
+<span>    <span class="st">"AduWhiting"</span>,</span>
+<span>    <span class="st">"JuvHaddock"</span>,</span>
+<span>    <span class="st">"AduHaddock"</span>,</span>
+<span>    <span class="st">"JuvSaithe"</span>,</span>
+<span>    <span class="st">"AduSaithe"</span>,</span>
+<span>    <span class="st">"JuvHerring"</span>,</span>
+<span>    <span class="st">"AduHerring"</span>,</span>
+<span>    <span class="st">"NorwayPout"</span>,</span>
+<span>    <span class="st">"Sandeels"</span>,</span>
+<span>    <span class="st">"Plaice"</span>,</span>
+<span>    <span class="st">"Sole"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"LV"</span>,</span>
+<span>  yield.curves <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  rpath.params <span class="op">=</span> <span class="va">Rpath.parameters</span>,</span>
+<span>  avg.window <span class="op">=</span> <span class="fl">500</span>,</span>
+<span>  simul.years <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  integration.method <span class="op">=</span> <span class="st">"AB"</span>,</span>
+<span>  conv.criterion <span class="op">=</span> <span class="fl">0.01</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Once executed, <em>it is possible to test whether</em> NE-MSY <em>has
+been achieved by varying the fishing mortality on each stock in turn
+while keeping the others fixed</em> at <span class="math inline">\(\mathbf{F}_\textbf{Nash}\)</span>. This is
+precisely what the following figures show for all <span class="math inline">\(S\)</span> species and across models, where
+<code>nash</code> correctly computed the Nash equilibrium fishing
+mortality rates (vertical dashed lines), such that, <em>for no stock the
+long-term yeld can be increased by choosing a different fishing
+mortality</em>.</p>
+<p><img src="FnFpaper_files/figure-html/unnamed-chunk-5-1.png" width="100%"><img src="FnFpaper_files/figure-html/unnamed-chunk-5-2.png" width="100%"></p>
+<div class="section level3">
+<h3 id="applying-nash-with-conservation-constraints">Applying <code>nash</code> with <em>Conservation
+Constraints</em><a class="anchor" aria-label="anchor" href="#applying-nash-with-conservation-constraints"></a>
+</h3>
+<p>It is conceivable that in some cases harvesting at the Nash
+equilibrium might drive one or more species to extinction. Even if this
+does not happen, some species might be placed under unacceptable risk
+levels of stock collapse. Therefore, the <code>nash</code> package
+includes an option that allows the user to explicitly incorporate
+conservation constraints <span class="citation">(<a href="#ref-Matsuda2006">Matsuda and Abrams 2006</a>)</span>, specifying
+a conservation biomass threshold <code>Bcons</code> below which stock
+sizes are not permitted to fall.</p>
+<p>We showcase this functionality with the Baltic Sea ecosystem by
+adding a conservation constraint for the biomass of Cod; which we chose
+arbitrarily by holding Cod <span class="math inline">\(1 \times 10^5
+\text{ Tn}\)</span> above the original <span class="math inline">\(B_{\text{Nash,Cod}}\)</span> (<em>i.e.</em> <span class="math inline">\(\approx 84 \times 10^4 \text{ Tn}\)</span>).</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Load the BS model and reference Nash equilibrium results</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"F&amp;F_Scripts&amp;Data/BalticSeaModel.RData"</span><span class="op">)</span></span>
+<span><span class="va">nash.eq.LV.BS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"F&amp;F_Scripts&amp;Data/BS-NE-Fmsy-LV.rds"</span><span class="op">)</span></span>
+<span><span class="co"># Commercial stock-complex</span></span>
+<span><span class="va">spp</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AdCod"</span>, <span class="st">"AdHerring"</span>, <span class="st">"AdSprat"</span>, <span class="st">"AdFlounder"</span><span class="op">)</span></span>
+<span><span class="co"># Initialising search with last year of data Fs</span></span>
+<span><span class="va">par</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">Rsim.model</span><span class="op">$</span><span class="va">fishing</span><span class="op">$</span><span class="va">ForcedFRate</span><span class="op">[</span>, <span class="va">spp</span><span class="op">]</span>, n <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># Baltic Sea Modelled Area</span></span>
+<span><span class="va">model.area</span> <span class="op">&lt;-</span> <span class="fl">240669</span></span>
+<span><span class="co"># Target for Cod biomass = 1e5 (kg^3)</span></span>
+<span><span class="va">blim</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">nash.eq.LV.BS</span><span class="op">$</span><span class="va">value</span> <span class="op">/</span> <span class="va">nash.eq.LV.BS</span><span class="op">$</span><span class="va">par</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="op">(</span><span class="fl">100000</span> <span class="op">/</span> <span class="va">model.area</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span></span>
+<span><span class="co"># Running nash via LV</span></span>
+<span><span class="va">nash.eq.LV.BS.CC</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nash.html">nash</a></span><span class="op">(</span></span>
+<span>  par <span class="op">=</span> <span class="va">par</span>,</span>
+<span>  fn <span class="op">=</span> <span class="va">fn_rpath</span>,</span>
+<span>  aged.str <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  data.years <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  rsim.mod <span class="op">=</span> <span class="va">Rsim.model</span>,</span>
+<span>  IDnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"JuvCod"</span>,</span>
+<span>    <span class="st">"AdCod"</span>,</span>
+<span>    <span class="st">"JuvHerring"</span>,</span>
+<span>    <span class="st">"AdHerring"</span>,</span>
+<span>    <span class="st">"JuvSprat"</span>,</span>
+<span>    <span class="st">"AdSprat"</span>,</span>
+<span>    <span class="st">"JuvFlounder"</span>,</span>
+<span>    <span class="st">"AdFlounder"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"LV"</span>,</span>
+<span>  yield.curves <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  rpath.params <span class="op">=</span> <span class="va">Rpath.parameters</span>,</span>
+<span>  avg.window <span class="op">=</span> <span class="fl">250</span>,</span>
+<span>  simul.years <span class="op">=</span> <span class="va">sim.years</span>,</span>
+<span>  integration.method <span class="op">=</span> <span class="st">"RK4"</span>,</span>
+<span>  Bcons <span class="op">=</span> <span class="va">blim</span>,</span>
+<span>  track <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  conv.criterion <span class="op">=</span> <span class="fl">0.01</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>This results in a new set of <span class="math inline">\(\mathbf{F_{Nash}}\)</span> values in which, as
+expected, the fishing pressure on Cod needs to be tapered from <span class="math inline">\(0.204 \text{ year}^{−1}\)</span> to <span class="math inline">\(0.150 \text{ year}^{−1}\)</span> with its
+consequent reduction in yield from <span class="math inline">\(\approx
+15 \times 10^4 \text{ Tn year}^{−1}\)</span> to <span class="math inline">\(\approx 13 \times 10^4 \text{ Tn
+year}^{−1}\)</span>. Application of the constraint increased <span class="math inline">\(F_{\text{Nash,Herring}}\)</span> from <span class="math inline">\(0.277 \text{ year}^{−1}\)</span> to <span class="math inline">\(0.392 \text{ year}^{−1}\)</span> generating a
+surplus of <span class="math inline">\(\approx 17 \times 10^4 \text{ Tn
+year}^{−1}\)</span> but had little influence on the NE-MSY harvesting
+rates for Flounder. For Sprat, by contrast, the conservation constraint
+on Cod led to a higher <span class="math inline">\(F_{\text{Nash,Sprat}}\)</span> of <span class="math inline">\(0.660 \text{ year}^{−1}\)</span> with a marginal
+reduction in yield of <span class="math inline">\(\approx 1 \times 10^3
+\text{ Tn year}^{−1}\)</span>.</p>
+<p><img src="FnFpaper_files/figure-html/unnamed-chunk-7-1.png" width="100%"></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="nashs-lv-algorithm-vs-round-robin">
+<code>nash</code>’s <code>LV</code> algorithm <em>vs</em>
+<code>round-robin</code><a class="anchor" aria-label="anchor" href="#nashs-lv-algorithm-vs-round-robin"></a>
+</h2>
+<p>A key advantage of the <code>LV</code> method over the simple
+<code>round-robin</code> method, that is, sequential optimisation of
+each <span class="math inline">\(F_i\)</span> until convergence is
+reached, is that it requires much less computation time, especially for
+complex ecological communities. As a platform-independent metric of
+performance, we compared the number of objective function evaluations
+between the two methods. For this analysis, we applied both methods
+across the three tested models with <span class="math inline">\(n=77\)</span> different initial harvesting rate
+values.</p>
+<p><img src="FnFpaper_files/figure-html/unnamed-chunk-8-1.png" width="100%"><img src="FnFpaper_files/figure-html/unnamed-chunk-8-2.png" width="100%"><img src="FnFpaper_files/figure-html/unnamed-chunk-8-3.png" width="100%"></p>
+<p>In all cases, the <code>LV</code> method outperformed the
+<code>round-robin</code> method for the same convergence threshold (set
+to a value of <span class="math inline">\(0.01\)</span> for this
+analysis). Noteworthy is, in particular, that for the North Sea model,
+the <code>LV</code> method requires only <span class="math inline">\(1.88\)</span> times more function evaluations than
+for the Baltic Sea model, even though the dimension of the <span class="math inline">\(\mathbf{F}_\textbf{Nash}\)</span> vector increases
+by <span class="math inline">\(2.25\)</span> from <span class="math inline">\(4\)</span> to <span class="math inline">\(9\)</span>. Using the <code>round-robin</code>
+method, by comparison, the number of function evaluations increases
+<span class="math inline">\(7\)</span>-fold.</p>
+<p><img src="FnFpaper_files/figure-html/unnamed-chunk-9-1.png" width="100%"></p>
+</div>
+<div class="section level2">
+<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Rpath2016" class="csl-entry">
+Aydin, Kerim, Sean Lucey, and Sarah Gaichas. 2016. <em>Rpath: R
+Implementation of Ecopath with Ecosim</em>. <a href="https://github.com/NOAA-EDAB/Rpath" class="external-link">https://github.com/NOAA-EDAB/Rpath</a>.
+</div>
+<div id="ref-Christensen2004" class="csl-entry">
+Christensen, Villy, and Carl J Walters. 2004. <span>“Ecopath with
+<span>Ecosim</span>: Methods, Capabilities and Limitations.”</span>
+<em>Ecological Modelling</em> 172 (2): 109–39. https://doi.org/<a href="https://doi.org/10.1016/j.ecolmodel.2003.09.003" class="external-link">https://doi.org/10.1016/j.ecolmodel.2003.09.003</a>.
+</div>
+<div id="ref-ICES2016" class="csl-entry">
+ICES. 2016. <span>“Report of the <span>Working</span> <span>Group</span>
+on <span>Multispecies</span> <span>Assessment</span>
+<span>Methods</span> (<span>WGSAM</span>), 9-13 <span>November</span>
+2015, <span>Woods</span> <span>Hole</span>, <span>USA</span>.”</span>
+<em>ICES CM 2015/SSGEPI:20</em>.
+</div>
+<div id="ref-ICES2017" class="csl-entry">
+———. 2017. <span>“<span class="nocase">Report of the Working Group on
+Multispecies Assessment Methods (WGSAM), 10–14 October 2016, Reykjavik,
+Iceland.</span>”</span> <em>ICES CM 2016/SSGEPI:21</em>, 1–94.
+https://doi.org/<a href="https://doi.org/10.17895/ices.pub.8534" class="external-link">https://doi.org/10.17895/ices.pub.8534</a>.
+</div>
+<div id="ref-Lucey2020" class="csl-entry">
+Lucey, Sean M., Sarah K. Gaichas, and Kerim Y. Aydin. 2020.
+<span>“Conducting Reproducible Ecosystem Modeling Using the Open Source
+Mass Balance Model Rpath.”</span> <em>Ecological Modelling</em> 427:
+109057. https://doi.org/<a href="https://doi.org/10.1016/j.ecolmodel.2020.109057" class="external-link">https://doi.org/10.1016/j.ecolmodel.2020.109057</a>.
+</div>
+<div id="ref-Matsuda2006" class="csl-entry">
+Matsuda, Hiroyuki, and Peter A. Abrams. 2006. <span>“Maximal Yields from
+Multispecies Fisheries Systems: Rules for Systems with Multiple Trophic
+Levels.”</span> <em>Ecological Applications</em> 16 (1): 225–37.
+https://doi.org/<a href="https://doi.org/10.1890/05-0346" class="external-link">https://doi.org/10.1890/05-0346</a>.
+</div>
+<div id="ref-Steenbeek2016" class="csl-entry">
+Steenbeek, Jeroen, Joe Buszowski, Villy Christensen, Ekin Akoglu, Kerim
+Aydin, Nick Ellis, Dalai Felinto, et al. 2016. <span>“Ecopath with
+<span>Ecosim</span> as a Model-Building Toolbox: Source Code
+Capabilities, Extensions, and Variations.”</span> <em>Ecological
+Modelling</em> 319: 178–89. https://doi.org/<a href="https://doi.org/10.1016/j.ecolmodel.2015.06.031" class="external-link">https://doi.org/10.1016/j.ecolmodel.2015.06.031</a>.
+</div>
+<div id="ref-Taylor2005" class="csl-entry">
+Taylor, Austin, and Amy Crizer. 2005. <span>“A Modified
+<span>Lotka</span>-<span>Volterra</span> Competition Model with a
+Non-Linear Relationship Between Species.”</span> <em>Rose-Hulman
+Undergraduate Mathematics Journal</em> 6 (2). <a href="https://scholar.rose-hulman.edu/rhumj/vol6/iss2/8" class="external-link">https://scholar.rose-hulman.edu/rhumj/vol6/iss2/8</a>.
+</div>
+</div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 

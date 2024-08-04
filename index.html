@@ -113,7 +113,7 @@
 <p>You can install the development version of <code>nash</code> either through the <code>devtools</code> (<a href="#ref-devtools2022">Wickham et al. 2022</a>) or <code>remotes</code> (<a href="#ref-remotes2023">Csárdi et al. 2023</a>) packages:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ThomasDelSantoONeill/nash"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"ThomasDelSantoONeill/nash"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level1">
 <h1 id="minimal-example">Minimal Example<a class="anchor" aria-label="anchor" href="#minimal-example"></a>
@@ -141,7 +141,7 @@
 <span>      <span class="op">}</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span>  <span class="co"># Default integrator in deSolve</span></span>
-<span>  <span class="va">simulation</span> <span class="op">&lt;-</span> <span class="fu">ode</span><span class="op">(</span>y <span class="op">=</span> <span class="va">y</span>, times <span class="op">=</span> <span class="va">time</span>, func <span class="op">=</span> <span class="va">derivs</span>,</span>
+<span>  <span class="va">simulation</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/deSolve/man/ode.html" class="external-link">ode</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">y</span>, times <span class="op">=</span> <span class="va">time</span>, func <span class="op">=</span> <span class="va">derivs</span>,</span>
 <span>                    parms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">parameters</span>, <span class="va">par</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="co"># Yield computation</span></span>
 <span>  <span class="va">yields</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html" class="external-link">array</a></span><span class="op">(</span>dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">simulation</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">par</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
