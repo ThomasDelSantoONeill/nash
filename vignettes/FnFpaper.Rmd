@@ -39,7 +39,7 @@ Complexity increases with respect to the number of interacting species and troph
 ``` {r, echo=FALSE, warning = FALSE, message=FALSE, out.width="100%"}
 ### Plotting routine for food web visualisation of Rpath models (Figure 1
 ###   in F&F manuscript).
-load("F&F_Scripts&Data/BalticSeaModel.RData")
+load("data/BalticSeaModel.RData")
 ## Libraries
 library(data.table)
 library(igraph)
@@ -185,7 +185,7 @@ p1 + theme(legend.position="none") + labs(subtitle = "Baltic Sea Ecosystem")
 ```
 
 ```{r, echo=FALSE, warning = FALSE, message=FALSE, out.width="100%"}
-load("F&F_Scripts&Data/NorthSeaModel.RData")
+load("data/NorthSeaModel.RData")
 ## Script
 # NODES
 nodes <- data.table(spnum  = 1:(Rpath.model$NUM_GROUPS-11),
@@ -309,7 +309,7 @@ To support users employing `Rpath` as their operating model, a built-in function
 library(nash)
 library(Rpath)
 # Load the BS model
-load("F&F_Scripts&Data/BalticSeaModel.RData")
+load("data/BalticSeaModel.RData")
 # Commercial stock-complex
 spp = c("AdCod", "AdHerring", "AdSprat", "AdFlounder")
 # Initialising search with last year of data Fs
@@ -341,7 +341,7 @@ nash.eq.LV.BS <- nash(
   F.increase = 0.01
 )
 # Load the NS model
-load("F&F_Scripts&Data/NorthSeaModel.RData")
+load("data/NorthSeaModel.RData")
 # Commercial stock-complex
 spp = c(
   "AduCod",
@@ -424,7 +424,7 @@ theme_tjdso <- theme(
   axis.text.x.bottom = element_text(margin = margin(4, 0, 0, 0, "mm")),
   axis.text.y.left = element_text(margin = margin(0, 4, 0, 0, "mm"))
 )
-nash.eq.LV.BS <- readRDS("F&F_Scripts&Data/BS-NE-Fmsy-LV.rds")
+nash.eq.LV.BS <- readRDS("data/BS-NE-Fmsy-LV.rds")
 sppname <- c("Cod", "Herring", "Sprat", "Flounder")
 # Transform data into something ggplot2 reads
 Fvec <- c()
@@ -478,7 +478,7 @@ ggplot(data = Yeq, aes(x = Fval, y = Yield)) +
     size = 7,
     col = 2
   )
-nash.eq.LV.NS <- readRDS("F&F_Scripts&Data/NS-NE-Fmsy-LV.rds")
+nash.eq.LV.NS <- readRDS("data/NS-NE-Fmsy-LV.rds")
 sppname <-
   c(
     "Cod",
@@ -558,8 +558,8 @@ We showcase this functionality with the Baltic Sea ecosystem by adding a conserv
 
 ```{r, eval = FALSE}
 # Load the BS model and reference Nash equilibrium results
-load("F&F_Scripts&Data/BalticSeaModel.RData")
-nash.eq.LV.BS <- readRDS("F&F_Scripts&Data/BS-NE-Fmsy-LV.rds")
+load("data/BalticSeaModel.RData")
+nash.eq.LV.BS <- readRDS("data/BS-NE-Fmsy-LV.rds")
 # Commercial stock-complex
 spp = c("AdCod", "AdHerring", "AdSprat", "AdFlounder")
 # Initialising search with last year of data Fs
@@ -604,11 +604,11 @@ This results in a new set of $\mathbf{F_{Nash}}$ values in which, as expected, t
 
 ``` {r, echo = FALSE, warning = FALSE, message=FALSE, out.width="100%"}
 ### Load data for plotting (Figure 2 in EAP manuscript)
-nash.eq.LV.BS <- readRDS("F&F_Scripts&Data/BS-NE-Fmsy-LV.rds")
-BSCCdataY2 <- readRDS("F&F_Scripts&Data/CCYield_Spp_2.rds")
-BSCCdataY3 <- readRDS("F&F_Scripts&Data/CCYield_Spp_3.rds")
-BSCCdataY4 <- readRDS("F&F_Scripts&Data/CCYield_Spp_4.rds")
-nash.eq.LV.BS.CC <- readRDS("F&F_Scripts&Data/BS-CCNE-Fmsy.rds")
+nash.eq.LV.BS <- readRDS("data/BS-NE-Fmsy-LV.rds")
+BSCCdataY2 <- readRDS("data/CCYield_Spp_2.rds")
+BSCCdataY3 <- readRDS("data/CCYield_Spp_3.rds")
+BSCCdataY4 <- readRDS("data/CCYield_Spp_4.rds")
+nash.eq.LV.BS.CC <- readRDS("data/BS-CCNE-Fmsy.rds")
 # Plotting -----------------------------------------------------------------
 library(ggplot2)
 library(extrafont)
@@ -776,9 +776,9 @@ A key advantage of the `LV` method over the simple `round-robin` method, that is
 platform-independent metric of performance, we compared the number of objective function evaluations between the two methods. For this analysis, we applied both methods across the three tested models with $n=77$ different initial harvesting rate values. 
 
 ```{r, echo = FALSE, warning = FALSE, message=FALSE, out.width="100%"}
-SMFmat <- readRDS("F&F_Scripts&Data/SMFmat.rds")
-BSFmat <- readRDS("F&F_Scripts&Data/BSFmat.rds")
-NSFmat <- readRDS("F&F_Scripts&Data/NSFmat.rds")
+SMFmat <- readRDS("data/SMFmat.rds")
+BSFmat <- readRDS("data/BSFmat.rds")
+NSFmat <- readRDS("data/NSFmat.rds")
 
 # Theme
 theme_tjdso <-
@@ -910,9 +910,9 @@ In all cases, the `LV` method outperformed the `round-robin` method for the same
 the `LV` method requires only $1.88$ times more function evaluations than for the Baltic Sea model, even though the dimension of the $\mathbf{F}_\textbf{Nash}$ vector increases by $2.25$ from $4$ to $9$. Using the `round-robin` method, by comparison, the number of function evaluations increases $7$-fold.
 
 ```{r, echo = FALSE, warning = FALSE, message=FALSE, out.width="100%"}
-SMdata <- readRDS("F&F_Scripts&Data/SM_fn.counts_data.rds")
-BSdata <- readRDS("F&F_Scripts&Data/BS_fn.counts_data.rds")
-NSdata <- readRDS("F&F_Scripts&Data/NS_fn.counts_data.rds")
+SMdata <- readRDS("data/SM_fn.counts_data.rds")
+BSdata <- readRDS("data/BS_fn.counts_data.rds")
+NSdata <- readRDS("data/NS_fn.counts_data.rds")
 
 performance <- data.frame(Simple.Model = c(colMeans(SMdata)),
                           BalticSea.Model = c(colMeans(BSdata)),
