@@ -22,7 +22,6 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-knitr::opts_knit$set(root.dir = "/home/tom/Documents/nash/vignettes/")
 ```
 
 # Disclaimer
