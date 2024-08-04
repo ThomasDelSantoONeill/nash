@@ -31,7 +31,16 @@ RdMacros:
     mathjaxr
 Suggests:
     knitr,
-    rmarkdown
+    rmarkdown,
+    ggplot2,
+    extrafont,
+    reshape2,
+    data.table,
+    igraph,
+    ggraph,
+    tidygraph,
+    cowplot,
+    scales
 VignetteBuilder: knitr
 RoxygenNote: 7.3.0
 URL: https://github.com/ThomasDelSantoONeill/nash, https://thomasdelsantooneill.github.io/nash/
