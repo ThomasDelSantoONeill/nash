@@ -151,7 +151,7 @@ Cod, Whiting, Haddock, Saithe and Herring in the North Sea model).</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ThomasDelSantoONeill/nash" class="external-link">nash</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/NOAA-EDAB/Rpath" class="external-link">Rpath</a></span><span class="op">)</span></span>
 <span><span class="co"># Load the BS model</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"F&amp;F_Scripts&amp;Data/BalticSeaModel.RData"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"data/BalticSeaModel.RData"</span><span class="op">)</span></span>
 <span><span class="co"># Commercial stock-complex</span></span>
 <span><span class="va">spp</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AdCod"</span>, <span class="st">"AdHerring"</span>, <span class="st">"AdSprat"</span>, <span class="st">"AdFlounder"</span><span class="op">)</span></span>
 <span><span class="co"># Initialising search with last year of data Fs</span></span>
@@ -183,7 +183,7 @@ Cod, Whiting, Haddock, Saithe and Herring in the North Sea model).</p>
 <span>  F.increase <span class="op">=</span> <span class="fl">0.01</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co"># Load the NS model</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"F&amp;F_Scripts&amp;Data/NorthSeaModel.RData"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"data/NorthSeaModel.RData"</span><span class="op">)</span></span>
 <span><span class="co"># Commercial stock-complex</span></span>
 <span><span class="va">spp</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>  <span class="st">"AduCod"</span>,</span>
@@ -256,8 +256,8 @@ arbitrarily by holding Cod <span class="math inline">\(1 \times 10^5
 \text{ Tn}\)</span> above the original <span class="math inline">\(B_{\text{Nash,Cod}}\)</span> (<em>i.e.</em> <span class="math inline">\(\approx 84 \times 10^4 \text{ Tn}\)</span>).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load the BS model and reference Nash equilibrium results</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"F&amp;F_Scripts&amp;Data/BalticSeaModel.RData"</span><span class="op">)</span></span>
-<span><span class="va">nash.eq.LV.BS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"F&amp;F_Scripts&amp;Data/BS-NE-Fmsy-LV.rds"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"data/BalticSeaModel.RData"</span><span class="op">)</span></span>
+<span><span class="va">nash.eq.LV.BS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"data/BS-NE-Fmsy-LV.rds"</span><span class="op">)</span></span>
 <span><span class="co"># Commercial stock-complex</span></span>
 <span><span class="va">spp</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AdCod"</span>, <span class="st">"AdHerring"</span>, <span class="st">"AdSprat"</span>, <span class="st">"AdFlounder"</span><span class="op">)</span></span>
 <span><span class="co"># Initialising search with last year of data Fs</span></span>
