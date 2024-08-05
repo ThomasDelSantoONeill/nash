@@ -23,10 +23,6 @@ navbar:
     href: articles/index.html
   - text: Reference
     href: reference/index.html
-  - text: Publications
-    href: articles/publications.html
-  - text: ToDo
-    href: news/index.html
   right:
   - icon: fa-github fa-lg
     href: https://github.com/ThomasDelSantoONeill/nash
